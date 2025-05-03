@@ -1,0 +1,243 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&family=Solway:wght@700&display=swap');
+
+body {
+  background-color: #1D1E23;
+  font-family: 'Quicksand', sans-serif;
+  color: #E8E9E2;
+  margin: 0;
+}
+
+header {
+  background-color: #1D1E23;
+  text-align: center;
+  padding: 1rem;
+}
+
+header img {
+  width: 200px;
+  margin: 3rem;
+}
+
+h1, h2 {
+  font-family: 'Solway', serif;
+  color: #EEB327;
+}
+
+h3, h4, h5, h6 {
+  font-family: 'Quicksand', sans-serif;
+  color: #8B926D;
+}
+
+nav a {
+  color: #E8E9E2;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: #EEB327;
+}
+
+.home img {
+  width: 80%;
+  display: block;
+  margin: 0 auto 3rem auto;
+}
+
+.container {
+  margin: 2rem 20%;
+}
+
+.member, .workshop {
+  background: #4A4B4F;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+.member {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.member img {
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+
+.page-header h1 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.member-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.member-right {
+  flex: 3;
+  align-self: flex-start;
+  margin: 0.5rem 0;
+}
+
+.member-right h2 {
+  margin: 0;
+  display: inline-block;
+}
+
+.member-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.member-links a {
+  color: #8B926D;
+  margin-left: 10px;
+  font-size: 1.2rem;
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.member-links a:hover {
+  color: #EEB327;
+}
+
+
+.workshop {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.workshop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.workshop-header h2 {
+  margin: 0;
+}
+
+.workshop-right{
+  flex: 3;
+  align-self: flex-start;
+  margin: 1rem 0;
+}
+
+.workshop-left{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workshop img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.workshop-details{
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.workshop-details h4{
+  margin: 0;
+}
+
+.button {
+  background: #A60000;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background: transparent;
+  border: 2px solid #A60000;
+}
+
+.calendar {
+  margin-top: 3rem;
+  background-color: #4A4B4F;
+  padding: 2rem;
+  border-radius: 8px;
+  color: #1D1E23;
+}
+
+.calendar h3 {
+  margin-top: 0;
+}
+
+.calendar table {
+  width: 75%;
+  border-collapse: collapse;
+  margin: 0 auto 2rem auto;
+  table-layout: fixed;
+  text-align: center;
+}
+
+.calendar th,
+.calendar td {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  width: 14.28%;
+  vertical-align: top;
+  border-radius: 4px;
+  background-color: #4A4B4F;
+  color: #E8E9E2;
+}
+
+.calendar th {
+  font-weight: bold;
+  color: #8B926D;
+}
+
+.calendar td.highlight {
+  background-color: #A60000;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+@keyframes vibrate {
+  0% { transform: translate(0); }
+  20% { transform: translate(-1px, 1px); }
+  40% { transform: translate(-1px, -1px); }
+  60% { transform: translate(1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
+}
+
+.logo-link:hover img {
+  animation: vibrate 0.3s linear infinite;
+}
+
+.site-footer {
+  text-align: center;
+  padding: 1rem;
+  color: #8B926D;
+  font-size: 0.9rem;
+}
+

@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Coil Building",
+    "date": "2025-05-16",
+    "time": "6pm-9pm",
+    "duration": "3 hours",
+    "instructor": "Michael Bridges",
+    "description": "An introduction to hand building with coil building. Create vases, planters, pitchers or a form of your choosing.",
+    "image": "https://images.pexels.com/photos/7302490/pexels-photo-7302490.jpeg",
+    "link": "https://book.stripe.com/3cs9Cq4Enarfe9G001"
+  },
+  {
+    "name": "Pinching Workshop",
+    "date": "2025-05-23",
+    "time": "6pm-9pm",
+    "description": "An introduction to hand building with pinching pots. Pinch cups, bowls, other vessels or a sculptural form of your choosing.",
+    "image": "https://images.pexels.com/photos/31755411/pexels-photo-31755411/free-photo-of-artisan-crafting-ceramic-pot-in-dim-workshop.jpeg",
+    "link": "https://book.stripe.com/7sIcOC7QzcznaXu9AA"
+  },
+  {
+    "name": "Coil Building",
+    "date": "2025-06-06",
+    "time": "6pm-9pm",
+    "description": "An introduction to hand building with coil building. Create vases, planters, pitchers or a form of your choosing.",
+    "image": "https://images.pexels.com/photos/7302490/pexels-photo-7302490.jpeg",
+    "link": "https://book.stripe.com/3cs9Cq4Enarfe9G001"
+  },
+  {
+    "name": "Visiting Artist Workshop",
+    "date": "2025-06-13",
+    "time": "6pm-9pm",
+    "description": "Join us in welcoming Moon Do Bang to Chicago!",
+    "image": "https://images.pexels.com/photos/7302490/pexels-photo-7302490.jpeg",
+    "link": "https://book.stripe.com/cN26qe4En0QFghO28a"
+  },
+  {
+    "name": "Pinching Workshop",
+    "date": "2025-06-20",
+    "time": "6pm-9pm",
+    "description": "An introduction to hand building with pinching pots. Pinch cups, bowls, other vessels or a sculptural form of your choosing.",
+    "image": "https://images.pexels.com/photos/31755411/pexels-photo-31755411/free-photo-of-artisan-crafting-ceramic-pot-in-dim-workshop.jpeg",
+    "link": "https://book.stripe.com/7sIcOC7QzcznaXu9AA"
+  }
+]
