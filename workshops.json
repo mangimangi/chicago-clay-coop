@@ -4,7 +4,7 @@
     "date": "2025-05-16",
     "time": "6pm-9pm",
     "duration": "3 hours",
-    "instructor": "Michael Bridges",
+    "instructor": "Alex Rivera",
     "description": "An introduction to hand building with coil building. Create vases, planters, pitchers or a form of your choosing.",
     "image": "https://images.pexels.com/photos/7302490/pexels-photo-7302490.jpeg",
     "link": "https://book.stripe.com/3cs9Cq4Enarfe9G001"
@@ -14,8 +14,7 @@
     "date": "2025-05-23",
     "time": "6pm-9pm",
     "description": "An introduction to hand building with pinching pots. Pinch cups, bowls, other vessels or a sculptural form of your choosing.",
-    "image": "https://images.pexels.com/photos/31755411/pexels-photo-31755411/free-photo-of-artisan-crafting-ceramic-pot-in-dim-workshop.jpeg",
-    "link": "https://book.stripe.com/7sIcOC7QzcznaXu9AA"
+    "image": "https://images.pexels.com/photos/31755411/pexels-photo-31755411/free-photo-of-artisan-crafting-ceramic-pot-in-dim-workshop.jpeg"
   },
   {
     "name": "Coil Building",
@@ -35,7 +34,7 @@
   },
   {
     "name": "Pinching Workshop",
-    "date": "2025-06-20",
+    "date": "2025-10-20",
     "time": "6pm-9pm",
     "description": "An introduction to hand building with pinching pots. Pinch cups, bowls, other vessels or a sculptural form of your choosing.",
     "image": "https://images.pexels.com/photos/31755411/pexels-photo-31755411/free-photo-of-artisan-crafting-ceramic-pot-in-dim-workshop.jpeg",

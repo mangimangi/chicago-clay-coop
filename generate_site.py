@@ -94,6 +94,15 @@ def generate_month_calendar(year, month, workshop_dates):
     html += '</tbody></table>'
     return html
 
+def generate_calendar(workshop_dates):
+    # Convert dates to (year, month) tuples
+    months = sorted({(datetime.strptime(d, "%Y-%m-%d").year, datetime.strptime(d, "%Y-%m-%d").month) for d in workshop_dates})
+    html = '<div class="calendar">'
+    for year, month in months:
+        html += generate_month_calendar(year, month, workshop_dates)
+    html += '</div>'
+    return html
+
 def generate_workshops_html(workshops):
     today = date.today()
     workshops = [w for w in workshops if datetime.strptime(w['date'], "%Y-%m-%d").date() >= today]
@@ -109,7 +118,7 @@ def generate_workshops_html(workshops):
             <div class="workshop-right">
                 <div class="workshop-header">
                     <h2>{ws['name']}</h2>
-                    <a class="button" href="{ws['link']}" target="_blank">Book</a>
+                    {f'<a class="button" href="{ws.get("link")}" target="_blank">Book</a>' if ws.get("link") else ""}
                 </div>
                 <div class="workshop-details">
                   <h4>{datetime.strptime(ws['date'], "%Y-%m-%d").strftime("%A, %B %-d") + " at " + ws['time']}</h4>
@@ -119,12 +128,7 @@ def generate_workshops_html(workshops):
             </div>
         </div>
       '''
-
-    html += f'''<div class="calendar">'''
-    html += generate_month_calendar(today.year, today.month, workshop_dates)
-    next_month = today.replace(day=28) + timedelta(days=4)
-    html += generate_month_calendar(next_month.year, next_month.month, workshop_dates)
-    html += '</div>'
+    html += generate_calendar(workshop_dates)
     html += TEMPLATE_FOOTER
     Path("workshops.html").write_text(html)
 
