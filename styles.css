@@ -164,6 +164,11 @@ nav a:hover {
   margin: 0;
 }
 
+.workshop-details h4 a {
+  all: inherit;
+}
+
+
 .button {
   background: #A60000;
   color: white;
@@ -219,6 +224,11 @@ nav a:hover {
   background-color: #A60000;
   color: #ffffff;
   font-weight: bold;
+}
+
+.calendar td a {
+  all: inherit;
+  border: none;
 }
 
 @keyframes vibrate {

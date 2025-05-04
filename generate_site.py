@@ -55,7 +55,7 @@ def generate_members_html(members):
             links_html += f'<a href="{member["website"]}" target="_blank" title="Website"><i class="fa-solid fa-link"></i></a>'
 
         html += f'''
-        <div class="member">
+        <div class="member" id="{member['name'].lower().replace(' ', '-')}">
             <div class="member-left">
                 <img src="{member['image']}" alt="{member['name']}">
             </div>
@@ -89,7 +89,7 @@ def generate_month_calendar(year, month, workshop_dates):
             else:
                 date_str = date(year, month, day).isoformat()
                 cls = highlight_class(date_str, workshop_dates)
-                html += f'<td class="{cls}">{day}</td>'
+                html += f'<td class="{cls}"><a href="#ws-{date_str}">{day}</a></td>'
         html += '</tr>'
     html += '</tbody></table>'
     return html
@@ -102,7 +102,7 @@ def generate_workshops_html(workshops):
     html = TEMPLATE_HEADER.format(title="Workshops", button="")
     for ws in workshops:
       html += f'''
-        <div class="workshop">
+        <div class="workshop" id="ws-{ws['date']}">
             <div class="workshop-left">
                 <img src="{ws['image']}" alt="{ws['name']}">
             </div>
@@ -113,7 +113,7 @@ def generate_workshops_html(workshops):
                 </div>
                 <div class="workshop-details">
                   <h4>{datetime.strptime(ws['date'], "%Y-%m-%d").strftime("%A, %B %-d") + " at " + ws['time']}</h4>
-                  {f"<h4>&nbsp;&nbsp;w/ {ws.get('instructor')}</h4>" if ws.get('instructor') else ""}
+                  {f"<h4><a href='members.html#{ws.get('instructor', '').lower().replace(' ', '-')}'>{'&nbsp;&nbsp;w/ ' + ws['instructor']}</a></h4>" if ws.get('instructor') else ""}
                 </div>
                 <p>{ws['description']}</p>
             </div>
