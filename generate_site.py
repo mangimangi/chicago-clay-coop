@@ -55,7 +55,7 @@ def generate_members_html(members):
             links_html += f'<a href="{member["website"]}" target="_blank" title="Website"><i class="fa-solid fa-link"></i></a>'
 
         html += f'''
-        <div class="member" id="{member['name'].lower().replace(' ', '-')}">
+        <div class="member" id="{make_anchor(member['name'])}">
             <div class="member-left">
                 <img src="{member['image']}" alt="{member['name']}">
             </div>
@@ -103,13 +103,20 @@ def generate_calendar(workshop_dates):
     html += '</div>'
     return html
 
-def generate_workshops_html(workshops):
+def generate_workshops_html(workshops, member_names):
     today = date.today()
     workshops = [w for w in workshops if datetime.strptime(w['date'], "%Y-%m-%d").date() >= today]
     workshops.sort(key=lambda w: datetime.strptime(w['date'], "%Y-%m-%d"))
     workshop_dates = {ws['date'] for ws in workshops}
     html = TEMPLATE_HEADER.format(title="Workshops", button="")
     for ws in workshops:
+      instructor = ws.get('instructor')
+      if instructor:
+        if instructor in member_names:
+          instructor = f"<a href='members.html#{make_anchor(ws.get('instructor', ''))}'>{'&nbsp;&nbsp;w/ ' + instructor}</a>"
+        else:
+          instructor = f"&nbsp;&nbsp;w/ {instructor}"
+
       html += f'''
         <div class="workshop" id="ws-{ws['date']}">
             <div class="workshop-left">
@@ -122,7 +129,7 @@ def generate_workshops_html(workshops):
                 </div>
                 <div class="workshop-details">
                   <h4>{datetime.strptime(ws['date'], "%Y-%m-%d").strftime("%A, %B %-d") + " at " + ws['time']}</h4>
-                  {f"<h4><a href='members.html#{ws.get('instructor', '').lower().replace(' ', '-')}'>{'&nbsp;&nbsp;w/ ' + ws['instructor']}</a></h4>" if ws.get('instructor') else ""}
+                  {f"<h4>{instructor}</h4>" if instructor else ""}
                 </div>
                 <p>{ws['description']}</p>
             </div>
@@ -148,6 +155,9 @@ def generate_about_html():
     html += TEMPLATE_FOOTER
     Path("about.html").write_text(html)
 
+def make_anchor(s):
+  return s.lower().replace(' ', '-')
+
 if __name__ == "__main__":
     members_file = sys.argv[1]
     workshops_file = sys.argv[2]
@@ -156,7 +166,7 @@ if __name__ == "__main__":
     workshops = json.loads(Path(workshops_file).read_text())
 
     generate_members_html(members)
-    generate_workshops_html(workshops)
+    generate_workshops_html(workshops, {m['name'] for m in members if m.get('name')})
     generate_index_html()
     generate_about_html()
 
