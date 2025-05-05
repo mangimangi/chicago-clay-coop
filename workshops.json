@@ -1,43 +1,13 @@
 [
   {
-    "name": "Coil Building",
-    "date": "2025-05-16",
-    "time": "6pm-9pm",
-    "duration": "3 hours",
-    "instructor": "Alex Rivera",
-    "description": "An introduction to hand building with coil building. Create vases, planters, pitchers or a form of your choosing.",
-    "image": "https://images.pexels.com/photos/7302490/pexels-photo-7302490.jpeg",
-    "link": "https://book.stripe.com/3cs9Cq4Enarfe9G001"
-  },
-  {
-    "name": "Pinching Workshop",
-    "date": "2025-05-23",
-    "time": "6pm-9pm",
-    "description": "An introduction to hand building with pinching pots. Pinch cups, bowls, other vessels or a sculptural form of your choosing.",
-    "image": "https://images.pexels.com/photos/31755411/pexels-photo-31755411/free-photo-of-artisan-crafting-ceramic-pot-in-dim-workshop.jpeg"
-  },
-  {
-    "name": "Coil Building",
-    "date": "2025-06-06",
-    "time": "6pm-9pm",
-    "description": "An introduction to hand building with coil building. Create vases, planters, pitchers or a form of your choosing.",
-    "image": "https://images.pexels.com/photos/7302490/pexels-photo-7302490.jpeg",
-    "link": "https://book.stripe.com/3cs9Cq4Enarfe9G001"
-  },
-  {
-    "name": "Visiting Artist Workshop",
-    "date": "2025-06-13",
-    "time": "6pm-9pm",
-    "description": "Join us in welcoming Moon Do Bang to Chicago!",
-    "image": "https://images.pexels.com/photos/7302490/pexels-photo-7302490.jpeg",
-    "link": "https://book.stripe.com/cN26qe4En0QFghO28a"
-  },
-  {
-    "name": "Pinching Workshop",
-    "date": "2025-10-20",
-    "time": "6pm-9pm",
-    "description": "An introduction to hand building with pinching pots. Pinch cups, bowls, other vessels or a sculptural form of your choosing.",
-    "image": "https://images.pexels.com/photos/31755411/pexels-photo-31755411/free-photo-of-artisan-crafting-ceramic-pot-in-dim-workshop.jpeg",
-    "link": "https://book.stripe.com/7sIcOC7QzcznaXu9AA"
+    "name": "Tiny Pottery in a Big World",
+    "date": "2025-06-21",
+    "time": "10am-12:30pm",
+    "cost": "125",
+    "duration": "2.5 hours",
+    "instructor": "Lillie Frances",
+    "description": "Step into the world of tiny pottery! In this playful, hands-on workshop, each participant will be provided a miniature pottery wheel, clay, tools, and underglazes. After a brief demo and instruction, you’ll get to create your own tiny ceramic pieces—perfect for beginners and anyone curious about working small. Your finished creations will be glazed, kiln-fired, and ready for pickup within two weeks. No experience needed—just bring your curiosity and appreciation for all things mini! This workshop includes all supplies, is beginner-friendly, offers instruction by a local ceramic artist, and you'll take home 2–5 mini pieces.",
+    "image": "https://i.imgur.com/a0C4EYS.jpeg",
+    "link": "https://book.stripe.com/9AQ14h3w2d9Ue7C8ww"
   }
 ]
