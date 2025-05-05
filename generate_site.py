@@ -42,7 +42,7 @@ TEMPLATE_FOOTER = '''
 '''
 
 def generate_members_html(members):
-    html = TEMPLATE_HEADER.format(title="Members", button=f'''<a class="button" href="#">Apply Now</a>''')
+    html = TEMPLATE_HEADER.format(title="Members", button=f'''<a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLScddEmf3gWJeJogpnNI95bFntmZ3dFg_7ctZNXt83XxIaofOw/viewform?usp=header">Apply Now</a>''')
     for member in members:
         links_html = ''
         if 'shop' in member:
