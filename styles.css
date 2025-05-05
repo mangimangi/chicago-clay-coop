@@ -1,9 +1,8 @@
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Quicksand&family=Solway:wght@700&display=swap');
+@import url("https://use.typekit.net/fjf5mmt.css");
 
 body {
+  font-family: 'bryant-web', serif;
   background-color: #1D1E23;
-  font-family: 'Quicksand', sans-serif;
   color: #E8E9E2;
   margin: 0;
 }
@@ -20,12 +19,12 @@ header img {
 }
 
 h1, h2 {
-  font-family: 'Solway', serif;
+  font-family: 'roca', sans-serif;
   color: #EEB327;
 }
 
 h3, h4, h5, h6 {
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'bryant-web', serif;
   color: #8B926D;
 }
 
