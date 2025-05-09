@@ -1,11 +1,4 @@
- {
-    "name": "Lillie Frances",
-    "statement": "These miniature pots are adorable and not as simple as they may seem. If throwing on the wheel is like a dartboard, then the tiny wheel is like hitting the bullseye every time. I throw all the pieces myself on a 1 ¾ inches diameter wheelhead using my fingertips, some “regular size” pottery tools, and tools I’ve made or repurposed myself (for example guitar picks and bread bag clips make nice ribs, and nail art brushes are great for detailed painting). Pottery that has images or words on them are stamped and/or painted with underglaze when they are “leather hard.” The pieces dry overnight before being bisque fired in a kiln. Next they are glazed and kiln fired a second time for the final product.",
-    "image": "https://file-the-coop.tor1.cdn.digitaloceanspaces.com/logo.png",
-    "shop": "https://shop.potterymouthchicago.com",
-    "instagram": "https://www.instagram.com/potterymouthchicago/",
-    "website": "https://potterymouthchicago.com"
-  },
+[
   {
     "name": "Michael Bridges",
     "statement": "Michael Bridges is an artist, designer, and instructor based out of Chicago, IL. His approach to ceramic  is often humorous and treads a fine line between function and form.",
@@ -20,6 +13,14 @@
     "shop": "https://www.mudweaverceramics.com/category/all-products",
     "instagram": "https://www.instagram.com/mudweaver_ceramics",
     "website": "https://www.mudweaverceramics.com"
+  },
+  {
+    "name": "Lillie Frances",
+    "statement": "These miniature pots are adorable and not as simple as they may seem. If throwing on the wheel is like a dartboard, then the tiny wheel is like hitting the bullseye every time. I throw all the pieces myself on a 1 ¾ inches diameter wheelhead using my fingertips, some “regular size” pottery tools, and tools I’ve made or repurposed myself (for example guitar picks and bread bag clips make nice ribs, and nail art brushes are great for detailed painting). Pottery that has images or words on them are stamped and/or painted with underglaze when they are “leather hard.” The pieces dry overnight before being bisque fired in a kiln. Next they are glazed and kiln fired a second time for the final product.",
+    "image": "https://file-the-coop.tor1.cdn.digitaloceanspaces.com/logo.png",
+    "shop": "https://shop.potterymouthchicago.com",
+    "instagram": "https://www.instagram.com/potterymouthchicago/",
+    "website": "https://potterymouthchicago.com"
   },
   {
     "name": "mangi",
