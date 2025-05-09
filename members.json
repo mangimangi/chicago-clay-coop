@@ -1,4 +1,11 @@
-[
+ {
+    "name": "Lillie Frances",
+    "statement": "These miniature pots are adorable and not as simple as they may seem. If throwing on the wheel is like a dartboard, then the tiny wheel is like hitting the bullseye every time. I throw all the pieces myself on a 1 ¾ inches diameter wheelhead using my fingertips, some “regular size” pottery tools, and tools I’ve made or repurposed myself (for example guitar picks and bread bag clips make nice ribs, and nail art brushes are great for detailed painting). Pottery that has images or words on them are stamped and/or painted with underglaze when they are “leather hard.” The pieces dry overnight before being bisque fired in a kiln. Next they are glazed and kiln fired a second time for the final product.",
+    "image": "https://file-the-coop.tor1.cdn.digitaloceanspaces.com/logo.png",
+    "shop": "https://shop.potterymouthchicago.com",
+    "instagram": "https://www.instagram.com/potterymouthchicago/",
+    "website": "https://potterymouthchicago.com"
+  }[
   {
     "name": "Michael Bridges",
     "statement": "Michael Bridges is an artist, designer, and instructor based out of Chicago, IL. His approach to ceramic  is often humorous and treads a fine line between function and form.",
@@ -9,17 +16,15 @@
   {
     "name": "Jen Fitzgerald",
     "statement": "My work, characterized by its realism and complexity, aims to push the boundaries of traditional ceramics and functionality.",
-    "image": "https://file-the-coop.tor1.cdn.digitaloceanspaces.com/logo.png",
+    "image": "https://static.wixstatic.com/media/a7422b_a4c07ffdbb6341c9b48ad87c3ffe94b6~mv2.jpg/v1/fill/w_670,h_642,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a7422b_a4c07ffdbb6341c9b48ad87c3ffe94b6~mv2.jpg",
     "shop": "https://www.mudweaverceramics.com/category/all-products",
     "instagram": "https://www.instagram.com/mudweaver_ceramics",
     "website": "https://www.mudweaverceramics.com"
   },
   {
-    "name": "Lillie Frances",
-    "statement": "These miniature pots are adorable and not as simple as they may seem. If throwing on the wheel is like a dartboard, then the tiny wheel is like hitting the bullseye every time. I throw all the pieces myself on a 1 ¾ inches diameter wheelhead using my fingertips, some “regular size” pottery tools, and tools I’ve made or repurposed myself (for example guitar picks and bread bag clips make nice ribs, and nail art brushes are great for detailed painting). Pottery that has images or words on them are stamped and/or painted with underglaze when they are “leather hard.” The pieces dry overnight before being bisque fired in a kiln. Next they are glazed and kiln fired a second time for the final product.",
-    "image": "https://file-the-coop.tor1.cdn.digitaloceanspaces.com/logo.png",
-    "shop": "https://shop.potterymouthchicago.com",
-    "instagram": "https://www.instagram.com/potterymouthchicago/",
-    "website": "https://potterymouthchicago.com"
-  }
+    "name": "mangi",
+    "statement": "a ceramics practice focused on freely creating imperfect vessels to celebrate, care for and curate life and vibrant panels to vividly catalogue the current condition.",
+    "image": "https://i.imgur.com/4vB519Y.jpeg",
+    "website": "https://mangi.dev"
+  },
 ]
