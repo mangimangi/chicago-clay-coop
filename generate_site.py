@@ -151,7 +151,7 @@ def generate_about_html():
     html = TEMPLATE_HEADER.format(title="About", button="")
     html += f'''
       <div class='home'>
-        <img src="blob:https://imgur.com/9ccebfc7-4b42-4650-9404-e75700786ab8" alt="co-op wide">
+        <img src="https://i.imgur.com/FFqFYA1.jpeg" alt="co-op wide">
       </div>
     '''  
     html += '<p>A community based ceramics studio in Chicago, IL. Located in the Bulldog Lock Building at 4636 n. Ravenswood ave. Unit 107. We offer one day workshops, annual memberships and classes. Please check in regularly for updates regarding shows and open hours. Founded by Jen + Michael in Winter 2025.</p>'
