@@ -18,5 +18,22 @@
     "description": "Are you ready to slay with clay? Join us for a one-of-a-kind drag ceramics brunch featuring performances by resident queen Wanda, pottery demos by Co-Op members, and the opportunity to decorate handmade ceramic dishes, ornaments and jewelry! Enjoy coffee and pastries while you bring out your inner pottery diva! Answer trivia to win a number of fabulous prizes! All proceeds will benefit AIDS Foundation Chicago, which mobilizes communities to create equity and justice for people living with and vulnerable to HIV or chronic conditions. Your base ticket of $50 gets you our standard-size dish to decorate. If you're feeling generous and you want to go home with more pottery, there will be larger items, jewelry, and ornaments available for increased donations. Bring cash or your Venmo -- all donations and tips will benefit AFC! Fully glazed and finished items will be available for pickup two weeks after the workshop.",
     "image": "https://i.imgur.com/VbMQSSi.jpeg",
     "link": "https://book.stripe.com/bIY9AN0jQc5Qd3yeUV"
+  },
+  {
+  "name": "TEST",
+    "date": "2025-06-14",
+    "time": "11am-1:00pm",
+    "cost": "50",
+    "instructor": "Alex Benjamin a.k.a. WANDA. + Co-Op teeam.",
+    "description": "Are you ready to slay with clay? Join us for a one-of-a-kind drag ceramics brunch featuring performances by resident queen Wanda, pottery demos by Co-Op members, and the opportunity to decorate handmade ceramic dishes, ornaments and jewelry! Enjoy coffee and pastries while you bring out your inner pottery diva! Answer trivia to win a number of fabulous prizes! All proceeds will benefit AIDS Foundation Chicago, which mobilizes communities to create equity and justice for people living with and vulnerable to HIV or chronic conditions. Your base ticket of $50 gets you our standard-size dish to decorate. If you're feeling generous and you want to go home with more pottery, there will be larger items, jewelry, and ornaments available for increased donations. Bring cash or your Venmo -- all donations and tips will benefit AFC! Fully glazed and finished items will be available for pickup two weeks after the workshop.",
+    "image": "https://i.imgur.com/VbMQSSi.jpeg",
+    "link": ""name": "Clay, Queen!",
+    "date": "2025-06-14",
+    "time": "11am-1:00pm",
+    "cost": "50",
+    "instructor": "Alex Benjamin a.k.a. WANDA. + Co-Op teeam.",
+    "description": "Are you ready to slay with clay? Join us for a one-of-a-kind drag ceramics brunch featuring performances by resident queen Wanda, pottery demos by Co-Op members, and the opportunity to decorate handmade ceramic dishes, ornaments and jewelry! Enjoy coffee and pastries while you bring out your inner pottery diva! Answer trivia to win a number of fabulous prizes! All proceeds will benefit AIDS Foundation Chicago, which mobilizes communities to create equity and justice for people living with and vulnerable to HIV or chronic conditions. Your base ticket of $50 gets you our standard-size dish to decorate. If you're feeling generous and you want to go home with more pottery, there will be larger items, jewelry, and ornaments available for increased donations. Bring cash or your Venmo -- all donations and tips will benefit AFC! Fully glazed and finished items will be available for pickup two weeks after the workshop.",
+    "image": "https://i.imgur.com/VbMQSSi.jpeg",
+    "link": "https://book.stripe.com/bIY9AN0jQc5Qd3yeUV""
   }
 ]
