@@ -1,0 +1,15 @@
+name: JSON check
+
+on:
+  push:
+    paths:
+      - '**.json'
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: json-yaml-validate
+        uses: GrantBirki/json-yaml-validate@v3.3.0
