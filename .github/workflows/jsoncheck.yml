@@ -11,7 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: json-syntax-check
-        uses: limitusus/json-syntax-check@v2
-        with:
-          pattern: "\\.json$"
+      - name: json-yaml-validate
+        uses: GrantBirki/json-yaml-validate@v3.3.0
