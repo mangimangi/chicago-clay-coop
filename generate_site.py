@@ -137,24 +137,24 @@ def generate_workshops_html(workshops, member_names):
     html += TEMPLATE_FOOTER
     Path("workshops.html").write_text(html)
 
-def generate_index_html():
+def generate_index_html(index):
     html = TEMPLATE_HEADER.format(title="", button="")
     html += f'''
       <div class='home'>
-        <img src="https://i.imgur.com/AE7GrQ1.jpeg" alt="The Coop">
+        <img src={index['image']} alt="The Coop">
       </div>
     '''
     html += TEMPLATE_FOOTER
     Path("index.html").write_text(html)
 
-def generate_about_html():
+def generate_about_html(about):
     html = TEMPLATE_HEADER.format(title="About", button="")
     html += f'''
       <div class='home'>
-        <img src="https://i.imgur.com/FFqFYA1.jpeg" alt="co-op wide">
+        <img src={about['image']} alt="co-op wide">
       </div>
     '''  
-    html += '<p>A community based ceramics studio in Chicago, IL. Located in the Bulldog Lock Building at 4636 n. Ravenswood ave. Unit 107. We offer one day workshops, annual memberships and classes. Please check in regularly for updates regarding shows and open hours. Founded by Jen + Michael in Winter 2025.</p>'
+    html += f'''<p>{about['text']}</p>'''
     html += TEMPLATE_FOOTER
     Path("about.html").write_text(html)
 
@@ -162,14 +162,18 @@ def make_anchor(s):
   return s.lower().replace(' ', '-')
 
 if __name__ == "__main__":
-    members_file = sys.argv[1]
-    workshops_file = sys.argv[2]
+    index_file = sys.argv[1]
+    about_file = sys.argv[2]
+    members_file = sys.argv[3]
+    workshops_file = sys.argv[4]
 
+    index = json.loads(Path(index_file).read_text())
+    about = json.loads(Path(about_file).read_text())
     members = json.loads(Path(members_file).read_text())
     workshops = json.loads(Path(workshops_file).read_text())
 
     generate_members_html(members)
     generate_workshops_html(workshops, {m['name'] for m in members if m.get('name')})
-    generate_index_html()
-    generate_about_html()
+    generate_index_html(index)
+    generate_about_html(about)
 
