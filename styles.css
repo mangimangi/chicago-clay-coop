@@ -42,10 +42,27 @@ nav a:hover {
   color: #EEB327;
 }
 
-.home img {
-  width: 80%;
+.home {
+  display: flex;
+  justify-content: center;
+}
+
+.home .about-left img {
+  max-width: 100%;
+  height: auto;
   display: block;
   margin: 0 auto 3rem auto;
+}
+
+.home .about-left,
+.home .about-right {
+  flex: 1; /* each takes 50% of container width */
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.home .about-right .apply {
+  margin-top: 3rem;
 }
 
 .container {
@@ -163,7 +180,7 @@ nav a:hover {
 
 .workshop-details{
   margin: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .workshop-details h4{
@@ -327,26 +344,13 @@ nav a:hover {
 
 .event-details {
   margin: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .event-details h4 {
   margin: 0;
 }
 
-.contact-section {
-  margin-top: 2rem;
-  background-color: #4A4B4F;
-  padding: 1rem 2rem;
-  border-radius: 8px;
+.contact {
+  margin-top: 4rem;
 }
-
-.contact-section a {
-  color: #EEB327;
-  text-decoration: none;
-}
-
-.contact-section a:hover {
-  text-decoration: underline;
-}
-

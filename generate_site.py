@@ -171,17 +171,24 @@ def generate_workshops_html(workshops, member_names):
     Path("workshops.html").write_text(html)
 
 def generate_home_html(home):
-    html = TEMPLATE_HEADER.format(title="About Us")
+    html = TEMPLATE_HEADER.format(title="")
     html += f'''
       <div class='home'>
-        <img src={home['image']} alt="co-op wide">
+        <div class='about-left'>
+            <img src={home['image']} alt="co-op wide">
+        </div>
+        <div class='about-right'>
+          <h1>About Us</h1>
+          <p>{home['text']}</p>
+          <div class='apply'>
+            <p><a class="button" href="{home['apply']}" target="_blank">Apply for Membership</a></p>
+          </div>
+        </div>
       </div>
-      <p>{home['text']}</p>
-      <div class="contact-section">
-        <h3>Contact</h3>
+      <div class="contact" id="contact">
+        <h1>Contact</h1>
         <p>Email: <a href="mailto:{home['email']}">{home['email']}</a></p>
         <p>Phone: <a href="tel:{home['phone'].replace(' ', '').replace('(', '').replace(')', '').replace('-', '')}">{home['phone']}</a></p>
-        <p><a class="button" href="{home['apply']}" target="_blank">Apply for Membership</a></p>
       </div>
     '''
     html += TEMPLATE_FOOTER
