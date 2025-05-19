@@ -22,6 +22,7 @@ TEMPLATE_HEADER = '''<!DOCTYPE html>
 <a href="index.html">Home</a>
 <a href="about.html">About</a>
 <a href="workshops.html">Workshops</a>
+<a href="events.html">Events</a>
 <a href="members.html">Members</a>
 </nav>
 </header>
@@ -101,6 +102,35 @@ def generate_calendar(workshop_dates):
     html += '</div>'
     return html
 
+def generate_events_html(events):
+    today = date.today()
+    events = [e for e in events if datetime.strptime(e['date'], "%Y-%m-%d").date() >= today]
+    events.sort(key=lambda e: datetime.strptime(e['date'], "%Y-%m-%d"))
+    
+    html = TEMPLATE_HEADER.format(title="Events", button="")
+    
+    for event in events:
+        event_date = datetime.strptime(event['date'], "%Y-%m-%d").strftime("%A, %B %-d")
+        html += f'''
+        <div class="event">
+            <div class="event-left">
+                <img src="{event['image']}" alt="{event['name']}">
+            </div>
+            <div class="event-right">
+                <div class="event-header">
+                    <h2>{event['name']}</h2>
+                </div>
+                <div class="event-details">
+                  <h4>{event_date} at {event['time']}</h4>
+                </div>
+                <p>{event['description']}</p>
+            </div>
+        </div>
+        '''
+    
+    html += TEMPLATE_FOOTER
+    Path("events.html").write_text(html)
+
 def generate_workshops_html(workshops, member_names):
     today = date.today()
     workshops = [w for w in workshops if datetime.strptime(w['date'], "%Y-%m-%d").date() >= today]
@@ -166,14 +196,17 @@ if __name__ == "__main__":
     about_file = sys.argv[2]
     members_file = sys.argv[3]
     workshops_file = sys.argv[4]
+    events_file = sys.argv[5]
 
     index = json.loads(Path(index_file).read_text())
     about = json.loads(Path(about_file).read_text())
     members = json.loads(Path(members_file).read_text())
     workshops = json.loads(Path(workshops_file).read_text())
+    events = json.loads(Path(events_file).read_text())
 
     generate_members_html(members)
     generate_workshops_html(workshops, {m['name'] for m in members if m.get('name')})
+    generate_events_html(events)
     generate_index_html(index)
     generate_about_html(about)
 

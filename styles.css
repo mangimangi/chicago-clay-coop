@@ -261,3 +261,51 @@ nav a:hover {
   font-size: 0.9rem;
 }
 
+.event {
+  background: #4A4B4F;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.event-header h2 {
+  margin: 0;
+}
+
+.event-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-right {
+  flex: 3;
+  align-self: flex-start;
+  margin: 1rem 0;
+}
+
+.event img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.event-details {
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.event-details h4 {
+  margin: 0;
+}

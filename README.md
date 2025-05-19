@@ -28,10 +28,10 @@ git clone git@github.com:mangimangi/chicago-clay-coop.git
 
 ### 3. Run the generator
 
-Make sure you have your data files: `index.json`, `about.json`, `members.json` and `workshops.json`.
+Make sure you have your data files: `index.json`, `about.json`, `members.json`, `workshops.json` and `events.json`.
 
 ```sh
-python generate_site.py index.json about.json members.json workshops.json
+python generate_site.py index.json about.json members.json workshops.json events.json
 ```
 
 This will generate:
@@ -55,10 +55,11 @@ All layout and color styling is defined in `styles.css`, using no inline styles.
 .
 ├── generate_site.py       # Main generator script
 ├── styles.css             # Global stylesheet
-├── index.json           # Member data
-├── about.json           # Member data
+├── index.json             # Homepage data
+├── about.json             # About data
 ├── members.json           # Member data
 ├── workshops.json         # Workshop data
+├── events.json         # Workshop data
 ├── index.html             # Home page (generated)
 ├── about.html             # About page (generated)
 ├── members.html           # Members page (generated)
