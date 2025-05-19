@@ -20,7 +20,6 @@ TEMPLATE_HEADER = '''<!DOCTYPE html>
 </a>
 <nav>
 <a href="index.html">Home</a>
-<a href="about.html">About</a>
 <a href="workshops.html">Workshops</a>
 <a href="events.html">Events</a>
 <a href="members.html">Members</a>
@@ -29,7 +28,6 @@ TEMPLATE_HEADER = '''<!DOCTYPE html>
 <div class="container">
 <div class="page-header">
 <h1>{title}</h1>
-{button}
 </div>
 '''
 
@@ -43,7 +41,7 @@ TEMPLATE_FOOTER = '''
 '''
 
 def generate_members_html(members):
-    html = TEMPLATE_HEADER.format(title="Members", button=f'''<a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLScddEmf3gWJeJogpnNI95bFntmZ3dFg_7ctZNXt83XxIaofOw/viewform?usp=header">Apply Now</a>''')
+    html = TEMPLATE_HEADER.format(title="Members")
     for member in members:
         links_html = ''
         if 'shop' in member:
@@ -107,7 +105,7 @@ def generate_events_html(events):
     events = [e for e in events if datetime.strptime(e['date'], "%Y-%m-%d").date() >= today]
     events.sort(key=lambda e: datetime.strptime(e['date'], "%Y-%m-%d"))
     
-    html = TEMPLATE_HEADER.format(title="Events", button="")
+    html = TEMPLATE_HEADER.format(title="Events")
     
     for event in events:
         event_date = datetime.strptime(event['date'], "%Y-%m-%d").strftime("%A, %B %-d")
@@ -136,7 +134,7 @@ def generate_workshops_html(workshops, member_names):
     workshops = [w for w in workshops if datetime.strptime(w['date'], "%Y-%m-%d").date() >= today]
     workshops.sort(key=lambda w: datetime.strptime(w['date'], "%Y-%m-%d"))
     workshop_dates = {ws['date'] for ws in workshops}
-    html = TEMPLATE_HEADER.format(title="Workshops", button="")
+    html = TEMPLATE_HEADER.format(title="Workshops")
     for ws in workshops:
       instructor = ws.get('instructor')
       if instructor:
@@ -172,39 +170,33 @@ def generate_workshops_html(workshops, member_names):
     html += TEMPLATE_FOOTER
     Path("workshops.html").write_text(html)
 
-def generate_index_html(index):
-    html = TEMPLATE_HEADER.format(title="", button="")
+def generate_home_html(home):
+    html = TEMPLATE_HEADER.format(title="About Us")
     html += f'''
       <div class='home'>
-        <img src={index['image']} alt="The Coop">
+        <img src={home['image']} alt="co-op wide">
+      </div>
+      <p>{home['text']}</p>
+      <div class="contact-section">
+        <h3>Contact</h3>
+        <p>Email: <a href="mailto:{home['email']}">{home['email']}</a></p>
+        <p>Phone: <a href="tel:{home['phone'].replace(' ', '').replace('(', '').replace(')', '').replace('-', '')}">{home['phone']}</a></p>
+        <p><a class="button" href="{home['apply']}" target="_blank">Apply for Membership</a></p>
       </div>
     '''
     html += TEMPLATE_FOOTER
     Path("index.html").write_text(html)
 
-def generate_about_html(about):
-    html = TEMPLATE_HEADER.format(title="About", button="")
-    html += f'''
-      <div class='home'>
-        <img src={about['image']} alt="co-op wide">
-      </div>
-    '''  
-    html += f'''<p>{about['text']}</p>'''
-    html += TEMPLATE_FOOTER
-    Path("about.html").write_text(html)
-
 def make_anchor(s):
   return s.lower().replace(' ', '-')
 
 if __name__ == "__main__":
-    index_file = sys.argv[1]
-    about_file = sys.argv[2]
-    members_file = sys.argv[3]
-    workshops_file = sys.argv[4]
-    events_file = sys.argv[5]
+    home_file = sys.argv[1]
+    members_file = sys.argv[2]
+    workshops_file = sys.argv[3]
+    events_file = sys.argv[4]
 
-    index = json.loads(Path(index_file).read_text())
-    about = json.loads(Path(about_file).read_text())
+    home  = json.loads(Path(home_file).read_text())
     members = json.loads(Path(members_file).read_text())
     workshops = json.loads(Path(workshops_file).read_text())
     events = json.loads(Path(events_file).read_text())
@@ -212,6 +204,5 @@ if __name__ == "__main__":
     generate_members_html(members)
     generate_workshops_html(workshops, {m['name'] for m in members if m.get('name')})
     generate_events_html(events)
-    generate_index_html(index)
-    generate_about_html(about)
+    generate_home_html(home)
 

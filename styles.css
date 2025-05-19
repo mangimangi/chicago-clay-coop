@@ -333,3 +333,20 @@ nav a:hover {
 .event-details h4 {
   margin: 0;
 }
+
+.contact-section {
+  margin-top: 2rem;
+  background-color: #4A4B4F;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+}
+
+.contact-section a {
+  color: #EEB327;
+  text-decoration: none;
+}
+
+.contact-section a:hover {
+  text-decoration: underline;
+}
+
