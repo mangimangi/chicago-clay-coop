@@ -23,6 +23,7 @@ TEMPLATE_HEADER = '''<!DOCTYPE html>
 <a href="workshops.html">Workshops</a>
 <a href="events.html">Events</a>
 <a href="members.html">Members</a>
+<a href="calendar.html">Studio Calendar</a>
 </nav>
 </header>
 <div class="container">
@@ -68,10 +69,7 @@ def generate_members_html(members):
     html += TEMPLATE_FOOTER
     Path("members.html").write_text(html)
 
-def highlight_class(date_str, workshop_dates):
-    return "highlight" if date_str in workshop_dates else ""
-
-def generate_month_calendar(year, month, workshop_dates):
+def generate_month_calendar(year, month, workshop_dates, event_dates):
     cal = calendar.Calendar(firstweekday=6)  # 6 = Sunday
     month_name = calendar.month_name[month]
     html = f'<h2>{month_name} {year}</h2>'
@@ -85,20 +83,30 @@ def generate_month_calendar(year, month, workshop_dates):
                 html += '<td></td>'
             else:
                 date_str = date(year, month, day).isoformat()
-                cls = highlight_class(date_str, workshop_dates)
-                html += f'<td class="{cls}"><a href="#ws-{date_str}">{day}</a></td>'
+                if date_str in workshop_dates:
+                  html += f'''<td class="calendar-workshop"><a href="workshops.html#ws-{date_str}">{day}</a></td>'''
+                elif date_str in event_dates:
+                  html += f'''<td class="calendar-event"><a href="events.html#e-{date_str}">{day}</a></td>'''
+                else:
+                  html += f'''<td>{day}</td>'''
         html += '</tr>'
     html += '</tbody></table>'
     return html
 
-def generate_calendar(workshop_dates):
+def generate_calendar(workshops, events):
+    html = TEMPLATE_HEADER.format(title="Studio Calendar")
+
+    workshop_dates = {ws['date'] for ws in workshops}
+    event_dates = {e['date'] for e in events}
     # Convert dates to (year, month) tuples
-    months = sorted({(datetime.strptime(d, "%Y-%m-%d").year, datetime.strptime(d, "%Y-%m-%d").month) for d in workshop_dates})
-    html = '<div class="calendar">'
+    months = sorted({(datetime.strptime(d, "%Y-%m-%d").year, datetime.strptime(d, "%Y-%m-%d").month) for d in workshop_dates | event_dates})
+    html += '<div class="calendar">'
     for year, month in months:
-        html += generate_month_calendar(year, month, workshop_dates)
+        html += generate_month_calendar(year, month, workshop_dates, event_dates)
     html += '</div>'
-    return html
+
+    html += TEMPLATE_FOOTER
+    Path("calendar.html").write_text(html)
 
 def generate_events_html(events):
     today = date.today()
@@ -133,7 +141,6 @@ def generate_workshops_html(workshops, member_names):
     today = date.today()
     workshops = [w for w in workshops if datetime.strptime(w['date'], "%Y-%m-%d").date() >= today]
     workshops.sort(key=lambda w: datetime.strptime(w['date'], "%Y-%m-%d"))
-    workshop_dates = {ws['date'] for ws in workshops}
     html = TEMPLATE_HEADER.format(title="Workshops")
     for ws in workshops:
       instructor = ws.get('instructor')
@@ -166,7 +173,6 @@ def generate_workshops_html(workshops, member_names):
             <p>{ws['description']}</p>
          </div>
       '''
-    html += generate_calendar(workshop_dates)
     html += TEMPLATE_FOOTER
     Path("workshops.html").write_text(html)
 
@@ -180,15 +186,15 @@ def generate_home_html(home):
         <div class='about-right'>
           <h1>About Us</h1>
           <p>{home['text']}</p>
-          <div class='apply'>
+          <div class='cta'>
             <p><a class="button" href="{home['apply']}" target="_blank">Apply for Membership</a></p>
           </div>
+          <div class='contact'>
+            <h3>Contact</h3>
+              <p>Email: <a href="mailto:{home['email']}">{home['email']}</a></p>
+              <p>Phone: <a href="tel:{home['phone'].replace(' ', '').replace('(', '').replace(')', '').replace('-', '')}">{home['phone']}</a></p>
+          </div>
         </div>
-      </div>
-      <div class="contact" id="contact">
-        <h1>Contact</h1>
-        <p>Email: <a href="mailto:{home['email']}">{home['email']}</a></p>
-        <p>Phone: <a href="tel:{home['phone'].replace(' ', '').replace('(', '').replace(')', '').replace('-', '')}">{home['phone']}</a></p>
       </div>
     '''
     html += TEMPLATE_FOOTER
@@ -211,5 +217,6 @@ if __name__ == "__main__":
     generate_members_html(members)
     generate_workshops_html(workshops, {m['name'] for m in members if m.get('name')})
     generate_events_html(events)
+    generate_calendar(workshops, events)
     generate_home_html(home)
 

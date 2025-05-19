@@ -47,13 +47,6 @@ nav a:hover {
   justify-content: center;
 }
 
-.home .about-left img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto 3rem auto;
-}
-
 .home .about-left,
 .home .about-right {
   flex: 1; /* each takes 50% of container width */
@@ -61,8 +54,33 @@ nav a:hover {
   margin-right: 1rem;
 }
 
-.home .about-right .apply {
+.home .about-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home .about-left img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.home .about-right .cta {
   margin-top: 3rem;
+}
+
+.home .about-right .contact {
+  margin-top: 3rem;
+}
+
+.home .about-right .contact p a {
+  all: unset;
+  cursor: pointer;
+}
+
+.home .about-right .contact p a:hover {
+  color: #EEB327;
 }
 
 .container {
@@ -246,14 +264,15 @@ nav a:hover {
   margin: 0 auto 2rem auto;
   table-layout: fixed;
   text-align: center;
+  height: 200px; /* or any fixed height */
 }
 
 .calendar th,
 .calendar td {
   border: 1px solid #ccc;
   width: 14.28%;
-  vertical-align: top;
-  border-radius: 4px;
+  vertical-align: middle;  /* use middle instead of top */
+  border-radius: 0;
   background-color: #4A4B4F;
   color: #E8E9E2;
   line-height: 3rem;
@@ -265,9 +284,21 @@ nav a:hover {
   justify-content: center;
 }
 
-.calendar td.highlight {
-  background-color: #A60000;
+.calendar td {
+  height: 75px;
+  box-sizing: border-box;
+  padding: 0;
+  position: relative;
+}
+
+.calendar td.calendar-event {
   color: #ffffff;
+  background-color: #8B926D;
+}
+
+.calendar td.calendar-workshop {
+  color: #ffffff;
+  background-color: #A60000;
 }
 
 .calendar td a {
