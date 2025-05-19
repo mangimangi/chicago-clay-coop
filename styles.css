@@ -1,7 +1,9 @@
 @import url("https://use.typekit.net/fjf5mmt.css");
 
 body {
-  font-family: 'bryant-web', serif;
+  font-family: 'bryant-web-alternate', 'sans-serif';
+  font-style: 'normal';
+  font-weight: 300;
   background-color: #1D1E23;
   color: #E8E9E2;
   margin: 0;
@@ -24,8 +26,9 @@ h1, h2 {
 }
 
 h3, h4, h5, h6 {
-  font-family: 'bryant-web', serif;
-  font-weight: normal;
+  font-family: 'bryant-web-alternate', 'sans-serif';
+  font-style: 'normal';
+  font-weight: 300;
   color: #EEB327;
 }
 
