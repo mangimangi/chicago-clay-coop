@@ -141,9 +141,9 @@ def generate_workshops_html(workshops, member_names):
       instructor = ws.get('instructor')
       if instructor:
         if instructor in member_names:
-          instructor = f"<a href='members.html#{make_anchor(ws.get('instructor', ''))}'>{'&nbsp;&nbsp;w/ ' + instructor}</a>"
+          instructor = f"<a href='members.html#{make_anchor(ws.get('instructor', ''))}'>{instructor}</a>"
         else:
-          instructor = f"&nbsp;&nbsp;w/ {instructor}"
+          instructor = f"{instructor}"
 
       html += f'''
         <div class="workshop" id="ws-{ws['date']}">
@@ -153,15 +153,20 @@ def generate_workshops_html(workshops, member_names):
             <div class="workshop-right">
                 <div class="workshop-header">
                     <h2>{ws['name']}</h2>
-                    {f'<a class="button" href="{ws.get("link")}" target="_blank">Book</a>' if ws.get("link") else ""}
                 </div>
                 <div class="workshop-details">
-                  <h4>{datetime.strptime(ws['date'], "%Y-%m-%d").strftime("%A, %B %-d") + " at " + ws['time']}</h4>
                   {f"<h4>{instructor}</h4>" if instructor else ""}
+                  <h4>{datetime.strptime(ws['date'], "%Y-%m-%d").strftime("%A, %B %-d") + " at " + ws['time']}</h4>
+                  {f"<h4>${ws['cost']}</h4>" if ws.get('cost') else ""}
                 </div>
-                <p>{ws['description']}</p>
-            </div>
-        </div>
+                <div class="workshop-details workshop-booking">
+                  {f'<a class="button" href="{ws.get("link")}" target="_blank">Book</a>' if ws.get("link") else ""}
+                </div>
+            </div> <!-- close .workshop-right -->
+        </div> <!-- close .workshop -->
+        <div class="workshop-description">
+            <p>{ws['description']}</p>
+         </div>
       '''
     html += generate_calendar(workshop_dates)
     html += TEMPLATE_FOOTER

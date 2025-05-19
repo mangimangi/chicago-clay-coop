@@ -26,7 +26,7 @@ h1, h2 {
 h3, h4, h5, h6 {
   font-family: 'bryant-web', serif;
   font-weight: normal;
-  color: #8B926D;
+  color: #EEB327;
 }
 
 nav a {
@@ -107,7 +107,7 @@ nav a:hover {
 }
 
 .member-links a {
-  color: #8B926D;
+  color: #EEB327;
   margin-left: 10px;
   font-size: 1.2rem;
   text-decoration: none;
@@ -118,12 +118,15 @@ nav a:hover {
   color: #EEB327;
 }
 
-
 .workshop {
   display: flex;
   gap: 2rem;
   align-items: center;
   flex-wrap: wrap;
+  background: #4A4B4F;
+  padding: 1rem 2rem 0.5rem 2rem;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 0;
 }
 
 .workshop-header {
@@ -164,12 +167,30 @@ nav a:hover {
   margin: 0;
 }
 
+.workshop-booking{
+  display: flex;
+  align-items: center;
+}
+
+.workshop-details h4,
+.workshop-details .button {
+  margin-top: 0.5rem;
+}
+
+
 .workshop-details h4 a {
   all: unset;
   color: inherit;
   font: inherit;
   text-decoration: none;
   cursor: pointer;
+}
+
+.workshop-description {
+  margin: -1rem 0 2rem 0;
+  background: #4A4B4F;
+  padding: 0 2rem 1rem 2rem;
+  border-radius: 0 0 8px 8px;
 }
 
 .button {
@@ -220,7 +241,7 @@ nav a:hover {
 
 .calendar th {
   font-weight: normal;
-  color: #8B926D;
+  color: #EEB327;
   justify-content: center;
 }
 
@@ -257,7 +278,7 @@ nav a:hover {
 .site-footer {
   text-align: center;
   padding: 1rem;
-  color: #8B926D;
+  color: #EEB327;
   font-size: 0.9rem;
 }
 
