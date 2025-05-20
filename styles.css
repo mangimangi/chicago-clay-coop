@@ -266,7 +266,44 @@ nav a:hover {
   border: 2px solid #A60000;
 }
 
-.calendar {
+.calendar-legend {
+  margin-top: 3rem;
+  padding: 2rem;
+  background-color: #4A4B4F;
+  border-radius: 8px;
+}
+
+.calendar-legend h2 {
+  margin-top: 0
+}
+
+.legend-body {
+  display: flex;
+  gap: 2rem;
+  justify-content: start;
+  align-items: center;
+  text-align: center;
+  width: 75%;
+  margin: 0 auto;
+}
+
+.legend-color {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  line-height: 100px;
+  border: 1px solid #ccc;
+}
+
+.legend-color.legend-workshop {
+  background-color: #A60000;
+}
+
+.legend-color.legend-event {
+  background-color: #8B926D;
+}
+
+.calendar .month {
   margin-top: 3rem;
   background-color: #4A4B4F;
   padding: 2rem;
@@ -274,11 +311,11 @@ nav a:hover {
   color: #1D1E23;
 }
 
-.calendar h3 {
+.calendar .month h2 {
   margin-top: 0;
 }
 
-.calendar table {
+.calendar .month table {
   width: 75%;
   border-collapse: collapse;
   margin: 0 auto 2rem auto;
@@ -287,8 +324,8 @@ nav a:hover {
   height: 200px; /* or any fixed height */
 }
 
-.calendar th,
-.calendar td {
+.calendar .month th,
+.calendar .month td {
   border: 1px solid #ccc;
   width: 14.28%;
   vertical-align: middle;  /* use middle instead of top */
@@ -298,30 +335,30 @@ nav a:hover {
   line-height: 3rem;
 }
 
-.calendar th {
+.calendar .month th {
   font-weight: normal;
   color: #EEB327;
   justify-content: center;
 }
 
-.calendar td {
+.calendar .month td {
   height: 75px;
   box-sizing: border-box;
   padding: 0;
   position: relative;
 }
 
-.calendar td.calendar-event {
+.calendar .month td.calendar-event {
   color: #ffffff;
   background-color: #8B926D;
 }
 
-.calendar td.calendar-workshop {
+.calendar .month td.calendar-workshop {
   color: #ffffff;
   background-color: #A60000;
 }
 
-.calendar td a {
+.calendar .month td a {
   all: unset;
   width: 100%;
   height: 100%;

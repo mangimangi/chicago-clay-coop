@@ -72,7 +72,8 @@ def generate_members_html(members):
 def generate_month_calendar(year, month, workshop_dates, event_dates):
     cal = calendar.Calendar(firstweekday=6)  # 6 = Sunday
     month_name = calendar.month_name[month]
-    html = f'<h2>{month_name} {year}</h2>'
+    html = '<div class="month">'
+    html += f'<h2>{month_name} {year}</h2>'
     html += '<table><thead><tr>' + ''.join(f'<th>{day}</th>' for day in ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']) + '</tr></thead><tbody>'
 
     weeks = cal.monthdayscalendar(year, month)
@@ -90,11 +91,21 @@ def generate_month_calendar(year, month, workshop_dates, event_dates):
                 else:
                   html += f'''<td>{day}</td>'''
         html += '</tr>'
-    html += '</tbody></table>'
+    html += '</tbody></table></div>'
     return html
 
 def generate_calendar(workshops, events):
     html = TEMPLATE_HEADER.format(title="Studio Calendar")
+
+    html += """
+      <div class="calendar-legend">
+        <h2>Major &#128273;</h2>
+        <div class="legend-body">
+          <span class="legend-color legend-event">Event</span>
+          <span class="legend-color legend-workshop">Workshop</span>
+        </div>
+      </div>
+    """
 
     workshop_dates = {ws['date'] for ws in workshops}
     event_dates = {e['date'] for e in events}
@@ -118,7 +129,7 @@ def generate_events_html(events):
     for event in events:
         event_date = datetime.strptime(event['date'], "%Y-%m-%d").strftime("%A, %B %-d")
         html += f'''
-        <div class="event">
+        <div class="event" id="e-{event['date']}">
             <div class="event-left">
                 <img src="{event['image']}" alt="{event['name']}">
             </div>
