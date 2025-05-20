@@ -176,23 +176,39 @@ def generate_workshops_html(workshops, member_names):
     html += TEMPLATE_FOOTER
     Path("workshops.html").write_text(html)
 
-def generate_home_html(home):
+def generate_home_html(home, upcoming_events):
+    upcoming_html = ""
+    for event in upcoming_events:
+      upcoming_html += f'''
+        <a href={event['anchor']}>
+          <h3>{event['name']}</h3>
+          <p>{datetime.strptime(event['date'], "%Y-%m-%d").strftime("%A, %B %-d") + " at " + event['time']}</p>
+        </a>
+      '''
+
     html = TEMPLATE_HEADER.format(title="")
     html += f'''
       <div class='home'>
         <div class='about-left'>
-            <img src={home['image']} alt="co-op wide">
+          <img src={home['image']} alt="co-op wide">
         </div>
         <div class='about-right'>
+          <div class='upcoming'>
+            <h1>Upcoming</h1>
+            {upcoming_html}
+          </div>
           <h1>About Us</h1>
           <p>{home['text']}</p>
           <div class='cta'>
             <p><a class="button" href="{home['apply']}" target="_blank">Apply for Membership</a></p>
           </div>
           <div class='contact'>
-            <h3>Contact</h3>
-              <p>Email: <a href="mailto:{home['email']}">{home['email']}</a></p>
-              <p>Phone: <a href="tel:{home['phone'].replace(' ', '').replace('(', '').replace(')', '').replace('-', '')}">{home['phone']}</a></p>
+            <h1>Contact</h1>
+            <a href="mailto:{home["email"]}" target="_blank" title="Email"><i class="fa-solid fa-envelope"></i>{"&nbsp;&nbsp;" + "ChicagoClayCooperative@gmail.com"}</a>
+            <br>
+            <a href={home["instagram"]} target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i>{"&nbsp;&nbsp;" + "@ChicagoClayCooperative"}</a>
+            <br>
+            <a href="tel:{home['phone'].replace(' ','').replace('(','').replace(')','').replace('-','')}" target="_blank" title="Phone"><i class="fa-solid fa-phone"></i>{"&nbsp;&nbsp;" + home['phone']}</a>
           </div>
         </div>
       </div>
@@ -218,5 +234,5 @@ if __name__ == "__main__":
     generate_workshops_html(workshops, {m['name'] for m in members if m.get('name')})
     generate_events_html(events)
     generate_calendar(workshops, events)
-    generate_home_html(home)
+    generate_home_html(home, sorted([{**e, "anchor": f'events.html#e-{e["date"]}'} for e in events] + [{**ws, "anchor": f'workshops.html#ws-{ws["date"]}'} for ws in workshops], key=lambda item: datetime.strptime(item["date"], "%Y-%m-%d"))[:3])
 

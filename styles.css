@@ -60,26 +60,46 @@ nav a:hover {
   justify-content: center;
 }
 
-.home .about-left img {
+.home img {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-.home .about-right .cta {
+.home .upcoming a {
+  text-decoration: none;
+}
+
+.home .upcoming a h3 {
+  margin: 0;
+  display: block;
+}
+
+.home .upcoming a p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  display: block;
+  color: #E8E9E2;
+}
+
+.home .upcoming a:hover p {
+  color: #8B926D;
+}
+
+.home .cta {
   margin-top: 3rem;
 }
 
-.home .about-right .contact {
+.home  .contact {
   margin-top: 3rem;
 }
 
-.home .about-right .contact p a {
+.home .contact p a {
   all: unset;
   cursor: pointer;
 }
 
-.home .about-right .contact p a:hover {
+.home  .contact p a:hover {
   color: #EEB327;
 }
 
@@ -153,7 +173,7 @@ nav a:hover {
 }
 
 .member-links a:hover {
-  color: #EEB327;
+  color: #8B926D;
 }
 
 .workshop {
@@ -384,4 +404,19 @@ nav a:hover {
 
 .contact {
   margin-top: 4rem;
+}
+
+.contact a {
+  color: #E8E9E2;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.contact  a:hover {
+  color: #8B926D;
+}
+
+.contact a i {
+  color: #EEB327;
 }
