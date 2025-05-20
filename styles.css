@@ -49,12 +49,22 @@ nav a:hover {
 
 .home .about-left,
 .home .about-right {
-  flex: 1; /* each takes 50% of container width */
   margin-left: 1rem;
   margin-right: 1rem;
+  flex: 3;
+}
+
+.home .about-right h1 {
+  margin-bottom: 0;
+  margin-top: 2rem;
+}
+
+.home .about-right p {
+  margin-top: 0
 }
 
 .home .about-left {
+  flex: 2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,6 +76,9 @@ nav a:hover {
   display: block;
 }
 
+.home .upcoming h1 {
+  margin-top: 0;
+}
 .home .upcoming a {
   text-decoration: none;
 }
@@ -76,8 +89,8 @@ nav a:hover {
 }
 
 .home .upcoming a p {
-  margin-top: 0;
-  margin-bottom: 1rem;
+  margin: 0;
+  margin-bottom: 0.5rem;
   display: block;
   color: #E8E9E2;
 }
@@ -87,11 +100,12 @@ nav a:hover {
 }
 
 .home .cta {
-  margin-top: 3rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .home  .contact {
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .home .contact p a {
