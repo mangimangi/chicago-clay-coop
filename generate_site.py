@@ -120,8 +120,6 @@ def generate_calendar(workshops, events):
     Path("calendar.html").write_text(html)
 
 def generate_events_html(events):
-    today = date.today()
-    events = [e for e in events if datetime.strptime(e['date'], "%Y-%m-%d").date() >= today]
     events.sort(key=lambda e: datetime.strptime(e['date'], "%Y-%m-%d"))
     
     html = TEMPLATE_HEADER.format(title="Events")
@@ -149,8 +147,6 @@ def generate_events_html(events):
     Path("events.html").write_text(html)
 
 def generate_workshops_html(workshops, member_names):
-    today = date.today()
-    workshops = [w for w in workshops if datetime.strptime(w['date'], "%Y-%m-%d").date() >= today]
     workshops.sort(key=lambda w: datetime.strptime(w['date'], "%Y-%m-%d"))
     html = TEMPLATE_HEADER.format(title="Workshops")
     for ws in workshops:
@@ -232,14 +228,18 @@ def make_anchor(s):
 
 if __name__ == "__main__":
     home_file = sys.argv[1]
-    members_file = sys.argv[2]
-    workshops_file = sys.argv[3]
-    events_file = sys.argv[4]
-
     home  = json.loads(Path(home_file).read_text())
+    
+    members_file = sys.argv[2]
     members = json.loads(Path(members_file).read_text())
+    
+    workshops_file = sys.argv[3]
     workshops = json.loads(Path(workshops_file).read_text())
+    workshops = [w for w in workshops if datetime.strptime(w['date'], "%Y-%m-%d").date() >= date.today()]
+    
+    events_file = sys.argv[4]
     events = json.loads(Path(events_file).read_text())
+    events = [e for e in events if datetime.strptime(e['date'], "%Y-%m-%d").date() >= date.today()]
 
     generate_members_html(members)
     generate_workshops_html(workshops, {m['name'] for m in members if m.get('name')})
