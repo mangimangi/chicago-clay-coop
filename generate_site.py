@@ -20,7 +20,6 @@ TEMPLATE_HEADER = '''<!DOCTYPE html>
 </a>
 <nav>
 <a href="index.html">Home</a>
-<a href="workshops.html">Workshops</a>
 <a href="events.html">Events</a>
 <a href="members.html">Members</a>
 <a href="calendar.html">Studio Calendar</a>
@@ -85,7 +84,7 @@ def generate_month_calendar(year, month, workshop_dates, event_dates):
             else:
                 date_str = date(year, month, day).isoformat()
                 if date_str in workshop_dates:
-                  html += f'''<td class="calendar-workshop"><a href="workshops.html#ws-{date_str}">{day}</a></td>'''
+                  html += f'''<td class="calendar-workshop"><a href="events.html#ws-{date_str}">{day}</a></td>'''
                 elif date_str in event_dates:
                   html += f'''<td class="calendar-event"><a href="events.html#e-{date_str}">{day}</a></td>'''
                 else:
@@ -119,36 +118,10 @@ def generate_calendar(workshops, events):
     html += TEMPLATE_FOOTER
     Path("calendar.html").write_text(html)
 
-def generate_events_html(events):
-    events.sort(key=lambda e: datetime.strptime(e['date'], "%Y-%m-%d"))
-    
-    html = TEMPLATE_HEADER.format(title="Events")
-    
-    for event in events:
-        event_date = datetime.strptime(event['date'], "%Y-%m-%d").strftime("%A, %B %-d")
-        html += f'''
-        <div class="event" id="e-{event['date']}">
-            <div class="event-left">
-                <img src="{event['image']}" alt="{event['name']}">
-            </div>
-            <div class="event-right">
-                <div class="event-header">
-                    <h2>{event['name']}</h2>
-                </div>
-                <div class="event-details">
-                  <h4>{event_date} at {event['time']}</h4>
-                </div>
-                <p>{event['description']}</p>
-            </div>
-        </div>
-        '''
-    
-    html += TEMPLATE_FOOTER
-    Path("events.html").write_text(html)
-
-def generate_workshops_html(workshops, member_names):
-    workshops.sort(key=lambda w: datetime.strptime(w['date'], "%Y-%m-%d"))
+def generate_events_html(workshops, events, member_names):
     html = TEMPLATE_HEADER.format(title="Workshops")
+
+    workshops.sort(key=lambda w: datetime.strptime(w['date'], "%Y-%m-%d"))
     for ws in workshops:
       instructor = ws.get('instructor')
       if instructor:
@@ -178,10 +151,34 @@ def generate_workshops_html(workshops, member_names):
         </div> <!-- close .workshop -->
         <div class="workshop-description">
             <p>{ws['description']}</p>
-         </div>
+        </div>
       '''
+    
+    events.sort(key=lambda e: datetime.strptime(e['date'], "%Y-%m-%d"))
+    if events:
+      html += "<h1>Events</h1>"
+
+      for event in events:
+          event_date = datetime.strptime(event['date'], "%Y-%m-%d").strftime("%A, %B %-d")
+          html += f'''
+          <div class="event" id="e-{event['date']}">
+              <div class="event-left">
+                  <img src="{event['image']}" alt="{event['name']}">
+              </div>
+              <div class="event-right">
+                  <div class="event-header">
+                      <h2>{event['name']}</h2>
+                  </div>
+                  <div class="event-details">
+                    <h4>{event_date} at {event['time']}</h4>
+                  </div>
+                  <p>{event['description']}</p>
+              </div>
+          </div>
+          '''
+    
     html += TEMPLATE_FOOTER
-    Path("workshops.html").write_text(html)
+    Path("events.html").write_text(html)
 
 def generate_home_html(home, upcoming_events):
     upcoming_html = ""
@@ -242,8 +239,7 @@ if __name__ == "__main__":
     events = [e for e in events if datetime.strptime(e['date'], "%Y-%m-%d").date() >= date.today()]
 
     generate_members_html(members)
-    generate_workshops_html(workshops, {m['name'] for m in members if m.get('name')})
-    generate_events_html(events)
+    generate_events_html(workshops, events, {m['name'] for m in members if m.get('name')})
     generate_calendar(workshops, events)
     generate_home_html(home, sorted([{**e, "anchor": f'events.html#e-{e["date"]}'} for e in events] + [{**ws, "anchor": f'workshops.html#ws-{ws["date"]}'} for ws in workshops], key=lambda item: datetime.strptime(item["date"], "%Y-%m-%d"))[:3])
 
