@@ -15,9 +15,24 @@ header {
   padding: 1rem;
 }
 
+header a {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+header nav {
+  margin-top: 2rem;
+}
+
+header nav a {
+  display: unset;
+}
+
 header img {
   width: 200px;
-  margin: 3rem;
 }
 
 h1, h2 {

@@ -18,6 +18,7 @@ TEMPLATE_HEADER = '''<!DOCTYPE html>
 <a href="index.html" class="logo-link">
   <img src="https://file-the-coop.tor1.cdn.digitaloceanspaces.com/logo.png" alt="Logo">
 </a>
+<a href="https://maps.app.goo.gl/Q8mYMy4PxFMPW2Ys6">4636 N. Ravenswood Ave. Unit 107</a>
 <nav>
 <a href="index.html">Home</a>
 <a href="events.html">Events</a>
