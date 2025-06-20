@@ -241,5 +241,5 @@ if __name__ == "__main__":
     generate_members_html(members)
     generate_events_html(workshops, events, {m['name'] for m in members if m.get('name')})
     generate_calendar(workshops, events)
-    generate_home_html(home, sorted([{**e, "anchor": f'events.html#e-{e["date"]}'} for e in events] + [{**ws, "anchor": f'workshops.html#ws-{ws["date"]}'} for ws in workshops], key=lambda item: datetime.strptime(item["date"], "%Y-%m-%d"))[:3])
+    generate_home_html(home, sorted([{**e, "anchor": f'events.html#e-{e["date"]}'} for e in events] + [{**ws, "anchor": f'events.html#ws-{ws["date"]}'} for ws in workshops], key=lambda item: datetime.strptime(item["date"], "%Y-%m-%d"))[:3])
 
