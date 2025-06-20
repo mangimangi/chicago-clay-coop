@@ -96,16 +96,6 @@ def generate_month_calendar(year, month, workshop_dates, event_dates):
 def generate_calendar(workshops, events):
     html = TEMPLATE_HEADER.format(title="Studio Calendar")
 
-    html += """
-      <div class="calendar-legend">
-        <h2>Major &#128273;</h2>
-        <div class="legend-body">
-          <span class="legend-color legend-event">Event</span>
-          <span class="legend-color legend-workshop">Workshop</span>
-        </div>
-      </div>
-    """
-
     workshop_dates = {ws['date'] for ws in workshops}
     event_dates = {e['date'] for e in events}
     # Convert dates to (year, month) tuples
