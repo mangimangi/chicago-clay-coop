@@ -5,5 +5,12 @@
     "time": "6pm-9pm",
     "description": "see what's cookin'",
     "image": "https://i.imgur.com/THTgPTn.jpeg"
+  },
+  {
+    "name": "Mini Fest",
+    "date": "2025-07-27",
+    "time": "11am-3pm",
+    "description": "Celebrate the world of tiny ceramics!",
+    "image": "https://imgur.com/hQlytAM"
   }
 ]
