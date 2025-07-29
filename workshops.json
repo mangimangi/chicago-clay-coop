@@ -58,5 +58,15 @@
     "description": "Step into the world of tiny pottery! In this playful, hands-on workshop, each participant will be provided a miniature pottery wheel, clay, tools, and underglazes. After a brief demo and instruction, you’ll get to create your own tiny ceramic pieces—perfect for beginners and anyone curious about working small. Your finished creations will be glazed, kiln-fired, and ready for pickup within two weeks. No experience needed—just bring your curiosity and appreciation for all things mini! This workshop includes all supplies, is beginner-friendly, offers instruction by a local ceramic artist, and you'll take home 2–5 mini pieces.",
     "image": "https://i.imgur.com/B9OGoPl.jpeg",
     "link": "https://buy.stripe.com/6oUeVc0RZebe0rg3jH9R60c"
+  },
+  {
+   "name": "Secret Pottery Class",
+    "date": "2025-09-20",
+    "time": "10am-1:00pm",
+    "cost": "420",
+    "instructor": "Jen Fitzgerald",
+    "description": "10 week pottery class with Jen Fitzgerald. 10-1 on Saturdays. Mostly hand building, but we're building it with you! From Sept. 20th to Oct 22nd.",
+    "image": "https://i.imgur.com/rjhCGlK.jpeg",
+    "link": "https://buy.stripe.com/00w3cueIP0koc9Y9I59R60d"
   }
 ]
