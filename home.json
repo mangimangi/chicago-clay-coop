@@ -1,8 +1,22 @@
 {
+  "thumbnail": "https://i.imgur.com/ewHQqbE.png",
   "image": "https://i.imgur.com/0Zq98jN.jpeg",
-  "text": "A community based ceramics studio in Chicago, IL. Located in the Bulldog Lock Building in Ravenswood. We offer one day workshops, annual memberships and classes. Please check in regularly for updates regarding shows and open hours. Founded by Jen + Michael in Winter 2025.",
+  "title": "Creativity,\\nEducation &\\nCommunity",
+  "description": "The Chicago Clay Co-Op is a community based ceramics studio in the Ravenswood neighborhood of Chicago. We offer classes, workshops and private events. ",
   "email": "chicagoclaycooperative@gmail.com",
   "phone": "(872) 255-9765",
   "instagram": "https://www.instagram.com/chicagoclaycooperative/",
-  "apply": "https://docs.google.com/forms/d/e/1FAIpQLScddEmf3gWJeJogpnNI95bFntmZ3dFg_7ctZNXt83XxIaofOw/viewform"
+  "apply": "https://docs.google.com/forms/d/e/1FAIpQLScddEmf3gWJeJogpnNI95bFntmZ3dFg_7ctZNXt83XxIaofOw/viewform",
+  "testimonials": [
+    {
+      "name": "charlie",
+      "location": "lincoln park",
+      "text": "this place slaps p hard if ur down to get dirty (which I v much am)"
+    },
+    {
+      "name": "julien",
+      "location": "uptown",
+      "text": "whoa! I didn't realize you could make literally anything out of mud!"
+    }
+  ]
 }
