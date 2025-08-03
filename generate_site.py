@@ -18,14 +18,14 @@ def header(page):
 
     return f'''
       <header>
-        <div class="logo-thumb"><a href="index.html"><img src="{logo}" alt="Logo" /></a></div>
-        <nav>
-          <ul>
-            <li><a href="index.html" class={"active" if page == "home" else ""}>Home</a></li>
-            <li><a href="events.html" class={"active" if page == "events" else  ""}>Events</a></li>
-            <li><a href="members.html" class={"active" if page == "members" else ""}>Members</a></li>
-          </ul>
-        </nav>
+          <div class="logo-thumb"><a href="index.html"><img src="{logo}" alt="Logo" /></a></div>
+          <nav>
+            <ul>
+              <li><a href="index.html" class={"active" if page == "home" else ""}>Home</a></li>
+              <li><a href="events.html" class={"active" if page == "events" else  ""}>Events</a></li>
+              <li><a href="members.html" class={"active" if page == "members" else ""}>Members</a></li>
+            </ul>
+          </nav>
       </header>
     '''
 
@@ -144,9 +144,30 @@ def render_events():
     logo = home.get('thumbnail', 'logo.png')
     events = get_combined_events()
 
-    cards = ''
+    # Group events by month
+    grouped = {}
     for e in events:
-        cards += get_event_card(e)
+        if 'date' not in e:
+            continue
+        dt = datetime.strptime(e['date'], "%Y-%m-%d")
+        month_label = dt.strftime('%B')
+        grouped.setdefault(month_label, []).append(e)
+
+    month_nav = ''
+    for month, _ in grouped.items():
+        short_month = datetime.strptime(month, "%B").strftime("%b")
+        month_nav += f'<a href="#{month.lower()}" class="month-link">{short_month}</a>\n'
+
+    # Build the content
+    content_blocks = ''
+    for month, events_in_month in grouped.items():
+        event_cards = ''.join([get_event_card(e) for e in events_in_month])
+        content_blocks += f'''
+        <h2 id="{month.lower()}" class="month-header">{month}</h2>
+        <section class="card-grid">
+          {event_cards}
+        </section>
+        '''
 
     content = f'''<!DOCTYPE html>
 <html lang="en">
@@ -160,14 +181,16 @@ def render_events():
 {header("events")}
 <main>
   <h1>Events</h1>
-  <section class="card-grid">
-    {cards}
-  </section>
+  <div class="month-nav">
+    {month_nav}
+  </div>
+  {content_blocks}
 </main>
 {footer()}
 </body>
 </html>
 '''
+
     with open('events.html', 'w', encoding='utf-8') as f:
         f.write(content)
 

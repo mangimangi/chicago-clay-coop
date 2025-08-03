@@ -51,10 +51,14 @@ P {
 
 /* Header */
 header {
+  margin: 1rem 0 2rem;
+  padding: 1rem 0 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 0 3rem;
+  position: sticky;
+  top: 0px;
+  background-color: var(--primary-bg); /* match your theme */
 }
 
 .logo-thumb img {
@@ -265,6 +269,35 @@ div.testimonial-grid {
   .card-grid {
     flex-direction: column;
   }
+}
+
+/* Event Calendar */
+.month-nav {
+  position: sticky;
+  top: 60px; /* adjust based on your header height */
+  background-color: var(--primary-bg); /* match your theme */
+  z-index: 100;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.month-link {
+  font-family: 'roca', sans-serif;
+  color: #1D1E23;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.month-link:hover {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: #EEB327;
+}
+
+.month-header {
+  scroll-margin-top: 150px;
 }
 
 /* Footer */
