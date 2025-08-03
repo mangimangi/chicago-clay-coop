@@ -87,7 +87,7 @@ def render_home():
     for t in testimonials[:2]:
         testimonial_cards += f'''
     <div class="testimonial-card">
-      <img src="{home.get('image', '')}" alt="Testimonial">
+      <img src="{t.get('image', '')}" alt="Testimonial Background">
       <div class="testimonial-bubble">
         <p>"{t.get('text', '')}"
           <br>
@@ -126,7 +126,7 @@ def render_home():
   </section>
   <section>
     <h2>Testimonials</h2>
-    <div class="card-grid">
+    <div class="card-grid testimonial-grid">
       {testimonial_cards}
     </div>
   </section>

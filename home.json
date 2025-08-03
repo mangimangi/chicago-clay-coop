@@ -11,12 +11,14 @@
     {
       "name": "charlie",
       "location": "lincoln park",
-      "text": "this place slaps p hard if ur down to get dirty (which I v much am)"
+      "text": "this place slaps p hard if ur down to get dirty (which I v much am)",
+      "image": "https://i.imgur.com/0Zq98jN.jpeg"
     },
     {
       "name": "julien",
       "location": "uptown",
-      "text": "whoa! I didn't realize you could make literally anything out of mud!"
+      "text": "whoa! I didn't realize you could make literally anything out of mud!",
+      "image": "https://i.imgur.com/0Zq98jN.jpeg"
     }
   ]
 }
