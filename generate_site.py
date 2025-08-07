@@ -1,5 +1,10 @@
 import json
+import os
+import re
+
 from datetime import date, datetime
+from pathlib import Path
+
 
 def load_json(filename):
     with open(filename, 'r', encoding='utf-8') as f:
@@ -12,18 +17,23 @@ def format_date(date_str):
     except:
         return date_str
 
+def slugify(text):
+    text = text.lower()
+    text = re.sub(r'[^a-z0-9]+', '-', text)
+    return text.strip('-')
+
 def header(page):
     home = load_json('home.json')
     logo = home.get('thumbnail')
 
     return f'''
       <header>
-          <div class="logo-thumb"><a href="index.html"><img src="{logo}" alt="Logo" /></a></div>
+          <div class="logo-thumb"><a href="/index.html"><img src="{logo}" alt="Logo" /></a></div>
           <nav>
             <ul>
-              <li><a href="index.html" class={"active" if page == "home" else ""}>Home</a></li>
-              <li><a href="events.html" class={"active" if page == "events" else  ""}>Events</a></li>
-              <li><a href="members.html" class={"active" if page == "members" else ""}>Members</a></li>
+              <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
+              <li><a href="/events.html" class={"active" if page in ["events", "event"] else  ""}>Events</a></li>
+              <li><a href="/members.html" class={"active" if page == "members" else ""}>Members</a></li>
             </ul>
           </nav>
       </header>
@@ -53,19 +63,69 @@ def get_combined_events():
 
     return future 
 
-def get_event_card(e):
+def render_event(event):
+    title = event.get('name', '')
+    instructor = event.get('instructor', '')
+    description = event.get('description', '')
+    date = event.get('date', '')
+    image = event.get('image', '')
+    link = event.get('link', '#')
+
+    slug = f"{slugify(title)}-{date}"
+    page_path = Path("event") / f"{slug}.html"
+
+    content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{title}</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+{header("event")}
+<main>
+  <section class="page-details">
+    <div class="details-image">
+      <img src="{image}" alt="{title}" />
+    </div>
+    <div class="details-text">
+      <h1 class="details-title">{title}</h1>
+      <h3>{f"with {instructor}" if instructor else ""}</h3>
+      <p class="details-description">{description}</p>
+      <a href="{link}" class="cta-btn">Register Now</a>
+    </div>
+  </section>
+</main>
+{footer()}
+</body>
+</html>
+"""
+    page_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(page_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    return slug
+
+def render_event_card(e):
     cost = f"${e['cost']}" if e.get('cost') else '&nbsp;'
     instructor = f"w/ {e['instructor']}" if e.get('instructor') else '&nbsp;'
+    slug = f"{slugify(e['name'])}-{e['date']}"
+    detail_link = f"event/{slug}.html"
+
     return f'''
         <div class="card">
-          <img src="{e.get('image', '')}" alt="{e.get('name', '')}" />
+          <a href="{detail_link}"><img src="{e.get('image', '')}" alt="{e.get('name', '')}" /></a>
           <div class="card-content">
             <h3>{e.get('name', '')}</h3>
             <p>{instructor}</p>
             <p>{format_date(e.get('date', ''))}</p>
             <p>{cost}</p>
           </div>
-          <a href="{e.get('link', '#')}" class="cta-btn card-btn">Register</a>
+          <div class="card-btn-row">
+            <a href="{detail_link}" class="cta-btn card-btn details-btn">Details</a>
+            <a href="{e.get('link', '#')}" class="cta-btn card-btn">Register</a>
+          </div>
         </div>
     '''
 
@@ -81,7 +141,7 @@ def render_home():
 
     upcoming_cards = ''
     for e in upcoming:
-        upcoming_cards += get_event_card(e)
+        upcoming_cards += render_event_card(e)
 
     testimonial_cards = ''
     for t in testimonials[:2]:
@@ -108,13 +168,13 @@ def render_home():
 <body>
 {header("home")}
 <main>
-  <section class="home-top">
-    <div class="home-text">
-      <h1 class="home-title">{title_with_br}</h1>
-      <p class="home-description">{home.get('description')}</p>
+  <section class="page-details">
+    <div class="details-text">
+      <h1 class="details-title">{title_with_br}</h1>
+      <p class="details-description home">{home.get('description')}</p>
       <a href="events.html" class="cta-btn">Schedule of Events</a>
     </div>
-    <div class="home-image">
+    <div class="details-image">
       <img src="{home.get('image')}" alt="Studio image" />
     </div>
   </section>
@@ -161,7 +221,7 @@ def render_events():
     # Build the content
     content_blocks = ''
     for month, events_in_month in grouped.items():
-        event_cards = ''.join([get_event_card(e) for e in events_in_month])
+        event_cards = ''.join([render_event_card(e) for e in events_in_month])
         content_blocks += f'''
         <h2 id="{month.lower()}" class="month-header">{month}</h2>
         <section class="card-grid">
@@ -269,6 +329,9 @@ def main():
     render_home()
     render_events()
     render_members()
+
+    for event in get_combined_events():
+        render_event(event)
 
 if __name__ == '__main__':
     main()

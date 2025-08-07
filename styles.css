@@ -40,15 +40,6 @@ P {
   margin: 0.5rem 0;
 }
 
-.home-title {
-  margin: 0;
-}
-
-.home-description {
-  font-size: 1.2rem;
-  margin: 3rem 0;
-}
-
 /* Header */
 header {
   margin: 1rem 0 2rem;
@@ -84,14 +75,14 @@ nav ul li a:hover {
   font-weight: bold;
 }
 
-/* Home top section */
-.home-top {
+/* Page details section */
+.page-details {
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
 }
 
-.home-text {
+.details-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -99,7 +90,19 @@ nav ul li a:hover {
   min-width: 250px;
 }
 
-.home-image {
+.details-title {
+  margin: 0;
+}
+
+.details-description {
+  margin: 3rem 0;
+}
+
+.details-description.home {
+  font-size: 1.2rem;
+}
+
+.details-image {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -107,7 +110,7 @@ nav ul li a:hover {
   min-width: 250px;
 }
 
-.home-image img {
+.details-image img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
@@ -206,12 +209,26 @@ nav ul li a:hover {
   background-color: #333;
 }
 
+.card-btn-row {
+  display: flex;
+  justify-content: space-between;
+}
+
 .card-btn {
   display: block;
   border-radius: 0px;
   margin-top: auto;
   width: 100%;
   padding: 0.5rem;
+}
+
+.details-btn {
+  background-color: var(--primary-cta);
+  color: var(--primary-text);
+}
+
+.details-btn:hover {
+  background-color: #e0a800;
 }
 
 /* Testimonials */
@@ -317,4 +334,3 @@ footer {
 .footer-copy {
   margin-top: 0.75rem;
 }
-
