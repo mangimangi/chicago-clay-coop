@@ -11,12 +11,12 @@ body {
   color: var(--primary-text);
   font-family: 'bryant-web-alternate', 'sans-serif';
   margin: 0;
-  padding: 0 10vw;
+  padding: 0 10px;
 }
 
 @media(min-width: 768px) {
   body {
-    padding: 0 16.66vw;
+    padding: 0 200px;
   }
 }
 
@@ -91,7 +91,13 @@ nav ul li a:hover {
 }
 
 .details-title {
+  display: flex;
   margin: 0;
+}
+
+.details-links {
+  max-width: 200px;
+  margin-left: auto;
 }
 
 .details-description {

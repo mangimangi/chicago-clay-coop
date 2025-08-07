@@ -129,6 +129,82 @@ def render_event_card(e):
         </div>
     '''
 
+def render_member(member):
+    name = member.get('name', '')
+    image = member.get('image', '')
+    statement = member.get('statement', '')
+
+    slug = slugify(name)
+    page_path = Path("member") / f"{slug}.html"
+
+    links = render_member_links(member)
+
+    content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{name}</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+{header("members")}
+<main>
+  <section class="page-details">
+    <div class="details-image">
+      <img src="{image}" alt="{name}" />
+    </div>
+    <div class="details-text">
+      <h1 class="details-title">
+        {name}
+        <div class="details-links">{links}</div>
+      </h1>
+      <p class="details-description">{statement}</p>
+    </div>
+  </section>
+</main>
+{footer()}
+</body>
+</html>
+"""
+
+    page_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(page_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+def render_member_links(member):
+    instagram = member.get('instagram')
+    website = member.get('website')
+
+    if instagram and website:
+        return f'''
+            <div class="card-links">
+                <a href="{instagram}" target="_blank" class="card-link half">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="{website}" target="_blank" class="card-link half">
+                    <i class="fa-solid fa-link"></i>
+                </a>
+            </div>
+        '''
+    elif instagram:
+        return f'''
+            <div class="card-links">
+                <a href="{instagram}" target="_blank" class="card-link full">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+        '''
+    elif website:
+        return f'''
+            <div class="card-links">
+                <a href="{website}" target="_blank" class="card-link full">
+                    <i class="fa-solid fa-link"></i>
+                </a>
+            </div>
+        '''
+
+
 def render_home():
     home = load_json('home.json')
     testimonials = home.get('testimonials', [])
@@ -207,6 +283,8 @@ def render_events():
     # Group events by month
     grouped = {}
     for e in events:
+        render_event(e)
+
         if 'date' not in e:
             continue
         dt = datetime.strptime(e['date'], "%Y-%m-%d")
@@ -259,46 +337,22 @@ def render_members():
 
     cards = ''
     for m in members:
-        links = ''
-        if m.get("instagram") and m.get("website"):
-            links = f'''
-                <div class="card-links">
-                    <a href="{m['instagram']}" target="_blank" class="card-link half">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                    <a href="{m['website']}" target="_blank" class="card-link half">
-                        <i class="fa-solid fa-link"></i>
-                    </a>
-                </div>
-            '''
-        elif m.get("instagram"):
-            links = f'''
-                <div class="card-links">
-                    <a href="{m['instagram']}" target="_blank" class="card-link full">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                </div>
-            '''
-        elif m.get("website"):
-            links = f'''
-                <div class="card-links">
-                    <a href="{m['website']}" target="_blank" class="card-link full">
-                        <i class="fa-solid fa-link"></i>
-                    </a>
-                </div>
-            '''
+        render_member(m)
 
+        links = render_member_links(m)
+        slug = slugify(m.get("name", ""))
+        profile_link = f"member/{slug}.html"
 
         cards += f'''
             <div class="card">
-              <img src="{m.get('image', '')}" alt="{m.get('name', '')}" />
+              <a href="{profile_link}"><img src="{m.get('image', '')}" alt="{m.get('name', '')}" /></a>
               <div class="card-content">
                 <h3>{m.get('name', '')}</h3>
                 <div class="card-links">
                   {links}
                 </div>
               </div>
-              <a href="{m.get('profile_link', '#')}" class="cta-btn card-btn">Profile</a>
+              <a href="{profile_link}" class="cta-btn card-btn">Profile</a>
             </div>
         '''
 
@@ -330,8 +384,6 @@ def main():
     render_events()
     render_members()
 
-    for event in get_combined_events():
-        render_event(event)
 
 if __name__ == '__main__':
     main()
