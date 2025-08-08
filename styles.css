@@ -4,6 +4,11 @@
   --primary-bg: #E8E9E2;
   --primary-text: #1D1E23;
   --primary-cta: #EEB327;
+  --card-width: 300px;
+  --card-border: 1px;
+  --three-per-padding: 200px;
+  --two-per-padding: 100px;
+  --default-gap: 1rem;
 }
 
 body {
@@ -11,12 +16,20 @@ body {
   color: var(--primary-text);
   font-family: 'bryant-web-alternate', 'sans-serif';
   margin: 0;
-  padding: 0 10px;
+  padding: 0 var(--three-per-padding);
 }
 
-@media(min-width: 768px) {
+/* @media (max-width: calc(3 * var(--card-width) + 6 * var(--card-border) + 2 * var(--default-gap) + 2 * var(--three-per-padding))) { */
+@media (max-width: calc(3 * 300px + 6 * 1px + 2 * 1rem + 2 * 200px)) {
   body {
-    padding: 0 200px;
+    padding: 0 var(--two-per-padding);
+  }
+}
+
+/*@media (max-width: calc(2 * var(--card-width) + 4 * var(--card-border) + var(--default-gap) + 2 * var(--two-per-padding))) { */
+@media (max-width: calc(2 * 300px + 4 * 1px + 1rem + 2 * 100px)) {
+  body {
+    padding: 0 10px; /* mobile */
   }
 }
 
@@ -136,12 +149,12 @@ nav ul li a:hover {
 
 /* Cards */
 .card {
-  border: 1px solid var(--primary-text);
+  border: var(--card-border) solid var(--primary-text);
   border-radius: 8px;
   background: white;
   color: var(--primary-text);
   overflow: hidden;
-  max-width: 300px;
+  max-width: var(--card-width);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -267,7 +280,7 @@ div.testimonial-grid {
   left: 50%;
   transform: translate(-50%, -50%);  /* Centers the bubble */
   width: 50%;
-  background-color: #E8E9E2E5;
+  background-color: var(--primary-bg-color);
   border-radius: 8px;
   padding: 1.5rem;
   text-align: center;
@@ -283,15 +296,12 @@ div.testimonial-grid {
 .card-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
-  gap: 1rem;
+  justify-content: flex-start; /* keep natural left-to-right flow */
+  gap: var(--default-gap);
+  max-width: calc(3 * 302px + 2 * 1rem); /* 3 cards + 2 gaps */
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 2rem;
-}
-
-@media(max-width: 768px) {
-  .card-grid {
-    flex-direction: column;
-  }
 }
 
 /* Event Calendar */
@@ -307,7 +317,7 @@ div.testimonial-grid {
 
 .month-link {
   font-family: 'roca', sans-serif;
-  color: #1D1E23;
+  color: var(--primary-text-color);
   text-decoration: none;
   font-weight: 600;
   font-size: 1.5rem;
@@ -316,7 +326,7 @@ div.testimonial-grid {
 .month-link:hover {
   text-decoration: underline;
   text-decoration-style: wavy;
-  text-decoration-color: #EEB327;
+  text-decoration-color: var(--primary-cta);
 }
 
 .month-header {
