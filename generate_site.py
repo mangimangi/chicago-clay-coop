@@ -10,10 +10,13 @@ def load_json(filename):
     with open(filename, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def format_date(date_str):
+def format_date(date_str, time):
     try:
         dt = datetime.strptime(date_str, '%Y-%m-%d')
-        return dt.strftime('%B %d, %Y')
+        dt = dt.strftime('%B %d, %Y')
+        if time:
+          dt += f'''<br>{time}'''
+        return dt
     except:
         return date_str
 
@@ -68,11 +71,39 @@ def render_event(event):
     instructor = event.get('instructor', '')
     description = event.get('description', '')
     date = event.get('date', '')
+    time = event.get('time', '')
+    cost = event.get('cost', '')
+    requirements = event.get('requirements', '')
     image = event.get('image', '')
     link = event.get('link', '#')
 
     slug = f"{slugify(title)}-{date}"
     page_path = Path("event") / f"{slug}.html"
+
+    # Start details row
+    details = "<div class='event-details'>"
+    if cost:
+        details += f"""
+        <div class="event-detail">
+            <i class="fa-light fa-dollar-sign"></i>
+            <div class="event-detail-text">${cost}</div>
+        </div>
+        """
+    if date or time:
+        details += f"""
+        <div class="event-detail">
+            <i class="fa-regular fa-calendar"></i>
+            <div class="event-detail-text">{format_date(date,time)}</div>
+        </div>
+        """
+    if requirements:
+        details += f"""
+        <div class="event-detail">
+            <i class="fa-solid fa-people-group"></i>
+            <div class="event-detail-text">{requirements}</div>
+        </div>
+        """
+    details += "</div>"
 
     content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -92,6 +123,7 @@ def render_event(event):
     <div class="details-text">
       <h1 class="details-title">{title}</h1>
       <h3>{f"with {instructor}" if instructor else ""}</h3>
+      {details}
       <p class="details-description">{description}</p>
       <a href="{link}" class="cta-btn">Register Now</a>
     </div>
@@ -119,7 +151,7 @@ def render_event_card(e):
           <div class="card-content">
             <h3>{e.get('name', '')}</h3>
             <p>{instructor}</p>
-            <p>{format_date(e.get('date', ''))}</p>
+            <p>{format_date(e.get('date', ''),e.get('time', ''))}</p>
             <p>{cost}</p>
           </div>
           <div class="card-btn-row">

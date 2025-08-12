@@ -114,7 +114,7 @@ nav ul li a:hover {
 }
 
 .details-description {
-  margin: 3rem 0;
+  margin: 2.5rem 0;
 }
 
 .details-description.home {
@@ -280,7 +280,7 @@ div.testimonial-grid {
   left: 50%;
   transform: translate(-50%, -50%);  /* Centers the bubble */
   width: 50%;
-  background-color: var(--primary-bg-color);
+  background-color: var(--primary-bg);
   border-radius: 8px;
   padding: 1.5rem;
   text-align: center;
@@ -317,7 +317,7 @@ div.testimonial-grid {
 
 .month-link {
   font-family: 'roca', sans-serif;
-  color: var(--primary-text-color);
+  color: var(--primary-text);
   text-decoration: none;
   font-weight: 600;
   font-size: 1.5rem;
@@ -332,6 +332,32 @@ div.testimonial-grid {
 .month-header {
   scroll-margin-top: 150px;
 }
+
+.event-details {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 2rem;
+}
+
+.event-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.9rem;
+  text-align: center;
+  justify-content: start;
+}
+
+.event-detail i {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  font-style: normal;
+}
+
+.event-detail-text {
+  font-weight: 500;
+}
+
 
 /* Footer */
 footer {
