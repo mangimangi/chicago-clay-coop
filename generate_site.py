@@ -116,7 +116,7 @@ def render_event(event):
 <body>
 {header("event")}
 <main>
-  <section class="page-details">
+  <section class="page-details event-page-details">
     <div class="details-image">
       <img src="{image}" alt="{title}" />
     </div>
@@ -293,7 +293,6 @@ def render_home():
     </div>
   </section>
   <section>
-    <h2>Testimonials</h2>
     <div class="card-grid testimonial-grid">
       {testimonial_cards}
     </div>
