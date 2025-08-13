@@ -1,0 +1,74 @@
+{
+  "images": [
+    "https://i.imgur.com/0Zq98jN.jpeg",
+    "https://i.imgur.com/0Zq98jN.jpeg",
+    "https://i.imgur.com/0Zq98jN.jpeg",
+    "https://i.imgur.com/0Zq98jN.jpeg",
+    "https://i.imgur.com/0Zq98jN.jpeg"
+  ],
+  "directions": {
+    "map": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11866.106492662148!2d-87.6820947!3d41.9675018!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fd25472455555%3A0x4d0d427a156d7c4!2s4636%20N%20Ravenswood%20Ave%2C%20Chicago%2C%20IL%2060640!5e0!3m2!1sen!2sus!4v1755104961237!5m2!1sen!2sus",
+    "link": "https://www.google.com/maps/dir//4636+N+Ravenswood+Ave,+Chicago,+IL+60640/@41.9660964,-87.6776729",
+    "transit": [
+      "0.4 miles from Montrose Brown Line",
+      "1.3 miles from Lawrence Red Line",
+      "350 feet from Ravenswood Metra",
+      "0.4 miles from the 81 Bus at Lawrence & Ashland"
+    ],
+    "biking": [
+      "There are bike racks immediately in front of the building",
+      "There is a Divvy Dock at Lawrence & Ravenswood"
+    ],
+    "driving": [
+      "There is free parking west of Wolcott on Wilson",
+      "Both sides of Ravenswood are permit parking only from 10-3pm between Wilson and Lawrence — we have one day passes available",
+      "The lot behind the building is $12 per day"
+    ]
+  },
+  "bring": {
+    "image": "https://i.imgur.com/0Zq98jN.jpeg",
+    "link": "https://mudtools.com/products/the-essentials",
+    "yes": [
+      "Water bottle or drinks. We have a fridge and filtered water here in case you forget :)",
+      "Small snacks (and some to share!)",
+      "Clothes that you don’t mind getting dirty",
+      "An apron and some old dish towels ",
+      "Tools if you have them (we will provide any necessary tools)",
+      "A well behaved pup",
+      "A friend!"
+    ],
+    "no": [
+      "Outside clay"
+    ],
+    "tools": [
+      "We provide workshop and class participants with any necessary tools, However if you’d like to purchase your own, we recommend the Mudtools Essentails Starter kit."
+    ]
+  },
+  "nearby": {
+    "map": "https://www.google.com/maps/d/embed?mid=1S9WeUUBdvrs9DuQ353VL4GSovNtHcpo&ehbc=2E312F",
+    "bars": [
+      "Forbidden Root",
+      "Vin 312",
+      "Dovetail Brewery",
+      "Begyle Brewery",
+      "Ravenswood Tavern"
+    ],
+    "cafes": [
+      "Spoken",
+      "Del Sur",
+      "Collectivo",
+      "Groundswell",
+      "Sweet Moon",
+      "Golden Nugget Pancake House"
+    ],
+    "food": [
+      "Budacki's Drive In",
+      "Spacca Napoli",
+      "O'Shaughnessy's Public House",
+      "Byron's Hot Dogs",
+      "Bayan Ko Diner",
+      "Teddy's Ice Cream"
+    ]
+  }
+}
+

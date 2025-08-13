@@ -43,10 +43,6 @@ h1 {
   margin-bottom: 1rem;
 }
 
-h2 {
-  margin-top: 2rem;
-}
-
 P {
   margin: 0.5rem 0;
 }
@@ -92,16 +88,18 @@ nav ul li a:hover {
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
+  margin-bottom: 2rem;
 }
 
 @media(max-width: 1338px) {
   .page-details {
+    flex-direction: column;
+  }
+
+  .home-page-details {
     flex-direction: column-reverse;
   }
 
-  .event-page-details {
-    flex-direction: column;
-  }
 }
 
 .details-text {
@@ -135,19 +133,52 @@ nav ul li a:hover {
   font-size: 1.2rem;
 }
 
+
+
 .details-image {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
-  min-width: 250px;
+  aspect-ratio: 1 / 1;
+  width: 100%; /* or whatever width you want */
+  height: auto; /* let aspect-ratio control height */
+  position: relative; /* needed for absolute-positioning children */
 }
 
-.details-image img {
+.details-image img,
+.details-image iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
+  height: 100%;
+  object-fit: cover;  /* fills the square */
   border-radius: 8px;
+}
+
+.page-details i {
+  margin-right: 1rem;
+}
+
+.page-details ul {
+  margin-block-start: 0;
+  margin-block-end: 2rem;
+  list-style: none; /* remove default bullets */
+  padding-left: 1.2rem; /* space for the custom symbol */
+}
+
+.page-details ul li::before {
+  content: "\2736";
+  color: var(--primary-text);
+  display: inline-block;
+  width: 1rem; /* keeps spacing consistent */
+  margin-left: -1rem; /* aligns with text */
+  font-size: 14px;
+}
+
+.page-details li {
+  margin-bottom: 6px;
+}
+
+.details-text h4 {
+  margin-bottom: 0;
 }
 
 /* Carousel */
@@ -325,6 +356,17 @@ div.testimonial-grid {
   margin-right: auto;
   margin-bottom: 2rem;
 }
+
+/* About */
+.about-carousel .carousel-image img {
+  width: auto;
+  height: 500px;
+  border-radius: 8px;
+}
+.about-carousel {
+  margin-bottom: 2rem;
+}
+
 
 /* Event Calendar */
 .month-nav {

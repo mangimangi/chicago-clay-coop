@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def load_json(filename):
-    with open(filename, 'r', encoding='utf-8') as f:
+    with open(f'''json/{filename}''', 'r', encoding='utf-8') as f:
         return json.load(f)
 
 def format_date(date_str, time):
@@ -35,6 +35,7 @@ def header(page):
           <nav>
             <ul>
               <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
+              <li><a href="/about.html" class={"active" if page == "about" else ""}>About</a></li>
               <li><a href="/events.html" class={"active" if page in ["events", "event"] else  ""}>Events</a></li>
               <li><a href="/members.html" class={"active" if page == "members" else ""}>Members</a></li>
             </ul>
@@ -116,7 +117,7 @@ def render_event(event):
 <body>
 {header("event")}
 <main>
-  <section class="page-details event-page-details">
+  <section class="page-details">
     <div class="details-image">
       <img src="{image}" alt="{title}" />
     </div>
@@ -276,7 +277,7 @@ def render_home():
 <body>
 {header("home")}
 <main>
-  <section class="page-details">
+  <section class="page-details home-page-details">
     <div class="details-text">
       <h1 class="details-title">{title_with_br}</h1>
       <p class="details-description home">{home.get('description')}</p>
@@ -305,6 +306,117 @@ def render_home():
 
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(content)
+
+def render_about():
+    about = load_json('about.json')
+
+    # Top carousel of images
+    image_carousel = ""
+    #''.join(
+    #    f'<div class="carousel-image"><img src="{img}" alt="About image" /></div>'
+    #    for img in about.get('images', [])
+    #)
+
+    # Helper to render a details section with image + bullet lists
+    def render_section(title, icon, section_data, list_details, cta=None):
+        image = ''
+        if section_data.get('map'):
+            image = f'''<iframe src="{section_data.get('map')}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'''
+        elif section_data.get('image'):
+            image = f'''<img src="{section_data.get('image')}" alt="{title}" />'''
+        
+        lists = ''
+        for key, (sub_icon, sub_label) in list_details.items():
+            if key in section_data:
+                items = ''.join(f'<li>{item}</li>' for item in section_data[key])
+                lists += f'''
+                    <h4><i class="{sub_icon}"></i>{sub_label}</h4>
+                    <ul>{items}</ul>
+                '''
+
+        if cta and section_data.get("link"):
+            cta = f'''<a href="{section_data.get("link")}" class="cta-btn">{cta}</a>'''
+        else:
+            cta = ""
+
+        return f'''
+        <section class="page-details">
+          <div class="details-image">
+            {image}
+          </div>
+          <div class="details-text">
+            <h2><i class="{icon}"></i>{title}</h2>
+            {lists}
+            {cta}
+          </div>
+        </section>
+        '''
+
+    # Directions section
+    directions = render_section(
+        "Directions",
+        "fa-solid fa-route",
+        about.get('directions', {}),
+        {
+            "transit": ("fa-solid fa-train-subway", "Transit"),
+            "biking": ("fa-solid fa-bicycle", "Bike"),
+            "driving": ("fa-solid fa-car", "Car")
+        },
+        "Get Directions"
+    )
+
+    # What to bring section
+    bring = render_section(
+        "What to Bring",
+        "fa-solid fa-bottle-water",
+        about.get('bring', {}),
+        {
+            "yes": ("fa-solid fa-thumbs-up", "Encouraged"),
+            "no": ("fa-solid fa-thumbs-down", "NOT Allowed"),
+            "tools": ("fa-solid fa-toolbox", "Tools")
+        },
+        "Purchase Here"
+    )
+
+    # Nearby  section
+    nearby = render_section(
+        "What's Nearby",
+        "fa-solid fa-map-location-dot",
+        about.get('nearby', {}),
+        {
+            "cafes": ("fa-solid fa-coffee-hot", "Cafes"),
+            "food": ("fa-solid fa-utensils", "Food"),
+            "bars": ("fa-solid fa-champagne-glasses", "Bars")
+        }
+    )
+
+    content = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>About</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+{header("about")}
+<main>
+  <h1>About</h1>
+  <div class="carousel about-carousel">
+    {image_carousel}
+  </div>
+  {directions}
+  {bring}
+  {nearby}
+</main>
+{footer()}
+</body>
+</html>
+'''
+
+    with open('about.html', 'w', encoding='utf-8') as f:
+        f.write(content)
+
 
 def render_events():
     home = load_json('home.json')
@@ -412,6 +524,7 @@ def render_members():
 
 def main():
     render_home()
+    render_about()
     render_events()
     render_members()
 
