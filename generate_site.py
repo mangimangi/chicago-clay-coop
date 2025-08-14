@@ -384,7 +384,7 @@ def render_about():
         "fa-solid fa-map-location-dot",
         about.get('nearby', {}),
         {
-            "cafes": ("fa-solid fa-coffee-hot", "Cafes"),
+            "cafes": ("fa-solid fa-mug-hot", "Cafes"),
             "food": ("fa-solid fa-utensils", "Food"),
             "bars": ("fa-solid fa-champagne-glasses", "Bars")
         }

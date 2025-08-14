@@ -99,7 +99,6 @@ nav ul li a:hover {
   .home-page-details {
     flex-direction: column-reverse;
   }
-
 }
 
 .details-text {
@@ -133,13 +132,17 @@ nav ul li a:hover {
   font-size: 1.2rem;
 }
 
-
-
 .details-image {
   aspect-ratio: 1 / 1;
-  width: 100%; /* or whatever width you want */
+  width: 50%; /* or whatever width you want */
   height: auto; /* let aspect-ratio control height */
   position: relative; /* needed for absolute-positioning children */
+}
+
+@media(max-width: 1338px) {
+  .details-image {
+    width: 100%;
+  }
 }
 
 .details-image img,
