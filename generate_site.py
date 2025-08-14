@@ -35,7 +35,7 @@ def header(page):
           <nav>
             <ul>
               <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
-              <li><a href="/about.html" class={"active" if page == "about" else ""}>About</a></li>
+              <li><a href="/visit.html" class={"active" if page == "visit" else ""}>Visit</a></li>
               <li><a href="/events.html" class={"active" if page in ["events", "event"] else  ""}>Events</a></li>
               <li><a href="/members.html" class={"active" if page == "members" else ""}>Members</a></li>
             </ul>
@@ -307,14 +307,14 @@ def render_home():
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(content)
 
-def render_about():
-    about = load_json('about.json')
+def render_visit():
+    visit = load_json('visit.json')
 
     # Top carousel of images
     image_carousel = ""
     #''.join(
-    #    f'<div class="carousel-image"><img src="{img}" alt="About image" /></div>'
-    #    for img in about.get('images', [])
+    #    f'<div class="carousel-image"><img src="{img}" alt="Visit image" /></div>'
+    #    for img in visit.get('images', [])
     #)
 
     # Helper to render a details section with image + bullet lists
@@ -356,7 +356,7 @@ def render_about():
     directions = render_section(
         "Directions",
         "fa-solid fa-route",
-        about.get('directions', {}),
+        visit.get('directions', {}),
         {
             "transit": ("fa-solid fa-train-subway", "Transit"),
             "biking": ("fa-solid fa-bicycle", "Bike"),
@@ -369,7 +369,7 @@ def render_about():
     bring = render_section(
         "What to Bring",
         "fa-solid fa-bottle-water",
-        about.get('bring', {}),
+        visit.get('bring', {}),
         {
             "yes": ("fa-solid fa-thumbs-up", "Encouraged"),
             "no": ("fa-solid fa-thumbs-down", "NOT Allowed"),
@@ -382,7 +382,7 @@ def render_about():
     nearby = render_section(
         "What's Nearby",
         "fa-solid fa-map-location-dot",
-        about.get('nearby', {}),
+        visit.get('nearby', {}),
         {
             "cafes": ("fa-solid fa-mug-hot", "Cafes"),
             "food": ("fa-solid fa-utensils", "Food"),
@@ -394,15 +394,15 @@ def render_about():
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>About</title>
+<title>Visit</title>
 <link rel="stylesheet" href="styles.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-{header("about")}
+{header("visit")}
 <main>
-  <h1>About</h1>
-  <div class="carousel about-carousel">
+  <h1>Visit</h1>
+  <div class="carousel visit-carousel">
     {image_carousel}
   </div>
   {directions}
@@ -414,7 +414,7 @@ def render_about():
 </html>
 '''
 
-    with open('about.html', 'w', encoding='utf-8') as f:
+    with open('visit.html', 'w', encoding='utf-8') as f:
         f.write(content)
 
 
@@ -524,7 +524,7 @@ def render_members():
 
 def main():
     render_home()
-    render_about()
+    render_visit()
     render_events()
     render_members()
 

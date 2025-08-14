@@ -361,12 +361,12 @@ div.testimonial-grid {
 }
 
 /* About */
-.about-carousel .carousel-image img {
+.visit-carousel .carousel-image img {
   width: auto;
   height: 500px;
   border-radius: 8px;
 }
-.about-carousel {
+.visit-carousel {
   margin-bottom: 2rem;
 }
 
