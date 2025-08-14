@@ -48,6 +48,7 @@ P {
 }
 
 /* Header */
+/* Header updates for hamburger menu */
 header {
   margin: 1rem 0 2rem;
   padding: 1rem 0 1rem;
@@ -57,15 +58,19 @@ header {
   position: sticky;
   top: 0px;
   z-index: 100;
-  background-color: var(--primary-bg); /* match your theme */
+  background-color: var(--primary-bg);
 }
 
 .logo-thumb img {
   height: 40px;
 }
 
-/* Navigation */
-nav ul {
+/* Desktop Navigation - show by default */
+.desktop-nav {
+    display: block;
+}
+
+.desktop-nav ul {
   list-style: none;
   display: flex;
   gap: 2rem;
@@ -73,14 +78,85 @@ nav ul {
   padding: 0;
 }
 
-nav ul li a {
+.desktop-nav ul li a {
   color: var(--primary-text);
   text-decoration: none;
 }
 
-nav ul li a.active,
-nav ul li a:hover {
+.desktop-nav ul li a.active,
+.desktop-nav ul li a:hover {
   font-weight: bold;
+}
+
+/* Mobile Navigation - hidden by default */
+.mobile-nav {
+  display: none;
+  position: relative;
+}
+
+.hamburger-menu {
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  color: var(--primary-text);
+  background: none;
+  border: none;
+  list-style: none;
+}
+
+.hamburger-menu::-webkit-details-marker {
+  display: none;
+}
+
+.mobile-nav-content {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--primary-bg);
+  border: var(--card-border) solid var(--primary-text);
+  border-radius: 8px;
+  padding: 1rem 0;
+  margin-top: 0.5rem;
+  min-width: 150px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-nav-content ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mobile-nav-content ul li {
+  padding: 0;
+}
+
+.mobile-nav-content ul li a {
+  color: var(--primary-text);
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  display: block;
+  transition: background-color 0.3s;
+}
+
+.mobile-nav-content ul li a:hover,
+.mobile-nav-content ul li a.active {
+  background-color: #ddddd5;
+  font-weight: bold;
+}
+
+/* Media queries for responsive behavior */
+@media (max-width: 1336px) {
+  .desktop-nav {
+    display: none;
+  }
+  
+  .mobile-nav {
+    display: block;
+  }
 }
 
 /* Page details section */
@@ -418,6 +494,7 @@ div.testimonial-grid {
 .event-detail i {
   font-size: 1.4rem;
   margin-bottom: 0.75rem;
+  margin-right: 0;
   font-style: normal;
 }
 

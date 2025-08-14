@@ -32,7 +32,7 @@ def header(page):
     return f'''
       <header>
           <div class="logo-thumb"><a href="/index.html"><img src="{logo}" alt="Logo" /></a></div>
-          <nav>
+          <nav class="desktop-nav">
             <ul>
               <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
               <li><a href="/visit.html" class={"active" if page == "visit" else ""}>Visit</a></li>
@@ -40,6 +40,19 @@ def header(page):
               <li><a href="/members.html" class={"active" if page == "members" else ""}>Members</a></li>
             </ul>
           </nav>
+          <details class="mobile-nav">
+            <summary class="hamburger-menu">
+              <i class="fa-solid fa-bars"></i>
+            </summary>
+            <nav class="mobile-nav-content">
+              <ul>
+                <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
+                <li><a href="/visit.html" class={"active" if page == "visit" else ""}>Visit</a></li>
+                <li><a href="/events.html" class={"active" if page in ["events", "event"] else  ""}>Events</a></li>
+                <li><a href="/members.html" class={"active" if page == "members" else ""}>Members</a></li>
+              </ul>
+            </nav>
+          </details>
       </header>
     '''
 
