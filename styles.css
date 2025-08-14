@@ -425,6 +425,89 @@ div.testimonial-grid {
   font-weight: 500;
 }
 
+/* Collapsible sections for event pages */
+.event-collapsible-sections {
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.collapsible-section {
+  border: var(--card-border) solid var(--primary-text);
+  border-radius: 8px;
+  background: white;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.collapsible-section summary {
+  padding: 1rem;
+  cursor: pointer;
+  font-family: 'roca', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: var(--primary-bg);
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.collapsible-section summary:hover {
+  background-color: #ddddd5;
+}
+
+.collapsible-section summary i {
+  margin-right: 1rem;
+}
+
+.collapsible-section[open] summary {
+  border-bottom: var(--card-border) solid var(--primary-text);
+  background-color: #ddddd5;
+}
+
+.collapsible-content {
+  background-color: var(--primary-bg);
+  padding: 1rem;
+}
+
+.collapsible-content h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-family: 'roca', sans-serif;
+}
+
+.collapsible-content h4:first-child {
+  margin-top: 0;
+}
+
+.collapsible-content i {
+  margin-right: 1rem;
+}
+
+.collapsible-content ul {
+  margin-block-start: 0;
+  margin-block-end: 1.5rem;
+  list-style: none;
+  padding-left: 1.2rem;
+}
+
+.collapsible-content ul li::before {
+  content: "\2736";
+  color: var(--primary-text);
+  display: inline-block;
+  width: 1rem;
+  margin-left: -1rem;
+  font-size: 14px;
+}
+
+.collapsible-content li {
+  margin-bottom: 6px;
+}
+
+.collapsible-content .cta-btn {
+  margin-top: 1rem;
+  width: auto;
+}
 
 /* Footer */
 footer {

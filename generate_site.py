@@ -106,6 +106,79 @@ def render_event(event):
         """
     details += "</div>"
 
+    # Load visit data for collapsible sections
+    visit = load_json('visit.json')
+    
+    # Helper to render collapsible sections
+    def render_collapsible_section(title, icon, section_data, list_details, cta=None):
+        lists = ''
+        for key, (sub_icon, sub_label) in list_details.items():
+            if key in section_data:
+                items = ''.join(f'<li>{item}</li>' for item in section_data[key])
+                lists += f'''
+                    <h4><i class="{sub_icon}"></i>{sub_label}</h4>
+                    <ul>{items}</ul>
+                '''
+        
+        if cta and section_data.get("link"):
+            cta_btn = f'''<a href="{section_data.get("link")}" class="cta-btn">{cta}</a>'''
+        else:
+            cta_btn = ""
+        
+        return f'''
+        <details class="collapsible-section">
+            <summary><i class="{icon}"></i>{title}</summary>
+            <div class="collapsible-content">
+                {lists}
+                {cta_btn}
+            </div>
+        </details>
+        '''
+
+    # Generate collapsible sections
+    collapsible_sections = ""
+    
+    # Directions section
+    if visit.get('directions'):
+        collapsible_sections += render_collapsible_section(
+            "Directions",
+            "fa-solid fa-route",
+            visit.get('directions', {}),
+            {
+                "transit": ("fa-solid fa-train-subway", "Transit"),
+                "biking": ("fa-solid fa-bicycle", "Bike"),
+                "driving": ("fa-solid fa-car", "Car")
+            },
+            "Get Directions"
+        )
+
+    # What to bring section
+    if visit.get('bring'):
+        collapsible_sections += render_collapsible_section(
+            "What to Bring",
+            "fa-solid fa-bottle-water",
+            visit.get('bring', {}),
+            {
+                "yes": ("fa-solid fa-thumbs-up", "Encouraged"),
+                "no": ("fa-solid fa-thumbs-down", "NOT Allowed"),
+                "tools": ("fa-solid fa-toolbox", "Tools")
+            },
+            "Purchase Here"
+        )
+
+    # Nearby section
+    if visit.get('nearby'):
+        collapsible_sections += render_collapsible_section(
+            "What's Nearby",
+            "fa-solid fa-map-location-dot",
+            visit.get('nearby', {}),
+            {
+                "cafes": ("fa-solid fa-mug-hot", "Cafes"),
+                "food": ("fa-solid fa-utensils", "Food"),
+                "bars": ("fa-solid fa-champagne-glasses", "Bars")
+            }
+        )
+
     content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,6 +202,10 @@ def render_event(event):
       <a href="{link}" class="cta-btn">Register Now</a>
     </div>
   </section>
+  
+  <section class="event-collapsible-sections">
+    {collapsible_sections}
+  </section>
 </main>
 {footer()}
 </body>
@@ -139,7 +216,6 @@ def render_event(event):
         f.write(content)
 
     return slug
-
 def render_event_card(e):
     cost = f"${e['cost']}" if e.get('cost') else '&nbsp;'
     instructor = f"w/ {e['instructor']}" if e.get('instructor') else '&nbsp;'
