@@ -527,6 +527,21 @@ div.testimonial-grid {
   display: flex;
   align-items: center;
   transition: background-color 0.3s;
+  list-style: none;
+}
+
+/* Remove default markers/arrows from summary elements */
+.collapsible-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapsible-section summary::marker {
+  display: none;
+}
+
+/* Additional Safari-specific rules */
+.collapsible-section summary::-moz-list-bullet {
+  list-style-type: none;
 }
 
 .collapsible-section summary:hover {
@@ -583,7 +598,32 @@ div.testimonial-grid {
 
 .collapsible-content .cta-btn {
   margin-top: 1rem;
-  width: auto;
+  max-width: 320px;
+}
+
+.share-section {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  font-family: 'roca', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: var(--primary-bg);
+  border: var(--card-border) solid var(--primary-text);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  color: var(--primary-text);
+  transition: background-color 0.3s;
+}
+
+.share-section:hover {
+  background-color: #ddddd5;
+}
+
+.share-section i {
+  margin-right: 1rem;
 }
 
 /* Footer */

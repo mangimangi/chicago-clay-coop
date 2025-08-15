@@ -192,6 +192,17 @@ def render_event(event):
             }
         )
 
+    # Share section (looks like collapsible but triggers SMS)
+    event_url = f"https://ccc.quest/event/{slug}.html" 
+    share_message = f"{event_url} Check out {title} at the Chicago Clay Co-Op!"
+    sms_url = f"sms:?body={share_message.replace(' ', '%20').replace('!', '%21').replace('-', '%2D')}"
+    
+    collapsible_sections += f'''
+    <a href="{sms_url}" class="share-section">
+        <i class="fa-solid fa-user-plus"></i>Share With A Friend
+    </a>
+    '''
+
     content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
