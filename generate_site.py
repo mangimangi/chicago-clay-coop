@@ -29,29 +29,26 @@ def header(page):
     home = load_json('home.json')
     logo = home.get('thumbnail')
 
+    def nav(nav_class, page):
+      return f'''<nav class="{nav_class}">
+        <ul>
+          <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
+          <li><a href="/about.html" class={"active" if page == "about" else ""}>About</a></li>
+          <li><a href="/visit.html" class={"active" if page == "visit" else ""}>Visit</a></li>
+          <li><a href="/events.html" class={"active" if page in ["events", "event"] else  ""}>Events</a></li>
+          <li><a href="/members.html" class={"active" if page in ["members", "member"] else ""}>Members</a></li>
+        </ul>
+      </nav>'''
+
     return f'''
       <header>
           <div class="logo-thumb"><a href="/index.html"><img src="{logo}" alt="Logo" /></a></div>
-          <nav class="desktop-nav">
-            <ul>
-              <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
-              <li><a href="/visit.html" class={"active" if page == "visit" else ""}>Visit</a></li>
-              <li><a href="/events.html" class={"active" if page in ["events", "event"] else  ""}>Events</a></li>
-              <li><a href="/members.html" class={"active" if page == "members" else ""}>Members</a></li>
-            </ul>
-          </nav>
+          {nav(nav_class="desktop-nav", page=page)}
           <details class="mobile-nav">
             <summary class="hamburger-menu">
               <i class="fa-solid fa-bars"></i>
             </summary>
-            <nav class="mobile-nav-content">
-              <ul>
-                <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
-                <li><a href="/visit.html" class={"active" if page == "visit" else ""}>Visit</a></li>
-                <li><a href="/events.html" class={"active" if page in ["events", "event"] else  ""}>Events</a></li>
-                <li><a href="/members.html" class={"active" if page == "members" else ""}>Members</a></li>
-              </ul>
-            </nav>
+            {nav(nav_class="mobile-nav-content", page=page)}
           </details>
       </header>
     '''
@@ -341,7 +338,6 @@ def render_member_links(member):
 def render_home():
     home = load_json('home.json')
     testimonials = home.get('testimonials', [])
-    logo = home.get('thumbnail', 'logo.png')
 
     events = get_combined_events()
     upcoming = events[:3]
@@ -405,6 +401,46 @@ def render_home():
 '''
 
     with open('index.html', 'w', encoding='utf-8') as f:
+        f.write(content)
+
+def render_about():
+    about = load_json('about.json')
+
+    sections = '\n'.join(list(map(
+      lambda section: f'''
+        <section class="page-details home-page-details">
+          <div class="details-text">
+            <h1 class="details-title">{section.get('title')}</h1>
+            <p class="details-description">{section.get('description')}</p>
+            {f"""<a href="{section.get('link')}" class="cta-btn">{section.get('cta')}</a>""" if (section.get('link') and section.get('cta')) else ""}
+          </div>
+          <div class="details-image">
+            <img src="{section.get('image')}" alt="Studio image" />
+          </div>
+        </section>
+      ''',
+      about.get('sections', [])
+    )))
+
+    content = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>About</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+{header("about")}
+<main>
+  {sections}
+</main>
+{footer()}
+</body>
+</html>
+'''
+
+    with open('about.html', 'w', encoding='utf-8') as f:
         f.write(content)
 
 def render_visit():
@@ -519,8 +555,6 @@ def render_visit():
 
 
 def render_events():
-    home = load_json('home.json')
-    logo = home.get('thumbnail', 'logo.png')
     events = get_combined_events()
 
     # Group events by month
@@ -624,6 +658,7 @@ def render_members():
 
 def main():
     render_home()
+    render_about()
     render_visit()
     render_events()
     render_members()

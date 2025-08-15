@@ -1,0 +1,23 @@
+{
+  "sections": [
+    {
+      "title": "Our Story",
+      "description": "We made da pots there now we make the pots here.",
+      "image": "https://i.imgur.com/0Zq98jN.jpeg"
+    },
+    {
+      "title": "Workshops & Classes",
+      "description": "We offer workshops and classes!",
+      "cta": "Schedule of Events",
+      "link": "/events.html",
+      "image": "https://i.imgur.com/0Zq98jN.jpeg"
+    },
+    {
+      "title": "Private Events",
+      "description": "We offer private events!",
+      "cta": "Inquire",
+      "link": "mailto:chicagoclaycooperative@gmail.com?subject=Chicago%20Clay%20Co-Op%20Private%20Event%20Inquiry&body=Hello%2C%0A%0AI%20am%20interested%20in%20hosting%20a%20private%20event%20at%20the%20Chicago%20Clay%20Co-Op.%20Here%20are%20some%20details%3A%0A%0ADate%3A%20%0ATime%3A%20%0ANumber%20of%20People%3A%20%0ADescription%3A%20%0A%0AThank%20you%21",
+      "image": "https://i.imgur.com/0Zq98jN.jpeg"
+    }
+  ]
+}
