@@ -33,7 +33,7 @@ def header(page):
           <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
           <li><a href="/about.html" class={"active" if page == "about" else ""}>About</a></li>
           <li><a href="/visit.html" class={"active" if page == "visit" else ""}>Visit</a></li>
-          <li><a href="/events.html" class={"active" if page in ["events", "event"] else  ""}>Events</a></li>
+          <li><a href="/schedule.html" class={"active" if page in ["schedule", "event"] else  ""}>Schedule</a></li>
           <li><a href="/members.html" class={"active" if page in ["members", "member"] else ""}>Members</a></li>
         </ul>
       </nav>'''
@@ -406,7 +406,7 @@ def render_home():
     <div class="details-text">
       <h1 class="details-title">{title_with_br}</h1>
       <p class="details-description home">{home.get('description')}</p>
-      <a href="events.html" class="cta-btn">Schedule of Events</a>
+      <a href="schedule.html" class="cta-btn">Schedule of Events</a>
     </div>
     <div class="details-image">
       <img src="{home.get('image')}" alt="Studio image" />
@@ -583,7 +583,7 @@ def render_visit():
         f.write(content)
 
 
-def render_events():
+def render_schedule():
     events = get_events(expand=False)
     for e in events:
         render_event(e)
@@ -619,14 +619,14 @@ def render_events():
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Events</title>
+<title>Schedule</title>
 <link rel="stylesheet" href="styles.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-{header("events")}
+{header("schedule")}
 <main>
-  <h1>Events</h1>
+  <h1>Schedule of Events</h1>
   <div class="month-nav">
     {month_nav}
   </div>
@@ -637,7 +637,7 @@ def render_events():
 </html>
 '''
 
-    with open('events.html', 'w', encoding='utf-8') as f:
+    with open('schedule.html', 'w', encoding='utf-8') as f:
         f.write(content)
 
 def render_members():
@@ -691,7 +691,7 @@ def main():
     render_home()
     render_about()
     render_visit()
-    render_events()
+    render_schedule()
     render_members()
 
 
