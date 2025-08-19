@@ -67,15 +67,18 @@ def footer():
       </footer>
     '''
 
-def get_combined_events():
+def get_events(sort=True, upcoming=True, past=False):
     events = load_json('events.json')
-    workshops = load_json('workshops.json')
-    combined = events + workshops
 
-    combined.sort(key=lambda x: datetime.strptime(x['date'], '%Y-%m-%d') if 'date' in x else datetime.max)
-    future = [c for c in combined if datetime.strptime(c['date'], "%Y-%m-%d").date() >= date.today()]
+    if sort:
+        events.sort(key=lambda e: datetime.strptime(e['date'], '%Y-%m-%d') if 'date' in e else datetime.max)
 
-    return future 
+    if upcoming:
+        events = [e for e in events if datetime.strptime(e['date'], "%Y-%m-%d").date() >= date.today()]
+    elif past:
+        events = [e for e in events if datetime.strptime(c['date'], "%Y-%m-%d").date() < date.today()]
+
+    return events
 
 def render_event(event):
     title = event.get('name', '')
@@ -339,7 +342,7 @@ def render_home():
     home = load_json('home.json')
     testimonials = home.get('testimonials', [])
 
-    events = get_combined_events()
+    events = get_events()
     upcoming = events[:3]
 
     title_with_br = home.get('title', '').replace('\\n', '<br>')
@@ -555,7 +558,7 @@ def render_visit():
 
 
 def render_events():
-    events = get_combined_events()
+    events = get_events()
 
     # Group events by month
     grouped = {}

@@ -12,5 +12,95 @@
     "time": "11am-3pm",
     "description": "Celebrate the world of tiny ceramics! Live demos, tiny snacks, little drinks, miniature vendors, and free admission! Try your hand on the miniature wheel!",
     "image": "https://i.imgur.com/dVb3q1H.jpeg"
+  },
+  {
+    "name": "Tiny Pottery",
+    "date": "2025-06-21",
+    "time": "10am-12:30pm",
+    "cost": "125",
+    "instructor": "Lillie Frances",
+    "description": "Step into the world of tiny pottery! In this playful, hands-on workshop, each participant will be provided a miniature pottery wheel, clay, tools, and underglazes. After a brief demo and instruction, you’ll get to create your own tiny ceramic pieces—perfect for beginners and anyone curious about working small. Your finished creations will be glazed, kiln-fired, and ready for pickup within two weeks. No experience needed—just bring your curiosity and appreciation for all things mini! This workshop includes all supplies, is beginner-friendly, offers instruction by a local ceramic artist, and you'll take home 2–5 mini pieces.",
+    "image": "https://i.imgur.com/a0C4EYS.jpeg",
+    "link": "https://book.stripe.com/9AQ14h3w2d9Ue7C8ww"
+  },
+  {
+    "name": "Clay, Queen!",
+    "date": "2025-06-14",
+    "time": "11am-1:00pm",
+    "cost": "65",
+    "instructor": "Wanda + Co-Op team.",
+    "description": "Are you ready to slay with clay? Join us for a one-of-a-kind drag ceramics brunch featuring performances by resident queen Wanda, pottery demos by Co-Op members, and the opportunity to decorate handmade ceramic dishes, ornaments and jewelry! Enjoy coffee and pastries while you bring out your inner pottery diva! Answer trivia to win a number of fabulous prizes! All proceeds will benefit AIDS Foundation Chicago, which mobilizes communities to create equity and justice for people living with and vulnerable to HIV or chronic conditions. Your base ticket of $65 gets you our standard-size dish to decorate. If you're feeling generous and you want to go home with more pottery, there will be larger items, jewelry, and ornaments available for increased donations. Bring cash or your Venmo -- all donations and tips will benefit AFC! Fully glazed and finished items will be available for pickup two weeks after the workshop.",
+    "image": "https://i.imgur.com/VbMQSSi.jpeg",
+    "link": "https://book.stripe.com/bJe28qeIP1os0rgg6t9R606"
+  },
+  {
+    "name": "Tiny Gnomes",
+    "date": "2025-07-26",
+    "time": "11am-1:00pm",
+    "cost": "85",
+    "instructor": "Linley Erickson",
+    "description": "Become the talk of the fairy garden in this hands-on workshop! Make a family of tiny gnomes and accoutrements. Suitable for all ages and experience levels!",
+    "image": "https://i.imgur.com/grOipHS.jpeg",
+    "link": "https://buy.stripe.com/5kQfZggQX5EIb5U5rP9R608"
+  },
+  {
+    "name": "Clay Canopy",
+    "date": "2025-08-02",
+    "time": "11am-1:00pm",
+    "cost": "85",
+    "instructor": "Lori Piecyk",
+    "description": "Chicago darling Lori Piecyk returns to the city for a one day workshop. Create textured and patterned cups using slab-building techniques and laser-cut motifs.  ",
+    "image": "https://i.imgur.com/PPmP32w.jpeg",
+    "link": "https://buy.stripe.com/cNi3cugQX6IMc9Y9I59R60a"
+  },
+   {
+    "name": "Kids Camp",
+    "date": "2025-08-04",
+    "time": "9:00am-12:00pm",
+    "cost": "200",
+    "instructor": "Linley Erickson",
+    "description": "Let your child explore clay with freedom, excitement and safety! Our expert instructor Linley has years of experience and a Professional Educator License. Projects include hand building, wheel throwing and the miniature wheel! Ages 8 and up. August 4th thorough 7th from 9am-12pm.",
+    "image": "https://i.imgur.com/uxBsNj1.jpeg",
+    "link": "https://buy.stripe.com/7sY3cu9ov3wA0rg3jH9R609"
+   },
+  {
+    "name": "Tiny Pottery",
+    "date": "2025-09-20",
+    "time": "2pm-5pm",
+    "cost": "85",
+    "instructor": "Lillie Frances",
+    "description": "Step into the world of tiny pottery! In this playful, hands-on workshop, each participant will be provided a miniature pottery wheel, clay, tools, and underglazes. After a brief demo and instruction, you’ll get to create your own tiny ceramic pieces—perfect for beginners and anyone curious about working small. Your finished creations will be glazed, kiln-fired, and ready for pickup within two weeks. No experience needed—just bring your curiosity and appreciation for all things mini! This workshop includes all supplies, is beginner-friendly, offers instruction by a local ceramic artist, and you'll take home 2–5 mini pieces.",
+    "image": "https://i.imgur.com/B9OGoPl.jpeg",
+    "link": "https://buy.stripe.com/6oUeVc0RZebe0rg3jH9R60c"
+  },
+  {
+   "name": "Secret Pottery Class",
+    "date": "2025-09-20",
+    "time": "10am-1pm",
+    "cost": "420",
+    "instructor": "Jen Fitzgerald",
+    "description": "10 week pottery class with Jen Fitzgerald. 10-1 on Saturdays. Mostly hand building, but we're building it with you! From Sept. 20th to Nov. 22nd.",
+    "image": "https://i.imgur.com/rjhCGlK.jpeg",
+    "link": "https://buy.stripe.com/00w3cueIP0koc9Y9I59R60d"
+  },
+  {
+  "name": "Ravenswood Art Walk",
+    "date": "2025-09-13",
+    "time": "11am-6pm",
+    "cost": "free",
+    "instructor": "N/A",
+    "description": "The Ravenswood ArtWalk (RAW) Tour of Arts and Industry is a weekend-long celebration of our local creative community. Stretching from Lawrence south to Irving Park along Ravenswood Ave, RAW features: open studios and galleries, pop-up performances and activations, and an outdoor arts market featuring 80+ local makers, two stages of live music, a pop-up beer garden, kids activities, food trucks, and more.",
+    "image": "https://i.imgur.com/6DxuPQE.jpeg",
+    "link": "https://ravenswoodchicago.org/signature-events/ravenswood-artwalk/"
+  },
+  {
+  "name": "Chicago Ceramics Crawl",
+    "date": "2025-10-04",
+    "time": "11am-4pm",
+    "cost": "free",
+    "instructor": "N/A",
+    "description": "The Chicago Ceramics Crawl is a city-wide open house guiding attendees along a tour of Chicago’s community ceramics spaces. Each participating studio on the Crawl will showcase their specialties during tours and events. On your first stop, pick up a passport to collect stamps from each participating studio. The passport can be turned in to the last location on your journey for a chance to win prizes donated by local artists and community studios.",
+    "image": "https://i.imgur.com/vgPu8Ul.png",
+    "link": "https://www.instagram.com/chicago.ceramics.crawl/"
   }
 ]
