@@ -10,12 +10,10 @@ def load_json(filename):
     with open(f'''json/{filename}''', 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def format_date(date_str, time):
+def format_date(date_str):
     try:
         dt = datetime.strptime(date_str, '%Y-%m-%d')
         dt = dt.strftime('%B %d, %Y')
-        if time:
-          dt += f'''<br>{time}'''
         return dt
     except:
         return date_str
@@ -67,8 +65,26 @@ def footer():
       </footer>
     '''
 
-def get_events(sort=True, upcoming=True, past=False):
+def get_events(sort=True, upcoming=True, past=False, expand=True):
     events = load_json('events.json')
+
+    if expand:
+        expanded = []
+        for event in events:
+            if 'dates' in event:
+                # Create separate event for each date
+                for date_str in event['dates']:
+                    copy = event.copy()
+                    copy['date'] = date_str
+
+                    expanded.append(copy)
+            else:
+                expanded.append(event)
+        events = expanded
+    else:
+        for event in events:
+            if event.get('dates') and not event.get('date'):
+                event["date"] = min(event["dates"])
 
     if sort:
         events.sort(key=lambda e: datetime.strptime(e['date'], '%Y-%m-%d') if 'date' in e else datetime.max)
@@ -85,6 +101,7 @@ def render_event(event):
     instructor = event.get('instructor', '')
     description = event.get('description', '')
     date = event.get('date', '')
+    dates = event.get('dates', '')
     time = event.get('time', '')
     cost = event.get('cost', '')
     requirements = event.get('requirements', '')
@@ -93,6 +110,11 @@ def render_event(event):
 
     slug = f"{slugify(title)}-{date}"
     page_path = Path("event") / f"{slug}.html"
+
+    if dates:
+        date = f'''{format_date(min(dates)) + "–" + format_date(max(dates))}'''
+    else:
+        date = format_date(date)
 
     # Start details row
     details = "<div class='event-details'>"
@@ -107,7 +129,7 @@ def render_event(event):
         details += f"""
         <div class="event-detail">
             <i class="fa-regular fa-calendar"></i>
-            <div class="event-detail-text">{format_date(date,time)}</div>
+            <div class="event-detail-text">{time + '<br>' + date}</div>
         </div>
         """
     if requirements:
@@ -243,7 +265,11 @@ def render_event(event):
 def render_event_card(e):
     cost = f"${e['cost']}" if e.get('cost') else '&nbsp;'
     instructor = f"w/ {e['instructor']}" if e.get('instructor') else '&nbsp;'
-    slug = f"{slugify(e['name'])}-{e['date']}"
+    if e.get('dates'):
+      date = min(e.get('dates'))
+    else:
+      date = e.get('date')
+    slug = f"{slugify(e['name'])}-{date}"
     detail_link = f"event/{slug}.html"
 
     return f'''
@@ -252,7 +278,7 @@ def render_event_card(e):
           <div class="card-content">
             <h3>{e.get('name', '')}</h3>
             <p>{instructor}</p>
-            <p>{format_date(e.get('date', ''),e.get('time', ''))}</p>
+            <p>{e.get('time', '') + '<br>' + format_date(e.get('date', ''))}</p>
             <p>{cost}</p>
           </div>
           <div class="card-btn-row">
@@ -342,7 +368,7 @@ def render_home():
     home = load_json('home.json')
     testimonials = home.get('testimonials', [])
 
-    events = get_events()
+    events = get_events(expand=False)
     upcoming = events[:3]
 
     title_with_br = home.get('title', '').replace('\\n', '<br>')
@@ -558,13 +584,15 @@ def render_visit():
 
 
 def render_events():
+    events = get_events(expand=False)
+    for e in events:
+        render_event(e)
+
     events = get_events()
 
     # Group events by month
     grouped = {}
     for e in events:
-        render_event(e)
-
         if 'date' not in e:
             continue
         dt = datetime.strptime(e['date'], "%Y-%m-%d")

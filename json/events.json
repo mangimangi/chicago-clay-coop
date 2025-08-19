@@ -75,8 +75,8 @@
   },
   {
    "name": "Secret Pottery Class",
-    "date": "2025-09-20",
-    "time": "10am-1pm",
+    "dates": [ "2025-09-20", "2025-09-27", "2025-10-04", "2025-10-11", "2025-10-18", "2025-10-25", "2025-11-01", "2025-11-08", "2025-11-15", "2025-11-22"],
+    "time": "Saturday 10am-1pm",
     "cost": "420",
     "instructor": "Jen Fitzgerald",
     "description": "10 week pottery class with Jen Fitzgerald. 10-1 on Saturdays. Mostly hand building, but we're building it with you! From Sept. 20th to Nov. 22nd.",
