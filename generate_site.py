@@ -4,24 +4,57 @@ import re
 
 from datetime import date, datetime
 from pathlib import Path
+from urllib.parse import urlparse
 
 
 def load_json(filename):
     with open(f'''json/{filename}''', 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def format_date(date_str):
+def format_date(date_str, short=False):
+    fmt = '%A, %B %-d'
+    if short:
+       fmt = '%B %-d'
+
     try:
         dt = datetime.strptime(date_str, '%Y-%m-%d')
-        dt = dt.strftime('%B %d, %Y')
+        dt = dt.strftime(fmt)
         return dt
     except:
         return date_str
+
+def get_event_date(event):
+    date = event.get('date')
+    dates = event.get('dates')
+
+    if dates:
+        return f'''{format_date(min(dates), short=True) + "–" + format_date(max(dates), short=True)}'''
+    else:
+        return format_date(date)
 
 def slugify(text):
     text = text.lower()
     text = re.sub(r'[^a-z0-9]+', '-', text)
     return text.strip('-')
+
+def is_payment_link(url, domains=["stripe.com"]):
+    try:
+        parsed = urlparse(url)
+        hostname = parsed.netloc.lower()
+        
+        for domain in domains:
+            domain = domain.lower()
+            if hostname == domain or hostname.endswith('.' + domain):
+                return True
+        return False
+    except:
+        return False
+
+def get_cta_text(link):
+  if is_payment_link(link):
+    return "Register"
+  else:
+    return "Learn More"
 
 def header(page):
     home = load_json('home.json')
@@ -65,7 +98,7 @@ def footer():
       </footer>
     '''
 
-def get_events(sort=True, upcoming=True, past=False, expand=True):
+def get_events(sort=True, upcoming=True, past=False, expand=False):
     events = load_json('events.json')
 
     if expand:
@@ -100,31 +133,24 @@ def render_event(event):
     title = event.get('name', '')
     instructor = event.get('instructor', '')
     description = event.get('description', '')
-    date = event.get('date', '')
-    dates = event.get('dates', '')
+    date = get_event_date(event)
     time = event.get('time', '')
-    cost = event.get('cost', '')
-    requirements = event.get('requirements', '')
+    cost = f"""${event.get('cost')}""" if event.get('cost') else "Free"
+    requirements = event.get('requirements', 'Open to All')
     image = event.get('image', '')
-    link = event.get('link', '#')
+    link = event.get('link')
 
-    slug = f"{slugify(title)}-{date}"
+    slug = f"{slugify(title)}-{event.get('date')}"
     page_path = Path("event") / f"{slug}.html"
 
-    if dates:
-        date = f'''{format_date(min(dates)) + "–" + format_date(max(dates))}'''
-    else:
-        date = format_date(date)
-
     # Start details row
-    details = "<div class='event-details'>"
-    if cost:
-        details += f"""
-        <div class="event-detail">
-            <i class="fa-light fa-dollar-sign"></i>
-            <div class="event-detail-text">${cost}</div>
-        </div>
-        """
+    details = f"""<div class='event-details'>
+    <div class="event-detail">
+        <i class="fa-light fa-dollar-sign"></i>
+        <div class="event-detail-text">{cost}</div>
+    </div>
+    """
+
     if date or time:
         details += f"""
         <div class="event-detail">
@@ -132,14 +158,13 @@ def render_event(event):
             <div class="event-detail-text">{time + '<br>' + date}</div>
         </div>
         """
-    if requirements:
-        details += f"""
-        <div class="event-detail">
-            <i class="fa-solid fa-people-group"></i>
-            <div class="event-detail-text">{requirements}</div>
-        </div>
-        """
-    details += "</div>"
+    details += f"""
+    <div class="event-detail">
+        <i class="fa-solid fa-people-group"></i>
+        <div class="event-detail-text">{requirements}</div>
+    </div>
+    </div>
+    """
 
     # Load visit data for collapsible sections
     visit = load_json('visit.json')
@@ -225,6 +250,11 @@ def render_event(event):
     </a>
     '''
 
+    cta = ""
+    if link:
+      cta = f"""<a href="{link}" class="cta-btn">{get_cta_text(link)}</a>"""
+        
+
     content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -245,7 +275,7 @@ def render_event(event):
       <h3>{f"with {instructor}" if instructor else ""}</h3>
       {details}
       <p class="details-description">{description}</p>
-      <a href="{link}" class="cta-btn">Register Now</a>
+      {cta}
     </div>
   </section>
   
@@ -261,16 +291,16 @@ def render_event(event):
     with open(page_path, "w", encoding="utf-8") as f:
         f.write(content)
 
-    return slug
 def render_event_card(e):
     cost = f"${e['cost']}" if e.get('cost') else '&nbsp;'
     instructor = f"w/ {e['instructor']}" if e.get('instructor') else '&nbsp;'
-    if e.get('dates'):
-      date = min(e.get('dates'))
-    else:
-      date = e.get('date')
-    slug = f"{slugify(e['name'])}-{date}"
+    slug = f"{slugify(e['name'])}-{e.get('date')}"
     detail_link = f"event/{slug}.html"
+
+    link = e.get('link')
+    cta = ""
+    if link:
+        cta = f"""<a href="{link}" class="cta-btn card-btn">{get_cta_text(link)}</a>"""
 
     return f'''
         <div class="card">
@@ -278,12 +308,12 @@ def render_event_card(e):
           <div class="card-content">
             <h3>{e.get('name', '')}</h3>
             <p>{instructor}</p>
-            <p>{e.get('time', '') + '<br>' + format_date(e.get('date', ''))}</p>
+            <p>{e.get('time', '') + '<br>' + get_event_date(e)}</p>
             <p>{cost}</p>
           </div>
           <div class="card-btn-row">
             <a href="{detail_link}" class="cta-btn card-btn details-btn">Details</a>
-            <a href="{e.get('link', '#')}" class="cta-btn card-btn">Register</a>
+            {cta}
           </div>
         </div>
     '''
@@ -368,7 +398,7 @@ def render_home():
     home = load_json('home.json')
     testimonials = home.get('testimonials', [])
 
-    events = get_events(expand=False)
+    events = get_events()
     upcoming = events[:3]
 
     title_with_br = home.get('title', '').replace('\\n', '<br>')
@@ -584,15 +614,11 @@ def render_visit():
 
 
 def render_schedule():
-    events = get_events(expand=False)
-    for e in events:
-        render_event(e)
-
-    events = get_events()
-
     # Group events by month
     grouped = {}
-    for e in events:
+    for e in get_events():
+        render_event(e)
+
         if 'date' not in e:
             continue
         dt = datetime.strptime(e['date'], "%Y-%m-%d")

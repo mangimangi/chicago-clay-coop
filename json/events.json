@@ -76,8 +76,9 @@
   {
    "name": "Secret Pottery Class",
     "dates": [ "2025-09-20", "2025-09-27", "2025-10-04", "2025-10-11", "2025-10-18", "2025-10-25", "2025-11-01", "2025-11-08", "2025-11-15", "2025-11-22"],
-    "time": "Saturday 10am-1pm",
+    "time": "10am-1pm Saturdays",
     "cost": "420",
+    "requirements": "Ages 21+",
     "instructor": "Jen Fitzgerald",
     "description": "10 week pottery class with Jen Fitzgerald. 10-1 on Saturdays. Mostly hand building, but we're building it with you! From Sept. 20th to Nov. 22nd.",
     "image": "https://i.imgur.com/rjhCGlK.jpeg",
@@ -96,7 +97,6 @@
     "date": "2025-10-04",
     "time": "11am-4pm",
     "description": "The Chicago Ceramics Crawl is a city-wide open house guiding attendees along a tour of Chicago’s community ceramics spaces. Each participating studio on the Crawl will showcase their specialties during tours and events. On your first stop, pick up a passport to collect stamps from each participating studio. The passport can be turned in to the last location on your journey for a chance to win prizes donated by local artists and community studios.",
-    "image": "https://i.imgur.com/vgPu8Ul.png",
-    "link": "https://www.instagram.com/chicago.ceramics.crawl/"
+    "image": "https://i.imgur.com/vgPu8Ul.png"
   }
 ]
