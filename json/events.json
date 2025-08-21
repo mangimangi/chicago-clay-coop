@@ -68,16 +68,18 @@
     "date": "2025-09-20",
     "time": "2pm-5pm",
     "cost": "85",
+    "technique": "handbuilding",
     "instructor": "Lillie Frances",
     "description": "Step into the world of tiny pottery! In this playful, hands-on workshop, each participant will be provided a miniature pottery wheel, clay, tools, and underglazes. After a brief demo and instruction, you’ll get to create your own tiny ceramic pieces—perfect for beginners and anyone curious about working small. Your finished creations will be glazed, kiln-fired, and ready for pickup within two weeks. No experience needed—just bring your curiosity and appreciation for all things mini! This workshop includes all supplies, is beginner-friendly, offers instruction by a local ceramic artist, and you'll take home 2–5 mini pieces.",
     "image": "https://i.imgur.com/B9OGoPl.jpeg",
     "link": "https://buy.stripe.com/6oUeVc0RZebe0rg3jH9R60c"
   },
   {
-   "name": "Secret Pottery Class",
+    "name": "Secret Pottery Class",
     "dates": [ "2025-09-20", "2025-09-27", "2025-10-04", "2025-10-11", "2025-10-18", "2025-10-25", "2025-11-01", "2025-11-08", "2025-11-15", "2025-11-22"],
     "time": "10am-1pm Saturdays",
     "cost": "420",
+    "technique": "handbuilding",
     "requirements": "Ages 21+",
     "instructor": "Jen Fitzgerald",
     "description": "10 week pottery class with Jen Fitzgerald. 10-1 on Saturdays. Mostly hand building, but we're building it with you! From Sept. 20th to Nov. 22nd.",
@@ -85,7 +87,7 @@
     "link": "https://buy.stripe.com/00w3cueIP0koc9Y9I59R60d"
   },
   {
-  "name": "Ravenswood Art Walk",
+    "name": "Ravenswood Art Walk",
     "date": "2025-09-13",
     "time": "11am-6pm",
     "description": "The Ravenswood ArtWalk (RAW) Tour of Arts and Industry is a weekend-long celebration of our local creative community. Stretching from Lawrence south to Irving Park along Ravenswood Ave, RAW features: open studios and galleries, pop-up performances and activations, and an outdoor arts market featuring 80+ local makers, two stages of live music, a pop-up beer garden, kids activities, food trucks, and more.",
@@ -93,7 +95,7 @@
     "link": "https://ravenswoodchicago.org/signature-events/ravenswood-artwalk/"
   },
   {
-  "name": "Chicago Ceramics Crawl",
+    "name": "Chicago Ceramics Crawl",
     "date": "2025-10-04",
     "time": "11am-4pm",
     "description": "The Chicago Ceramics Crawl is a city-wide open house guiding attendees along a tour of Chicago’s community ceramics spaces. Each participating studio on the Crawl will showcase their specialties during tours and events. On your first stop, pick up a passport to collect stamps from each participating studio. The passport can be turned in to the last location on your journey for a chance to win prizes donated by local artists and community studios.",

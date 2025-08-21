@@ -56,6 +56,25 @@ def get_cta_text(link):
   else:
     return "Learn More"
 
+def get_event_card_data(e):
+    day_type = 'weekend' if datetime.strptime(e.get('date', ''), '%Y-%m-%d').weekday() in  [5,6] else 'weekday'
+
+    period = 'unknown'
+    match = re.search(r'(\d{1,2})\s*(am|pm)', e.get('time', ''))
+    if match:
+        hour, ampm = int(match.group(1)), match.group(2)
+        if ampm == "am":
+            period = 'morning'
+        elif hour < 5:
+            period = 'afternoon'
+        else:
+            period = 'evening'
+            
+    event_type = 'free' if not e.get('cost') else 'class' if e.get('dates') else 'workshop'
+    technique = e.get('technique', 'none')
+
+    return f'''data-day-type="{day_type}" data-time-period="{period}" data-event-type="{event_type}" data-technique="{technique}"'''
+
 def header(page):
     home = load_json('home.json')
     logo = home.get('thumbnail')
@@ -302,8 +321,10 @@ def render_event_card(e):
     if link:
         cta = f"""<a href="{link}" class="cta-btn card-btn">{get_cta_text(link)}</a>"""
 
+    event_data = get_event_card_data(e)
+
     return f'''
-        <div class="card">
+        <div class="card" {event_data}>
           <a href="{detail_link}"><img src="{e.get('image', '')}" alt="{e.get('name', '')}" /></a>
           <div class="card-content">
             <h3>{e.get('name', '')}</h3>
@@ -654,7 +675,42 @@ def render_schedule():
 <main>
   <h1>Schedule of Events</h1>
   <div class="month-nav">
-    {month_nav}
+    <details class="filter-section">
+      <summary class="filter-toggle">
+        <i class="fa-solid fa-sliders"></i>
+        Filter
+      </summary>
+      <div class="filter-content">
+        <div class="filter-group">
+          <h4>Time of Week</h4>
+          <label><input type="checkbox" name="weekday"> Weekday</label>
+          <label><input type="checkbox" name="weekend"> Weekend</label>
+        </div>
+        
+        <div class="filter-group">
+          <h4>Time of Day</h4>
+          <label><input type="checkbox" name="morning"> Morning</label>
+          <label><input type="checkbox" name="afternoon"> Afternoon</label>
+          <label><input type="checkbox" name="evening"> Evening</label>
+        </div>
+        
+        <div class="filter-group">
+          <h4>Type</h4>
+          <label><input type="checkbox" name="workshop"> Workshop</label>
+          <label><input type="checkbox" name="class"> Class</label>
+          <label><input type="checkbox" name="free"> Free</label>
+        </div>
+        
+        <div class="filter-group">
+          <h4>Technique</h4>
+          <label><input type="checkbox" name="handbuilding"> Handbuilding</label>
+          <label><input type="checkbox" name="wheelthrowing"> Wheelthrowing</label>
+        </div>
+      </div>
+    </details>
+    <div class="month-links">
+      {month_nav}
+    </div>
   </div>
   {content_blocks}
 </main>
