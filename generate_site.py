@@ -110,7 +110,7 @@ def footer():
       <footer>
         <div class="footer-links">
           <a href="{home.get('instagram', '#')}" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-          <a href="mailto:{home.get('email', '#')}"><i class="fa-solid fa-envelope"></i></a>
+          <a href="mailto:{home.get('email', '#')}"><i class="fa-regular fa-envelope"></i></a>
           <a href="tel:{home.get('phone', '#')}"><i class="fa-solid fa-phone"></i></a>
         </div>
         <div class="footer-copy">&copy; 2025 Chicago Clay Co-Op</div>
@@ -206,7 +206,7 @@ def render_event(event):
         
         return f'''
         <details class="collapsible-section">
-            <summary><i class="{icon}"></i>{title}</summary>
+            <summary><i class="{icon}"></i><p>{title}</p></summary>
             <div class="collapsible-content">
                 {lists}
                 {cta_btn}
@@ -265,7 +265,7 @@ def render_event(event):
     
     collapsible_sections += f'''
     <a href="{sms_url}" class="share-section">
-        <i class="fa-solid fa-user-plus"></i>Share With A Friend
+        <i class="fa-solid fa-user-plus"></i><p>Share With A Friend</p>
     </a>
     '''
 
@@ -388,30 +388,24 @@ def render_member_links(member):
 
     if instagram and website:
         return f'''
-            <div class="card-links">
                 <a href="{instagram}" target="_blank" class="card-link half">
                     <i class="fa-brands fa-instagram"></i>
                 </a>
                 <a href="{website}" target="_blank" class="card-link half">
                     <i class="fa-solid fa-link"></i>
                 </a>
-            </div>
         '''
     elif instagram:
         return f'''
-            <div class="card-links">
                 <a href="{instagram}" target="_blank" class="card-link full">
                     <i class="fa-brands fa-instagram"></i>
                 </a>
-            </div>
         '''
     elif website:
         return f'''
-            <div class="card-links">
                 <a href="{website}" target="_blank" class="card-link full">
                     <i class="fa-solid fa-link"></i>
                 </a>
-            </div>
         '''
 
 
@@ -429,16 +423,15 @@ def render_home():
         upcoming_cards += render_event_card(e)
 
     testimonial_cards = ''
-    for t in testimonials[:2]:
+    for t in testimonials[:10]:
         testimonial_cards += f'''
     <div class="testimonial-card">
       <img src="{t.get('image', '')}" alt="Testimonial Background">
-      <div class="testimonial-bubble">
-        <p>"{t.get('text', '')}"
-          <br>
-          <strong>- {t.get('name', '')}, {t.get('location', '')}</strong>
-        </p>
+      <div class="testimonial-text">
+        <h2>"{t.get('text', '')}"</h2>
+        <p>- {t.get('name', '')}, {t.get('location', '')}</p>
       </div>
+      </p>
     </div>
     '''
 
@@ -470,7 +463,7 @@ def render_home():
     </div>
   </section>
   <section>
-    <div class="card-grid testimonial-grid">
+    <div class="carousel">
       {testimonial_cards}
     </div>
   </section>
@@ -678,7 +671,7 @@ def render_schedule():
     <details class="filter-section">
       <summary class="filter-toggle">
         <i class="fa-solid fa-sliders"></i>
-        Filter
+        <p>Filter</p>
       </summary>
       <div class="filter-content">
         <div class="filter-group">
