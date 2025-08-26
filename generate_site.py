@@ -675,12 +675,6 @@ def render_schedule():
       </summary>
       <div class="filter-content">
         <div class="filter-group">
-          <h4>Time of Week</h4>
-          <label><input type="checkbox" name="weekday"> Weekday</label>
-          <label><input type="checkbox" name="weekend"> Weekend</label>
-        </div>
-        
-        <div class="filter-group">
           <h4>Time of Day</h4>
           <label><input type="checkbox" name="morning"> Morning</label>
           <label><input type="checkbox" name="afternoon"> Afternoon</label>
@@ -692,6 +686,12 @@ def render_schedule():
           <label><input type="checkbox" name="workshop"> Workshop</label>
           <label><input type="checkbox" name="class"> Class</label>
           <label><input type="checkbox" name="free"> Free</label>
+        </div>
+        
+        <div class="filter-group">
+          <h4>Time of Week</h4>
+          <label><input type="checkbox" name="weekday"> Weekday</label>
+          <label><input type="checkbox" name="weekend"> Weekend</label>
         </div>
         
         <div class="filter-group">

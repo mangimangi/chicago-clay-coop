@@ -103,13 +103,15 @@ header {
   justify-content: space-between;
   align-items: center;
   position: sticky;
+  width: 100%;
   top: 0;
+  left: 0;
   z-index: 2;
   background-color: var(--primary-bg);
 }
 
 .logo-thumb img {
-  width: var(--header-height);
+  height: var(--header-height);
 }
 
 /* Desktop Navigation - show by default */
@@ -128,6 +130,7 @@ header {
 .desktop-nav ul li a {
   color: var(--primary-text);
   text-decoration: none;
+  font-size: clamp(1rem, 1.5vw, 2rem);
 }
 
 .desktop-nav ul li a.active,
@@ -163,16 +166,15 @@ header {
 }
 
 .mobile-nav-content {
-  position: absolute;
-  top: 100%;
-  right: 0;
+  position: fixed;
+  top: calc(var(--header-height) + 2 * var(--header-padding));
+  left: 0;
+  width: 100vw;
   background-color: var(--primary-bg);
-  border: var(--card-border) solid var(--primary-text);
-  border-radius: 8px;
   padding: 1rem 0;
-  margin-top: 0.5rem;
-  min-width: 150px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  display: flex;
 }
 
 .mobile-nav-content ul {
@@ -182,18 +184,21 @@ header {
   display: flex;
   flex-direction: column;
   gap: 0;
+  width: inherit;
 }
 
 .mobile-nav-content ul li {
   padding: 0;
+  text-align: center;
 }
 
 .mobile-nav-content ul li a {
   color: var(--primary-text);
   text-decoration: none;
-  padding: 0.75rem 1rem;
+  padding: 8vw 0;
   display: block;
   transition: background-color 0.3s;
+  font-size: clamp(3vw, 3.5vw, 4vw);
 }
 
 .mobile-nav-content ul li a:hover,
@@ -236,7 +241,7 @@ header {
   justify-content: center;
   flex: 1;
   min-width: 250px;
-  font-size: clamp(1vw, 1.5vw, 2vw);
+  font-size: clamp(1rem, 1.5vw, 2rem);
 }
 
 @media(pointer: coarse) {
@@ -574,20 +579,22 @@ header {
 /* Event Calendar */
 .month-nav {
   position: sticky;
-  top: calc(var(--header-height) + 2*var(--header-padding));
+  top: calc(var(--header-height) + 2 * var(--header-padding));
   background-color: var(--primary-bg); /* match your theme */
   z-index: 1;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 1rem 0;
+  padding: calc(var(--header-padding) / 2) 0;
   gap: 2rem;
+  height: var(--header-hegiht);
 }
 
 .month-links {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  margin: 0.5vw 0 0 0;
 }
 
 .month-link {
@@ -599,6 +606,10 @@ header {
 }
 
 @media (pointer: coarse) {
+  .month-links {
+    margin: 1vw 0 0 0;
+  }
+
   .month-link {
     font-size: clamp(1rem, 4vw, 2rem);
   }
@@ -611,7 +622,7 @@ header {
 }
 
 .month-header {
-  scroll-margin-top: 8vw;
+  scroll-margin-top: calc(2 * var(--header-height) + 3 * var(--header-padding));
 }
 
 /* Filter section styles */
@@ -685,35 +696,49 @@ header {
   min-width: 250px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(2, 20vw);
 }
 
 .filter-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1vw;
 }
 
-.filter-group:last-of-type {
+.filter-content > :nth-last-child(-n + 2) {
   margin-bottom: 0;
 }
 
 .filter-group h4 {
-  margin: 0 0 0.75rem 0;
-  font-family: 'roca', sans-serif;
-  font-size: 1rem;
-  color: var(--primary-text);
+  margin-bottom: 0;
 }
 
 .filter-group label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: 1.5vw;
+  margin: 0 0 1vw 1vw;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: clamp(1rem, 1.5vw, 2rem);
+}
+
+@media (pointer: coarse) {
+  .filter-group {
+    margin-bottom: 5vw;
+  }
+
+  .filter-group label {
+    font-size: clamp(1rem, 4vw, 2rem);
+    padding: 2vw 0;
+  }
+
+  .filter-content {
+    grid-template-columns: repeat(2, 42.5vw);
+  }
 }
 
 .filter-group input[type="checkbox"] {
   margin: 0;
-  transform: scale(1.1);
+  transform: scale(2);
 }
 
 /* Responsive adjustments for filter */
@@ -985,7 +1010,12 @@ main:not(:has(.filter-section input[type="checkbox"]:checked)) .card {
 
 .collapsible-content .cta-btn {
   margin-top: 1rem;
-  max-width: 320px;
+}
+
+@media (pointer: coarse) {
+  .collapsible-content .cta-btn {
+    width: 83.5vw;
+  }
 }
 
 .share-section {
@@ -1034,7 +1064,7 @@ main:not(:has(.filter-section input[type="checkbox"]:checked)) .card {
 /* Footer */
 footer {
   text-align: left;
-  padding: var(--header-padding) 0;
+  padding: calc(2*var(--header-padding)) 0;
   color: var(--primary-text);
   font-size: clamp(1rem, 1vw, 2rem);
 }
