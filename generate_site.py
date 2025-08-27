@@ -6,6 +6,8 @@ from datetime import date, datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
+NEWLINE = '\\n'
+
 
 def load_json(filename):
     with open(f'''json/{filename}''', 'r', encoding='utf-8') as f:
@@ -450,7 +452,7 @@ def render_home():
     events = get_events()
     upcoming = events[:3]
 
-    title_with_br = home.get('title', '').replace('\\n', '<br>')
+    title_with_br = home.get('title', '').replace(NEWLINE, '<br>')
 
     upcoming_cards = ''
     for e in upcoming:
@@ -469,6 +471,10 @@ def render_home():
     </div>
     '''
 
+      
+    email_octopus_btn = f'''<a class="cta-btn" data-eo-form-toggle-id="{home.get('email_octopus_id')}" href="#">Join our email list</a>''' if home.get('email_octopus_id') else ''
+    email_octopus_script = f'''<script async src="https://eocampaign1.com/form/{home.get('email_octopus_id')}.js" data-form="{home.get('email_octopus_id')}"></script>''' if home.get('email_octopus_id') else ''
+
     content = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -484,13 +490,16 @@ def render_home():
   <section class="page-details home-page-details">
     <div class="details-text">
       <p class="details-description home">{home.get('description')}</p>
-      <a href="schedule.html" class="cta-btn">Schedule of Events</a>
+      {email_octopus_btn}
     </div>
   </section>
-  <section>
-    <h2>Upcoming Events</h2>
-    <div class="carousel">
-      {upcoming_cards}
+  <section class="page-details">
+    <div class="details-text">
+      <h2>Upcoming Events</h2>
+      <div class="carousel">
+        {upcoming_cards}
+      </div>
+      <a href="schedule.html" class="cta-btn">Full Schedule of Events</a>
     </div>
   </section>
   <section>
@@ -500,6 +509,7 @@ def render_home():
   </section>
 </main>
 {footer()}
+{email_octopus_script}
 </body>
 </html>
 '''
@@ -510,21 +520,19 @@ def render_home():
 def render_about():
     about = load_json('about.json')
 
-    sections = '\n'.join(list(map(
-      lambda section: f'''
-        <section class="page-details home-page-details">
+    sections = '\n'.join([f'''
+        <section class="page-details home-page-details {'page-details-reverse' if index%2 else ''}">
           <div class="details-text">
             <h1 class="details-title">{section.get('title')}</h1>
-            <p class="details-description">{section.get('description')}</p>
+            <p class="details-description">{section.get('description','').replace(NEWLINE, '<br>')}</p>
             {f"""<a href="{section.get('link')}" class="cta-btn">{section.get('cta')}</a>""" if (section.get('link') and section.get('cta')) else ""}
           </div>
           <div class="details-image">
             <img src="{section.get('image')}" alt="Studio image" />
           </div>
         </section>
-      ''',
-      about.get('sections', [])
-    )))
+      ''' for index, section in enumerate(about.get('sections', []))]
+    )
 
     content = f'''<!DOCTYPE html>
 <html lang="en">
@@ -551,15 +559,8 @@ def render_about():
 def render_visit():
     visit = load_json('visit.json')
 
-    # Top carousel of images
-    image_carousel = ""
-    #''.join(
-    #    f'<div class="carousel-image"><img src="{img}" alt="Visit image" /></div>'
-    #    for img in visit.get('images', [])
-    #)
-
     # Helper to render a details section with image + bullet lists
-    def render_section(title, icon, section_data, list_details, cta=None):
+    def render_section(title, icon, section_data, list_details, cta=None, reverse=False):
         image = ''
         if section_data.get('map'):
             image = f'''<iframe src="{section_data.get('map')}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'''
@@ -581,7 +582,7 @@ def render_visit():
             cta = ""
 
         return f'''
-        <section class="page-details">
+        <section class="page-details {'page-details-reverse' if reverse else ''}">
           <div class="details-image">
             {image}
           </div>
@@ -616,7 +617,8 @@ def render_visit():
             "no": ("fa-solid fa-thumbs-down", "NOT Allowed"),
             "tools": ("fa-solid fa-toolbox", "Tools")
         },
-        "Purchase Here"
+        "Purchase Here",
+        reverse=True
     )
 
     # Nearby  section
@@ -643,9 +645,16 @@ def render_visit():
 {header("visit")}
 <main>
   {render_hero("Visit", visit.get('hero'))}
-  <div class="carousel visit-carousel">
-    {image_carousel}
-  </div>
+  <section class="page-details home-page-details page-details-reverse">
+    <div class="details-image">
+      <img src="{visit.get('image')}" alt="Front Entrance" />
+    </div>
+    <div class="details-text">
+      <h2>{visit.get('address').replace(NEWLINE, '<br>')}</h2>
+      <p class="details-description home">{visit.get('description').replace(NEWLINE, '<br>')}</p>
+      <a href="{visit.get('link')}" class="cta-btn">Schedule A Visit</a>
+    </div>
+  </section>
   {directions}
   {bring}
   {nearby}
@@ -772,6 +781,12 @@ def render_makers():
 {header("makers")}
 <main>
   {render_hero("Makers", makers.get('hero'))}
+  <section class="page-details home-page-details">
+    <div class="details-text">
+      <p class="details-description home">{makers.get('description')}</p>
+      <a href="{makers.get('link')}" class="cta-btn">Apply</a>
+    </div>
+  </section>
   {members}
   {visitors}
 </main>

@@ -1,22 +1,28 @@
 {
+  "hero": "https://i.imgur.com/0Zq98jN.jpeg",
   "sections": [
     {
       "title": "Our Story",
-      "description": "We made da pots there now we make the pots here.",
+      "description": "The Chicago Clay Co-Op was serendipitously founded in the winter of 2025 by Jennifer Fitzgerald and Michael Bridges.\\n\\nMichael participated in an event in the Bulldog Lock building hosted by (our now neighbors) 7th cloud tattoo studio. He fell in love with the building immediately. The location was fantastic and the rustic, industrial feel of the building just seemed right.\\n\\nA few days after the event, Michael invited Jen on a walk to see the outside of the building. Upon arrival, Jen immediately and without hesitation started buzzing various tenants in the building... one let us in.\nnWe walked through the space where we are currently located and ultimately spoke to a tenant who was planning to move out. The timing was perfect.\\n\\nInitially, the space was going to house only Jen and Michael’s personal studios, but as we began to asses the pros and cons of moving to the space, it became clear that community was a non-negotiable requirement.\\n\\nWe drafted countless iterations of the space and ultimately settled on the layout we currently have.\\n\\nConstruction began in February 2025 and we welcomed our first members that May.\\n\\nThe Co-Op is owned by Jen and Michael, so it is not a true “co-op”-rather it is a co-op in spirit. Members are encouraged to participate in all decision making and studio functionality.\\n\\nWe currently offer studio memberships, workshops, classes and private events.",
       "image": "https://i.imgur.com/0Zq98jN.jpeg"
     },
     {
       "title": "Workshops & Classes",
-      "description": "We offer workshops and classes!",
+      "description": "We offer a regularly updated roster of workshops and classes taught by our studio members and visiting artists. Our aim is to enrich and support our community through education in the ceramic arts.",
       "cta": "Schedule of Events",
       "link": "/events.html",
       "image": "https://i.imgur.com/0Zq98jN.jpeg"
     },
     {
       "title": "Private Events",
-      "description": "We offer private events!",
+      "description": "We would love to host your next private party: birthdays, private lessons, team building events, or a girls night out-we do it all! Rates vary depending on needs.",
       "cta": "Inquire",
       "link": "mailto:chicagoclaycooperative@gmail.com?subject=Chicago%20Clay%20Co-Op%20Private%20Event%20Inquiry&body=Hello%2C%0A%0AI%20am%20interested%20in%20hosting%20a%20private%20event%20at%20the%20Chicago%20Clay%20Co-Op.%20Here%20are%20some%20details%3A%0A%0ADate%3A%20%0ATime%3A%20%0ANumber%20of%20People%3A%20%0ADescription%3A%20%0A%0AThank%20you%21",
+      "image": "https://i.imgur.com/0Zq98jN.jpeg"
+    },
+    {
+      "title": "Pizza Oven",
+      "description": "Also we have a pizza oven and we love to cook. You never know what you’ll find on a random Saturday night in the back alley of the Co-Op!",
       "image": "https://i.imgur.com/0Zq98jN.jpeg"
     }
   ]
