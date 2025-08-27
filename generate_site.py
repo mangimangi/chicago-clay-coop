@@ -492,9 +492,10 @@ def render_home():
       </div>
     </div>
     ''' for t in testimonials[:10])
-      
-    email_octopus_btn = f'''<a class="cta-btn" data-eo-form-toggle-id="{home.get('email_octopus_id')}" href="#">Join our email list</a>''' if home.get('email_octopus_id') else ''
-    email_octopus_script = f'''<script async src="https://eocampaign1.com/form/{home.get('email_octopus_id')}.js" data-form="{home.get('email_octopus_id')}"></script>''' if home.get('email_octopus_id') else ''
+
+    email_octopus = home.get('email_octopus')
+    email_octopus_btn = f'''<a class="cta-btn" data-eo-form-toggle-id="{email_octopus.get('id')}" href="#">{email_octopus.get('cta')}</a>''' if email_octopus.get('id') else ''
+    email_octopus_script = f'''<script async src="https://eocampaign1.com/form/{email_octopus.get('id')}.js" data-form="{email_octopus.get('id')}"></script>''' if email_octopus.get('id') else ''
 
     content = f'''
   {render_hero(title_with_br, home.get('hero'))}
@@ -663,7 +664,7 @@ def render_makers():
   <section class="page-details">
     <div class="details-text">
       <p class="details-description home">{makers.get('description')}</p>
-      <a href="{makers.get('link')}" class="cta-btn">Apply</a>
+      <a href="{makers.get('link')}" class="cta-btn">{makers.get('cta')}</a>
     </div>
   </section>
   {members_section}
