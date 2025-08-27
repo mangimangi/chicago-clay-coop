@@ -7,11 +7,13 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 NEWLINE = '\\n'
-
+_JSON_CACHE = {}
 
 def load_json(filename):
-    with open(f'''json/{filename}''', 'r', encoding='utf-8') as f:
-        return json.load(f)
+    if filename not in _JSON_CACHE:
+        with open(f'json/{filename}', 'r', encoding='utf-8') as f:
+            _JSON_CACHE[filename] = json.load(f)
+    return _JSON_CACHE[filename]
 
 def format_date(date_str, short=False):
     fmt = '%A, %B %-d'
@@ -53,10 +55,10 @@ def is_payment_link(url, domains=["stripe.com"]):
         return False
 
 def get_cta_text(link):
-  if is_payment_link(link):
-    return "Register"
-  else:
-    return "Learn More"
+    if is_payment_link(link):
+        return "Register"
+    else:
+        return "Learn More"
 
 def get_event_card_data(e):
     day_type = 'weekend' if datetime.strptime(e.get('date', ''), '%Y-%m-%d').weekday() in  [5,6] else 'weekday'
@@ -77,18 +79,58 @@ def get_event_card_data(e):
 
     return f'''data-day-type="{day_type}" data-time-period="{period}" data-event-type="{event_type}" data-technique="{technique}"'''
 
+# Extract common page structure
+def build_page_html(title, content, page_type, css_path="styles.css", icon=None):
+    if not icon:
+        home = load_json('home.json')
+        icon = home.get('thumbnail')
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{title}</title>
+  <link rel="icon" type="image/png" href={icon}>
+  <link rel="stylesheet" href="{css_path}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+{header(page_type)}
+<main>
+{content}
+</main>
+{footer()}
+</body>
+</html>
+'''
+
 def header(page):
     home = load_json('home.json')
     logo = home.get('thumbnail')
 
     def nav(nav_class, page):
-      return f'''<nav class="{nav_class}">
+        nav_items = [
+            ("home", "/index.html", "Home"),
+            ("about", "/about.html", "About"), 
+            ("visit", "/visit.html", "Visit"),
+            ("schedule", "/schedule.html", "Schedule"),
+            ("makers", "/makers.html", "Makers")
+        ]
+        
+        links = []
+        for page_key, url, label in nav_items:
+            # Handle special cases for active state
+            active_pages = {
+                "schedule": ["schedule", "event"],
+                "makers": ["makers", "maker"]
+            }
+            is_active = page in active_pages.get(page_key, [page_key])
+            active_class = 'class="active"' if is_active else ""
+            links.append(f'<li><a href="{url}" {active_class}>{label}</a></li>')
+        
+        return f'''<nav class="{nav_class}">
         <ul>
-          <li><a href="/index.html" class={"active" if page == "home" else ""}>Home</a></li>
-          <li><a href="/about.html" class={"active" if page == "about" else ""}>About</a></li>
-          <li><a href="/visit.html" class={"active" if page == "visit" else ""}>Visit</a></li>
-          <li><a href="/schedule.html" class={"active" if page in ["schedule", "event"] else  ""}>Schedule</a></li>
-          <li><a href="/makers.html" class={"active" if page in ["makers", "maker"] else ""}>Makers</a></li>
+          {''.join(links)}
         </ul>
       </nav>'''
 
@@ -130,7 +172,6 @@ def get_events(sort=True, upcoming=True, past=False, expand=False):
                 for date_str in event['dates']:
                     copy = event.copy()
                     copy['date'] = date_str
-
                     expanded.append(copy)
             else:
                 expanded.append(event)
@@ -146,7 +187,7 @@ def get_events(sort=True, upcoming=True, past=False, expand=False):
     if upcoming:
         events = [e for e in events if datetime.strptime(e['date'], "%Y-%m-%d").date() >= date.today()]
     elif past:
-        events = [e for e in events if datetime.strptime(c['date'], "%Y-%m-%d").date() < date.today()]
+        events = [e for e in events if datetime.strptime(e['date'], "%Y-%m-%d").date() < date.today()]
 
     return events
 
@@ -158,6 +199,86 @@ def render_hero(title, image=None):
 <img src="{image}" alt="Hero Image"/>
   <h1>{title}</h1>
 </div>'''
+
+# Extract common detail section rendering  
+def render_detail_section(title, icon=None, description=None, lists=None, image=None, iframe=None, link=None, cta_text=None, reverse=False):
+    reverse_class = "page-details-reverse" if reverse else ""
+    icon = f'<i class="{icon}"></i>' if icon else ""
+
+    return f'''
+    <section class="page-details {reverse_class}">
+      <div class="details-text">
+        <h2 class="details-title">{icon}{title.replace(NEWLINE, '<br>')}</h2>
+        {render_detail_section_body(description, lists, image, iframe, link, cta_text)}
+      </div>
+      {render_detail_media(image, iframe, title)}
+    </section>
+    '''
+
+def render_detail_section_body(description=None, lists=None, image=None, iframe=None, link=None, cta_text=None):
+    description = f'<p class="details-description">{description.replace(NEWLINE, "<br>")}</p>' if description else ""
+    lists = render_detail_lists(lists) if lists else ""
+    cta = f'<a href="{link}" class="cta-btn">{cta_text}</a>' if link and cta_text else ""
+ 
+    return f'''
+        {description}
+        {lists}
+        {cta}
+    '''
+
+def render_detail_lists(lists):
+    output= ''
+
+    for l in lists:
+      items = ''.join(f'<li>{item}</li>' for item in l.get('items'))
+      output += f'''
+          <h4><i class="{l.get('icon')}"></i>{l.get('title')}</h4>
+          <ul>{items}</ul>
+      '''
+
+    return output
+
+def render_detail_media(image, iframe, title):
+    media=''
+
+    if iframe:
+        media = f'''<iframe src="{iframe}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'''
+    elif image:
+        media = f'''<img src="{image}" alt="{title}" />'''
+
+    return f'''
+    <div class="details-media">
+        {media}
+    </div>
+    '''
+
+# Extract collapsible section rendering
+def render_collapsible_detail_section(title, icon=None, description=None, lists=None, image=None, iframe=None, link=None, cta_text=None, reverse=False):
+    reverse_class = "page-details-reverse" if reverse else ""
+    icon = f'<i class="{icon}"></i>' if icon else ""
+
+    return f'''
+    <details class="collapsible-section">
+        <summary>{icon}<p>{title}</p></summary>
+        <div class="collapsible-content page-details {reverse_class}">
+            <div class="details-text">
+              {render_detail_section_body(description, lists, image, iframe, link, cta_text)}
+            </div>
+            {render_detail_media(image, iframe, title)}
+        </div>
+    </details>
+    '''
+
+def render_share_section(title, slug):
+    url = f"https://ccc.quest/event/{slug}.html" 
+    share_message = f"{url} Check out {title} at the Chicago Clay Co-Op!"
+    sms_url = f"sms:?body={share_message.replace(' ', '%20').replace('!', '%21').replace('-', '%2D')}"
+    
+    return f'''
+    <a href="{sms_url}" class="share-section">
+        <i class="fa-solid fa-user-plus"></i><p>Share With A Friend</p>
+    </a>
+    '''
 
 def render_event(event):
     title = event.get('name', '')
@@ -173,7 +294,7 @@ def render_event(event):
     slug = f"{slugify(title)}-{event.get('date')}"
     page_path = Path("event") / f"{slug}.html"
 
-    # Start details row
+    # Build event details section
     details = f"""<div class='event-details'>
     <div class="event-detail">
         <i class="fa-light fa-dollar-sign"></i>
@@ -196,108 +317,34 @@ def render_event(event):
     </div>
     """
 
+    cta = f"""<a href="{link}" class="cta-btn">{get_cta_text(link)}</a>""" if link else ""
+
     # Load visit data for collapsible sections
     visit = load_json('visit.json')
     
-    # Helper to render collapsible sections
-    def render_collapsible_section(title, icon, section_data, list_details, cta=None):
-        lists = ''
-        for key, (sub_icon, sub_label) in list_details.items():
-            if key in section_data:
-                items = ''.join(f'<li>{item}</li>' for item in section_data[key])
-                lists += f'''
-                    <h4><i class="{sub_icon}"></i>{sub_label}</h4>
-                    <ul>{items}</ul>
-                '''
-        
-        if cta and section_data.get("link"):
-            cta_btn = f'''<a href="{section_data.get("link")}" class="cta-btn">{cta}</a>'''
-        else:
-            cta_btn = ""
-        
-        return f'''
-        <details class="collapsible-section">
-            <summary><i class="{icon}"></i><p>{title}</p></summary>
-            <div class="collapsible-content">
-                {lists}
-                {cta_btn}
-            </div>
-        </details>
-        '''
-
     # Generate collapsible sections
-    collapsible_sections = ""
-    
-    # Directions section
-    if visit.get('directions'):
-        collapsible_sections += render_collapsible_section(
-            "Directions",
-            "fa-solid fa-route",
-            visit.get('directions', {}),
-            {
-                "transit": ("fa-solid fa-train-subway", "Transit"),
-                "biking": ("fa-solid fa-bicycle", "Bike"),
-                "driving": ("fa-solid fa-car", "Car")
-            },
-            "Get Directions"
+    sections = '\n'.join([
+        render_collapsible_detail_section(
+            section.get('title'),
+            section.get('icon', ''),
+            section.get('description', ''),
+            section.get('lists', []),
+            section.get('image'),
+            section.get('iframe'),
+            section.get('link'),
+            section.get('cta'),
+            reverse=(index % 2 != 0)
         )
+        for index, section in enumerate(visit.get('sections', [])[1:])
+    ])
+ 
+    # Share section
+    sections += render_share_section(title, slug)
 
-    # What to bring section
-    if visit.get('bring'):
-        collapsible_sections += render_collapsible_section(
-            "What to Bring",
-            "fa-solid fa-bottle-water",
-            visit.get('bring', {}),
-            {
-                "yes": ("fa-solid fa-thumbs-up", "Encouraged"),
-                "no": ("fa-solid fa-thumbs-down", "NOT Allowed"),
-                "tools": ("fa-solid fa-toolbox", "Tools")
-            },
-            "Purchase Here"
-        )
-
-    # Nearby section
-    if visit.get('nearby'):
-        collapsible_sections += render_collapsible_section(
-            "What's Nearby",
-            "fa-solid fa-map-location-dot",
-            visit.get('nearby', {}),
-            {
-                "cafes": ("fa-solid fa-mug-hot", "Cafes"),
-                "food": ("fa-solid fa-utensils", "Food"),
-                "bars": ("fa-solid fa-champagne-glasses", "Bars")
-            }
-        )
-
-    # Share section (looks like collapsible but triggers SMS)
-    event_url = f"https://ccc.quest/event/{slug}.html" 
-    share_message = f"{event_url} Check out {title} at the Chicago Clay Co-Op!"
-    sms_url = f"sms:?body={share_message.replace(' ', '%20').replace('!', '%21').replace('-', '%2D')}"
-    
-    collapsible_sections += f'''
-    <a href="{sms_url}" class="share-section">
-        <i class="fa-solid fa-user-plus"></i><p>Share With A Friend</p>
-    </a>
-    '''
-
-    cta = ""
-    if link:
-      cta = f"""<a href="{link}" class="cta-btn">{get_cta_text(link)}</a>"""
-        
-
-    content = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>{title}</title>
-  <link rel="stylesheet" href="../styles.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
-<body>
-{header("event")}
-<main>
+    # Build page content
+    page_content = f"""
   <section class="page-details">
-    <div class="details-image">
+    <div class="details-media">
       <img src="{image}" alt="{title}" />
     </div>
     <div class="details-text">
@@ -310,16 +357,14 @@ def render_event(event):
   </section>
   
   <section class="event-collapsible-sections">
-    {collapsible_sections}
+    {sections}
   </section>
-</main>
-{footer()}
-</body>
-</html>
 """
+
+    # Write the page
     page_path.parent.mkdir(parents=True, exist_ok=True)
     with open(page_path, "w", encoding="utf-8") as f:
-        f.write(content)
+        f.write(build_page_html(title, page_content, "event", "../styles.css"))
 
 def render_event_card(e):
     cost = f"${e['cost']}" if e.get('cost') else '&nbsp;'
@@ -328,9 +373,7 @@ def render_event_card(e):
     detail_link = f"event/{slug}.html"
 
     link = e.get('link')
-    cta = ""
-    if link:
-        cta = f"""<a href="{link}" class="cta-btn card-btn">{get_cta_text(link)}</a>"""
+    cta = f"""<a href="{link}" class="cta-btn card-btn">{get_cta_text(link)}</a>""" if link else ""
 
     event_data = get_event_card_data(e)
 
@@ -349,74 +392,6 @@ def render_event_card(e):
           </div>
         </div>
     '''
-
-def render_maker(maker):
-    name = maker.get('name', '')
-    image = maker.get('image', '')
-    statement = maker.get('statement', '')
-
-    slug = slugify(name)
-    page_path = Path("maker") / f"{slug}.html"
-
-    links = render_maker_links(maker)
-
-    content = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>{name}</title>
-  <link rel="stylesheet" href="../styles.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
-<body>
-{header("makers")}
-<main>
-  <section class="page-details">
-    <div class="details-image">
-      <img src="{image}" alt="{name}" />
-    </div>
-    <div class="details-text">
-      <h1 class="details-title">
-        {name}
-        <div class="details-links">{links}</div>
-      </h1>
-      <p class="details-description">{statement}</p>
-    </div>
-  </section>
-</main>
-{footer()}
-</body>
-</html>
-"""
-
-    page_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(page_path, "w", encoding="utf-8") as f:
-        f.write(content)
-
-def render_maker_cards(makers, title="Members"):
-    cards = ''
-    for m in makers:
-        links = render_maker_links(m)
-        slug = slugify(m.get("name", ""))
-        profile_link = f"maker/{slug}.html"
-
-        cards += f'''
-            <div class="card">
-              <a href="{profile_link}"><img src="{m.get('image', '')}" alt="{m.get('name', '')}" /></a>
-              <div class="card-content">
-                <h3>{m.get('name', '')}</h3>
-                <div class="card-links">
-                  {links}
-                </div>
-              </div>
-              <a href="{profile_link}" class="cta-btn card-btn">Profile</a>
-            </div>
-        '''
-    return f'''<h2 class="maker-title">{title}</h2>
-<section class="card-grid">
-  {cards}
-</section>
-''' if cards else cards
 
 def render_maker_links(maker):
     instagram = maker.get('instagram')
@@ -443,51 +418,87 @@ def render_maker_links(maker):
                     <i class="fa-solid fa-link"></i>
                 </a>
         '''
+    return ""
 
+def render_maker(maker):
+    name = maker.get('name', '')
+    image = maker.get('image', '')
+    statement = maker.get('statement', '')
+
+    slug = slugify(name)
+    page_path = Path("maker") / f"{slug}.html"
+    links = render_maker_links(maker)
+
+    page_content = f"""
+  <section class="page-details">
+    <div class="details-media">
+      <img src="{image}" alt="{name}" />
+    </div>
+    <div class="details-text">
+      <h1 class="details-title">
+        {name}
+        <div class="details-links">{links}</div>
+      </h1>
+      <p class="details-description">{statement}</p>
+    </div>
+  </section>
+"""
+
+    page_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(page_path, "w", encoding="utf-8") as f:
+        f.write(build_page_html(name, page_content, "makers", "../styles.css"))
+
+def render_maker_cards(makers, title="Members"):
+    cards = ''
+    for m in makers:
+        links = render_maker_links(m)
+        slug = slugify(m.get("name", ""))
+        profile_link = f"maker/{slug}.html"
+
+        cards += f'''
+            <div class="card">
+              <a href="{profile_link}"><img src="{m.get('image', '')}" alt="{m.get('name', '')}" /></a>
+              <div class="card-content">
+                <h3>{m.get('name', '')}</h3>
+                <div class="card-links">
+                  {links}
+                </div>
+              </div>
+              <a href="{profile_link}" class="cta-btn card-btn">Profile</a>
+            </div>
+        '''
+    return f'''<h2 class="maker-title">{title}</h2>
+<section class="card-grid">
+  {cards}
+</section>
+''' if cards else ""
 
 def render_home():
     home = load_json('home.json')
     testimonials = home.get('testimonials', [])
-
     events = get_events()
     upcoming = events[:3]
 
     title_with_br = home.get('title', '').replace(NEWLINE, '<br>')
 
-    upcoming_cards = ''
-    for e in upcoming:
-        upcoming_cards += render_event_card(e)
+    upcoming_cards = ''.join(render_event_card(e) for e in upcoming)
 
-    testimonial_cards = ''
-    for t in testimonials[:10]:
-        testimonial_cards += f'''
+    testimonial_cards = ''.join(f'''
     <div class="testimonial-card">
       <img src="{t.get('image', '')}" alt="Testimonial Background">
       <div class="testimonial-text">
         <h2>"{t.get('text', '')}"</h2>
         <p>- {t.get('name', '')}, {t.get('location', '')}</p>
       </div>
-      </p>
     </div>
-    '''
-
+    ''' for t in testimonials[:10])
       
     email_octopus_btn = f'''<a class="cta-btn" data-eo-form-toggle-id="{home.get('email_octopus_id')}" href="#">Join our email list</a>''' if home.get('email_octopus_id') else ''
     email_octopus_script = f'''<script async src="https://eocampaign1.com/form/{home.get('email_octopus_id')}.js" data-form="{home.get('email_octopus_id')}"></script>''' if home.get('email_octopus_id') else ''
 
-    content = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Chicago Clay Co-Op</title>
-<link rel="stylesheet" href="styles.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
-<body>
-{header("home")}
-<main>
+    content = f'''
   {render_hero(title_with_br, home.get('hero'))}
-  <section class="page-details home-page-details">
+  <section class="page-details homepage-details">
     <div class="details-text">
       <p class="details-description home">{home.get('description')}</p>
       {email_octopus_btn}
@@ -507,166 +518,63 @@ def render_home():
       {testimonial_cards}
     </div>
   </section>
-</main>
-{footer()}
 {email_octopus_script}
-</body>
-</html>
 '''
 
     with open('index.html', 'w', encoding='utf-8') as f:
-        f.write(content)
+        f.write(build_page_html("Chicago Clay Co-Op", content, "home"))
 
 def render_about():
     about = load_json('about.json')
 
-    sections = '\n'.join([f'''
-        <section class="page-details home-page-details {'page-details-reverse' if index%2 else ''}">
-          <div class="details-text">
-            <h1 class="details-title">{section.get('title')}</h1>
-            <p class="details-description">{section.get('description','').replace(NEWLINE, '<br>')}</p>
-            {f"""<a href="{section.get('link')}" class="cta-btn">{section.get('cta')}</a>""" if (section.get('link') and section.get('cta')) else ""}
-          </div>
-          <div class="details-image">
-            <img src="{section.get('image')}" alt="Studio image" />
-          </div>
-        </section>
-      ''' for index, section in enumerate(about.get('sections', []))]
-    )
+    sections = '\n'.join([
+        render_detail_section(
+            section.get('title'),
+            section.get('icon'),
+            section.get('description', ''),
+            section.get('lists', []),
+            section.get('image'),
+            section.get('iframe'),
+            section.get('link'),
+            section.get('cta'),
+            reverse=(index % 2 != 0)
+        )
+        for index, section in enumerate(about.get('sections', []))
+    ])
 
-    content = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>About</title>
-<link rel="stylesheet" href="styles.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
-<body>
-{header("about")}
-<main>
+    content = f'''
   {render_hero("About", about.get('hero'))}
   {sections}
-</main>
-{footer()}
-</body>
-</html>
 '''
 
     with open('about.html', 'w', encoding='utf-8') as f:
-        f.write(content)
+        f.write(build_page_html("About", content, "about"))
 
 def render_visit():
     visit = load_json('visit.json')
 
-    # Helper to render a details section with image + bullet lists
-    def render_section(title, icon, section_data, list_details, cta=None, reverse=False):
-        image = ''
-        if section_data.get('map'):
-            image = f'''<iframe src="{section_data.get('map')}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'''
-        elif section_data.get('image'):
-            image = f'''<img src="{section_data.get('image')}" alt="{title}" />'''
-        
-        lists = ''
-        for key, (sub_icon, sub_label) in list_details.items():
-            if key in section_data:
-                items = ''.join(f'<li>{item}</li>' for item in section_data[key])
-                lists += f'''
-                    <h4><i class="{sub_icon}"></i>{sub_label}</h4>
-                    <ul>{items}</ul>
-                '''
+    sections = '\n'.join([
+        render_detail_section(
+            section.get('title'),
+            section.get('icon'),
+            section.get('description', ''),
+            section.get('lists', []),
+            section.get('image'),
+            section.get('iframe'),
+            section.get('link'),
+            section.get('cta'),
+            reverse=(index % 2 != 0)
+        )
+        for index, section in enumerate(visit.get('sections', []))
+    ])
 
-        if cta and section_data.get("link"):
-            cta = f'''<a href="{section_data.get("link")}" class="cta-btn">{cta}</a>'''
-        else:
-            cta = ""
-
-        return f'''
-        <section class="page-details {'page-details-reverse' if reverse else ''}">
-          <div class="details-image">
-            {image}
-          </div>
-          <div class="details-text">
-            <h2><i class="{icon}"></i>{title}</h2>
-            {lists}
-            {cta}
-          </div>
-        </section>
-        '''
-
-    # Directions section
-    directions = render_section(
-        "Directions",
-        "fa-solid fa-route",
-        visit.get('directions', {}),
-        {
-            "transit": ("fa-solid fa-train-subway", "Transit"),
-            "biking": ("fa-solid fa-bicycle", "Bike"),
-            "driving": ("fa-solid fa-car", "Car")
-        },
-        "Get Directions"
-    )
-
-    # What to bring section
-    bring = render_section(
-        "What to Bring",
-        "fa-solid fa-bottle-water",
-        visit.get('bring', {}),
-        {
-            "yes": ("fa-solid fa-thumbs-up", "Encouraged"),
-            "no": ("fa-solid fa-thumbs-down", "NOT Allowed"),
-            "tools": ("fa-solid fa-toolbox", "Tools")
-        },
-        "Purchase Here",
-        reverse=True
-    )
-
-    # Nearby  section
-    nearby = render_section(
-        "What's Nearby",
-        "fa-solid fa-map-location-dot",
-        visit.get('nearby', {}),
-        {
-            "cafes": ("fa-solid fa-mug-hot", "Cafes"),
-            "food": ("fa-solid fa-utensils", "Food"),
-            "bars": ("fa-solid fa-champagne-glasses", "Bars")
-        }
-    )
-
-    content = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Visit</title>
-<link rel="stylesheet" href="styles.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
-<body>
-{header("visit")}
-<main>
+    content = f'''
   {render_hero("Visit", visit.get('hero'))}
-  <section class="page-details home-page-details page-details-reverse">
-    <div class="details-image">
-      <img src="{visit.get('image')}" alt="Front Entrance" />
-    </div>
-    <div class="details-text">
-      <h2>{visit.get('address').replace(NEWLINE, '<br>')}</h2>
-      <p class="details-description home">{visit.get('description').replace(NEWLINE, '<br>')}</p>
-      <a href="{visit.get('link')}" class="cta-btn">Schedule A Visit</a>
-    </div>
-  </section>
-  {directions}
-  {bring}
-  {nearby}
-</main>
-{footer()}
-</body>
-</html>
+  {sections}
 '''
 
     with open('visit.html', 'w', encoding='utf-8') as f:
-        f.write(content)
-
+        f.write(build_page_html("Visit", content, "visit"))
 
 def render_schedule():
     json_events = load_json('events.json')
@@ -682,33 +590,18 @@ def render_schedule():
         month_label = dt.strftime('%B')
         grouped.setdefault(month_label, []).append(e)
 
-    month_nav = ''
-    for month, _ in grouped.items():
-        short_month = datetime.strptime(month, "%B").strftime("%b")
-        month_nav += f'<a href="#{month.lower()}" class="month-link">{short_month}</a>\n'
+    month_nav = ''.join(f'<a href="#{month.lower()}" class="month-link">{datetime.strptime(month, "%B").strftime("%b")}</a>\n' 
+                       for month in grouped.keys())
 
     # Build the content
-    content_blocks = ''
-    for month, events_in_month in grouped.items():
-        event_cards = ''.join([render_event_card(e) for e in events_in_month])
-        content_blocks += f'''
+    content_blocks = ''.join(f'''
         <h2 id="{month.lower()}" class="month-header">{month}</h2>
         <section class="card-grid">
-          {event_cards}
+          {''.join(render_event_card(e) for e in events_in_month)}
         </section>
-        '''
+        ''' for month, events_in_month in grouped.items())
 
-    content = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Schedule</title>
-<link rel="stylesheet" href="styles.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
-<body>
-{header("schedule")}
-<main>
+    content = f'''
   {render_hero("Schedule of Events", json_events.get('hero'))}
   <div class="month-nav">
     <details class="filter-section">
@@ -749,14 +642,10 @@ def render_schedule():
     </div>
   </div>
   {content_blocks}
-</main>
-{footer()}
-</body>
-</html>
 '''
 
     with open('schedule.html', 'w', encoding='utf-8') as f:
-        f.write(content)
+        f.write(build_page_html("Schedule", content, "schedule"))
 
 def render_makers():
     makers = load_json('makers.json')
@@ -766,36 +655,23 @@ def render_makers():
     for maker in members + visitors:
         render_maker(maker)
 
-    members = render_maker_cards(members)
-    visitors = render_maker_cards(visitors, 'Visiting Artists')
+    members_section = render_maker_cards(members)
+    visitors_section = render_maker_cards(visitors, 'Visiting Artists')
 
-    content = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Makers</title>
-<link rel="stylesheet" href="styles.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
-<body>
-{header("makers")}
-<main>
+    content = f'''
   {render_hero("Makers", makers.get('hero'))}
-  <section class="page-details home-page-details">
+  <section class="page-details">
     <div class="details-text">
       <p class="details-description home">{makers.get('description')}</p>
       <a href="{makers.get('link')}" class="cta-btn">Apply</a>
     </div>
   </section>
-  {members}
-  {visitors}
-</main>
-{footer()}
-</body>
-</html>
+  {members_section}
+  {visitors_section}
 '''
+
     with open('makers.html', 'w', encoding='utf-8') as f:
-        f.write(content)
+        f.write(build_page_html("Makers", content, "makers"))
 
 def main():
     render_home()
@@ -804,7 +680,5 @@ def main():
     render_schedule()
     render_makers()
 
-
 if __name__ == '__main__':
     main()
-
