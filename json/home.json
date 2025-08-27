@@ -1,6 +1,6 @@
 {
   "thumbnail": "https://i.imgur.com/ewHQqbE.png",
-  "image": "https://i.imgur.com/0Zq98jN.jpeg",
+  "hero": "https://i.imgur.com/0Zq98jN.jpeg",
   "title": "Creativity, \\nEducation & \\nCommunity",
   "description": "The Chicago Clay Co-Op is a community based ceramics studio in the Ravenswood neighborhood of Chicago. We offer classes, workshops and private events. ",
   "email": "chicagoclaycooperative@gmail.com",
@@ -15,9 +15,9 @@
       "image": "https://i.imgur.com/0Zq98jN.jpeg"
     },
     {
-      "name": "julien",
-      "location": "uptown",
-      "text": "whoa! I didn't realize you could make literally anything out of mud!",
+      "name": "charlie",
+      "location": "lincoln park",
+      "text": "this place slaps p hard if ur down to get dirty (which I v much am)",
       "image": "https://i.imgur.com/0Zq98jN.jpeg"
     }
   ]

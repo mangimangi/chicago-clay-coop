@@ -86,7 +86,7 @@ def header(page):
           <li><a href="/about.html" class={"active" if page == "about" else ""}>About</a></li>
           <li><a href="/visit.html" class={"active" if page == "visit" else ""}>Visit</a></li>
           <li><a href="/schedule.html" class={"active" if page in ["schedule", "event"] else  ""}>Schedule</a></li>
-          <li><a href="/members.html" class={"active" if page in ["members", "member"] else ""}>Members</a></li>
+          <li><a href="/makers.html" class={"active" if page in ["makers", "maker"] else ""}>Makers</a></li>
         </ul>
       </nav>'''
 
@@ -118,7 +118,7 @@ def footer():
     '''
 
 def get_events(sort=True, upcoming=True, past=False, expand=False):
-    events = load_json('events.json')
+    events = load_json('events.json').get('events',[])
 
     if expand:
         expanded = []
@@ -147,6 +147,15 @@ def get_events(sort=True, upcoming=True, past=False, expand=False):
         events = [e for e in events if datetime.strptime(c['date'], "%Y-%m-%d").date() < date.today()]
 
     return events
+
+def render_hero(title, image=None):
+    if not image:
+        return f'''<h1>{title}</h1>'''
+
+    return f'''<div class="hero">
+<img src="{image}" alt="Hero Image"/>
+  <h1>{title}</h1>
+</div>'''
 
 def render_event(event):
     title = event.get('name', '')
@@ -339,15 +348,15 @@ def render_event_card(e):
         </div>
     '''
 
-def render_member(member):
-    name = member.get('name', '')
-    image = member.get('image', '')
-    statement = member.get('statement', '')
+def render_maker(maker):
+    name = maker.get('name', '')
+    image = maker.get('image', '')
+    statement = maker.get('statement', '')
 
     slug = slugify(name)
-    page_path = Path("member") / f"{slug}.html"
+    page_path = Path("maker") / f"{slug}.html"
 
-    links = render_member_links(member)
+    links = render_maker_links(maker)
 
     content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -358,7 +367,7 @@ def render_member(member):
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-{header("members")}
+{header("makers")}
 <main>
   <section class="page-details">
     <div class="details-image">
@@ -382,9 +391,34 @@ def render_member(member):
     with open(page_path, "w", encoding="utf-8") as f:
         f.write(content)
 
-def render_member_links(member):
-    instagram = member.get('instagram')
-    website = member.get('website')
+def render_maker_cards(makers, title="Members"):
+    cards = ''
+    for m in makers:
+        links = render_maker_links(m)
+        slug = slugify(m.get("name", ""))
+        profile_link = f"maker/{slug}.html"
+
+        cards += f'''
+            <div class="card">
+              <a href="{profile_link}"><img src="{m.get('image', '')}" alt="{m.get('name', '')}" /></a>
+              <div class="card-content">
+                <h3>{m.get('name', '')}</h3>
+                <div class="card-links">
+                  {links}
+                </div>
+              </div>
+              <a href="{profile_link}" class="cta-btn card-btn">Profile</a>
+            </div>
+        '''
+    return f'''<h2 class="maker-title">{title}</h2>
+<section class="card-grid">
+  {cards}
+</section>
+''' if cards else cards
+
+def render_maker_links(maker):
+    instagram = maker.get('instagram')
+    website = maker.get('website')
 
     if instagram and website:
         return f'''
@@ -446,14 +480,11 @@ def render_home():
 <body>
 {header("home")}
 <main>
+  {render_hero(title_with_br, home.get('hero'))}
   <section class="page-details home-page-details">
     <div class="details-text">
-      <h1 class="details-title">{title_with_br}</h1>
       <p class="details-description home">{home.get('description')}</p>
       <a href="schedule.html" class="cta-btn">Schedule of Events</a>
-    </div>
-    <div class="details-image">
-      <img src="{home.get('image')}" alt="Studio image" />
     </div>
   </section>
   <section>
@@ -506,6 +537,7 @@ def render_about():
 <body>
 {header("about")}
 <main>
+  {render_hero("About", about.get('hero'))}
   {sections}
 </main>
 {footer()}
@@ -610,7 +642,7 @@ def render_visit():
 <body>
 {header("visit")}
 <main>
-  <h1>Visit</h1>
+  {render_hero("Visit", visit.get('hero'))}
   <div class="carousel visit-carousel">
     {image_carousel}
   </div>
@@ -628,6 +660,8 @@ def render_visit():
 
 
 def render_schedule():
+    json_events = load_json('events.json')
+
     # Group events by month
     grouped = {}
     for e in get_events():
@@ -666,7 +700,7 @@ def render_schedule():
 <body>
 {header("schedule")}
 <main>
-  <h1>Schedule of Events</h1>
+  {render_hero("Schedule of Events", json_events.get('hero'))}
   <div class="month-nav">
     <details class="filter-section">
       <summary class="filter-toggle">
@@ -715,51 +749,37 @@ def render_schedule():
     with open('schedule.html', 'w', encoding='utf-8') as f:
         f.write(content)
 
-def render_members():
-    members = load_json('members.json')
+def render_makers():
+    makers = load_json('makers.json')
+    members = makers.get('members', [])
+    visitors = makers.get('visitors', [])
 
-    cards = ''
-    for m in members:
-        render_member(m)
+    for maker in members + visitors:
+        render_maker(maker)
 
-        links = render_member_links(m)
-        slug = slugify(m.get("name", ""))
-        profile_link = f"member/{slug}.html"
-
-        cards += f'''
-            <div class="card">
-              <a href="{profile_link}"><img src="{m.get('image', '')}" alt="{m.get('name', '')}" /></a>
-              <div class="card-content">
-                <h3>{m.get('name', '')}</h3>
-                <div class="card-links">
-                  {links}
-                </div>
-              </div>
-              <a href="{profile_link}" class="cta-btn card-btn">Profile</a>
-            </div>
-        '''
+    members = render_maker_cards(members)
+    visitors = render_maker_cards(visitors, 'Visiting Artists')
 
     content = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Members</title>
+<title>Makers</title>
 <link rel="stylesheet" href="styles.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-{header("members")}
+{header("makers")}
 <main>
-  <h1>Members</h1>
-  <section class="card-grid">
-    {cards}
-  </section>
+  {render_hero("Makers", makers.get('hero'))}
+  {members}
+  {visitors}
 </main>
 {footer()}
 </body>
 </html>
 '''
-    with open('members.html', 'w', encoding='utf-8') as f:
+    with open('makers.html', 'w', encoding='utf-8') as f:
         f.write(content)
 
 def main():
@@ -767,7 +787,7 @@ def main():
     render_about()
     render_visit()
     render_schedule()
-    render_members()
+    render_makers()
 
 
 if __name__ == '__main__':

@@ -98,7 +98,8 @@ P {
 /* Header */
 /* Header updates for hamburger menu */
 header {
-  padding: var(--header-padding) 0;
+  padding: var(--header-padding) var(--body-padding);
+  margin-left: calc(-1 * var(--body-padding));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -222,7 +223,7 @@ header {
 .page-details {
   display: flex;
   gap: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 8vw;
 }
 
 @media(max-width: 1338px) {
@@ -268,7 +269,7 @@ header {
 }
 
 .details-description {
-  margin: 2.5rem 0;
+  margin: 4vw 0;
 }
 
 .details-image {
@@ -585,7 +586,7 @@ header {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: calc(var(--header-padding) / 2) 0;
+  padding: var(--header-padding) 0;
   gap: 2rem;
   height: var(--header-hegiht);
 }
@@ -622,7 +623,8 @@ header {
 }
 
 .month-header {
-  scroll-margin-top: calc(2 * var(--header-height) + 3 * var(--header-padding));
+  margin-top: 4vw;
+  scroll-margin-top: calc(2 * var(--header-height) + 4 * var(--header-padding));
 }
 
 /* Filter section styles */
@@ -1059,6 +1061,35 @@ main:not(:has(.filter-section input[type="checkbox"]:checked)) .card {
 
 .share-section p {
   margin: 1vw 0 0 0;
+}
+
+.maker-title {
+  margin-top: 8vw;
+}
+
+.hero {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-1 * var(--body-padding));
+}
+
+.hero img {
+  width: 100vw;
+  display: block;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+}
+
+.hero h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* true center */
+  
+  background: rgba(29, 30, 35, 0.6); /* 60% transparent */
+  color: white;
+  padding: 1vw 2vw;
+  text-align: left;
 }
 
 /* Footer */
