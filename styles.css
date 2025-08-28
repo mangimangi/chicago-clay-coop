@@ -213,7 +213,7 @@ header {
 .details-title {
   display: flex;
   margin: 0;
-  font-size: var(--font-xl);
+  font-size: var(--font-lg);
 }
 
 .details-links {
