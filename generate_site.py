@@ -505,7 +505,7 @@ def render_home():
       {email_octopus_btn}
     </div>
   </section>
-  <section class="page-details">
+  <section class="page-details homepage-details">
     <div class="details-text">
       <h2>Upcoming Events</h2>
       <div class="carousel">
@@ -514,9 +514,11 @@ def render_home():
       <a href="schedule.html" class="cta-btn">Full Schedule of Events</a>
     </div>
   </section>
-  <section>
-    <div class="carousel">
-      {testimonial_cards}
+  <section class="page-details homepage-details">
+    <div class="details-text">
+      <div class="carousel">
+        {testimonial_cards}
+      </div>
     </div>
   </section>
 {email_octopus_script}
