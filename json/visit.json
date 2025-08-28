@@ -1,9 +1,9 @@
 {
-  "hero": "https://i.imgur.com/0Zq98jN.jpeg",
+  "hero": "https://i.imgur.com/CohcvRv.jpeg",
   "sections": [
     {
       "title": "The Chicago Clay Co-Op\\n4636 N. Ravenswood Ave\\nUnit 107\\nChicago, IL 60640",
-      "image": "https://i.imgur.com/0Zq98jN.jpeg",
+      "image": "https://i.imgur.com/FrTRDKS.jpeg",
       "description": "The Chicago Clay Co-Op is located in unit 107 of the BullDog Lock Co. building.\\n\\nWe are available to the public by appointment only, but feel free to ring our buzzer (107) if you’re in the neighborhood!",
       "cta": "Schedule A Visit",
       "link": "mailto:chicagoclaycooperative@gmail.com?subject=Schedule%20Visit"
@@ -47,7 +47,7 @@
     {
       "title": "What to Bring",
       "icon": "fa-solid fa-bottle-water",
-      "image": "https://i.imgur.com/0Zq98jN.jpeg",
+      "image": "https://i.imgur.com/W1rktxN.jpeg",
       "cta": "Purchase Here",
       "link": "https://mudtools.com/products/the-essentials",
       "lists": [
