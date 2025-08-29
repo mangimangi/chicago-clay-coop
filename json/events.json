@@ -131,10 +131,21 @@
       "time": "6pm-9pm",
       "cost": "85",
       "technique": "Handbuilding",
-      "instructor": "Michael Bridges ",
+      "instructor": "Michael Bridges",
       "description": "Get spooky in this one night hand building workshop. You'll make 1-2 mugs that are decorated like a carved pumpkin.",
       "image": "https://i.imgur.com/2g7dvce.jpeg",
       "link": "https://buy.stripe.com/7sY9AS58febegqef2p9R60g"
+    },
+    {
+      "name": "Witch House",
+      "date": "2025-10-17",
+      "time": "6pm-9pm",
+      "cost": "85",
+      "technique": "Handbuilding",
+      "instructor": "Laura Torres",
+      "description": "Come join us for a cozy clay workshop where imagination takes shape! Together we’ll handbuild a charming witch house using clay molds and playful detailing—adding little chimneys, textured roofs, secret doors, and whimsical windows. By the end of the session, you’ll have finished your very own magical clay cottage, ready to be bisque-fired. One month later, you can return to pick up your completed piece, now transformed into a lasting treasure for your home or garden.",
+      "image": "https://i.imgur.com/hVyCVUG.jpeg",
+      "link": "https://buy.stripe.com/3cIaEW7gnaZ24Hw3jH9R60h"
     }
   ]
 }
