@@ -102,6 +102,17 @@
       "time": "11am-4pm",
       "description": "The Chicago Ceramics Crawl is a city-wide open house guiding attendees along a tour of Chicago’s community ceramics spaces. Each participating studio on the Crawl will showcase their specialties during tours and events. On your first stop, pick up a passport to collect stamps from each participating studio. The passport can be turned in to the last location on your journey for a chance to win prizes donated by local artists and community studios.",
       "image": "https://i.imgur.com/vgPu8Ul.png"
+    },
+    {
+      "name": "Date Night",
+      "date": "2025-09-26",
+      "time": "6pm-9pm",
+      "cost": "85",
+      "technique": "Wheelthrowing",
+      "instructor": "TBD",
+      "description": "Bring your boo and get cozy on the wheel in this fun, hands on wheel throwing workshop! Ghosting encouraged. BYOB",
+      "image": "https://i.imgur.com/B9OGoPl.jpeg",
+      "link": "https://buy.stripe.com/cNi6oG7gn3wA1vkdYl9R60e"
     }
   ]
 }
