@@ -124,6 +124,17 @@
       "description": "In a small, spooky mood? Join us to make tiny ceramic ghosts, pumpkins, candy corns, and witches! Just in time for your Halloween decorating.",
       "image": "https://i.imgur.com/dzABMd1.jpeg",
       "link": "https://buy.stripe.com/cNi8wObwD1os5LAbQd9R60f"
+    },
+     {
+      "name": "Pumpkin Mugs",
+      "date": "2025-10-10",
+      "time": "6pm-9pm",
+      "cost": "85",
+      "technique": "Handbuilding",
+      "instructor": "Michael Bridges ",
+      "description": "Get spooky in this one night hand building workshop. You'll make 1-2 mugs that are decorated like a carved pumpkin.",
+      "image": "https://i.imgur.com/2g7dvce.jpeg",
+      "link": "https://buy.stripe.com/7sY9AS58febegqef2p9R60g"
     }
   ]
 }
