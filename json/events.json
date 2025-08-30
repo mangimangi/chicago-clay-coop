@@ -133,7 +133,7 @@
       "technique": "Handbuilding",
       "instructor": "Michael Bridges",
       "description": "Get spooky in this one night hand building workshop. You'll make 1-2 mugs that are decorated like a carved pumpkin.",
-      "image": "https://i.imgur.com/2g7dvce.jpeg",
+      "image": "https://i.imgur.com/1SN3bcG.jpeg",
       "link": "https://buy.stripe.com/7sY9AS58febegqef2p9R60g"
     },
     {
@@ -177,7 +177,7 @@
       "technique": "Handbuilding",
       "instructor": "TBD",
       "description": "Remember when it used to snow? Stay warm or get frosty-it's up to you! make a cute little snowman mug with a candy cane handle and button eyes. Festive and fun!",
-      "image": "https://i.imgur.com/2g7dvce.jpeg",
+      "image": "https://i.imgur.com/jAkhScL.jpeg",
       "link": "https://buy.stripe.com/4gMaEWaszc362zobQd9R60k"
     },
     {
@@ -190,6 +190,22 @@
       "description": "Make a plethora of holiday ornaments to hang up anywhere you feel like! a tree? sure! the wall? why not? hang em high and hang em low!",
       "image": "https://i.imgur.com/2g7dvce.jpeg",
       "link": "https://buy.stripe.com/eVqcN41W34AE3DsdYl9R60l"
+    },
+    {
+      "name": "Halloween Market",
+      "date": "2025-10-24",
+      "time": "6pm-9pm",
+      "description": "Halloween market and party!",
+      "image": "https://i.imgur.com/2g7dvce.jpeg",
+      "link": "Applications coming soon!"
+    },
+    {
+      "name": "Holiday Market",
+      "date": "2025-12-12",
+      "time": "6pm-9pm",
+      "description": "Holiday market and party!",
+      "image": "https://i.imgur.com/2g7dvce.jpeg",
+      "link": "Applications coming soon!"
     }
   ]
 }
