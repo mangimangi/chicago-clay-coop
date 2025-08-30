@@ -146,6 +146,50 @@
       "description": "Come join us for a cozy clay workshop where imagination takes shape! Together we’ll handbuild a charming witch house using clay molds and playful detailing—adding little chimneys, textured roofs, secret doors, and whimsical windows. By the end of the session, you’ll have finished your very own magical clay cottage, ready to be bisque-fired. One month later, you can return to pick up your completed piece, now transformed into a lasting treasure for your home or garden.",
       "image": "https://i.imgur.com/hVyCVUG.jpeg",
       "link": "https://buy.stripe.com/3cIaEW7gnaZ24Hw3jH9R60h"
+    },
+    {
+      "name": "Date Night",
+      "date": "2025-11-07",
+      "time": "6pm-9pm",
+      "cost": "85",
+      "technique": "Wheelthrowing",
+      "instructor": "TBD",
+      "description": "Bring your boo and get cozy on the wheel in this fun, hands on wheel throwing workshop! Ghosting encouraged. BYOB",
+      "image": "https://i.imgur.com/2g7dvce.jpeg",
+      "link": "https://buy.stripe.com/3cIdR81W3ffigqeg6t9R60i"
+    },
+     {
+      "name": "Charcuterie Boards",
+      "date": "2025-11-14",
+      "time": "6pm-9pm",
+      "cost": "85",
+      "technique": "Handbuilding",
+      "instructor": "TBD",
+      "description": "Get ready to host those holiday parties with a bit more style! Make a Charcuterie Board using slab building and hand sculpting techniques. Suitable for all skill levels.",
+      "image": "https://i.imgur.com/2g7dvce.jpeg",
+      "link": "https://buy.stripe.com/aFadR86cj3wA6PE5rP9R60j"
+    },
+    {
+      "name": "Snowman Mugs",
+      "date": "2025-11-21",
+      "time": "6pm-9pm",
+      "cost": "85",
+      "technique": "Handbuilding",
+      "instructor": "TBD",
+      "description": "Remember when it used to snow? Stay warm or get frosty-it's up to you! make a cute little snowman mug with a candy cane handle and button eyes. Festive and fun!",
+      "image": "https://i.imgur.com/2g7dvce.jpeg",
+      "link": "https://buy.stripe.com/4gMaEWaszc362zobQd9R60k"
+    },
+    {
+      "name": "Holiday Ornaments",
+      "date": "2025-12-05",
+      "time": "6pm-9pm",
+      "cost": "85",
+      "technique": "Handbuilding",
+      "instructor": "Laura Torres",
+      "description": "Make a plethora of holiday ornaments to hang up anywhere you feel like! a tree? sure! the wall? why not? hang em high and hang em low!",
+      "image": "https://i.imgur.com/2g7dvce.jpeg",
+      "link": "https://buy.stripe.com/eVqcN41W34AE3DsdYl9R60l"
     }
   ]
 }
