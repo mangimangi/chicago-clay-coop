@@ -467,7 +467,7 @@ def render_maker_cards(makers, title="Members"):
               <a href="{profile_link}" class="cta-btn card-btn">Profile</a>
             </div>
         '''
-    return f'''<h2 class="maker-title">{title}</h2>
+    return f'''<h2 id="{slugify(title)}" class="page-header maker-header">{title}</h2>
 <section class="card-grid">
   {cards}
 </section>
@@ -593,12 +593,11 @@ def render_schedule():
         month_label = dt.strftime('%B')
         grouped.setdefault(month_label, []).append(e)
 
-    month_nav = ''.join(f'<a href="#{month.lower()}" class="month-link">{datetime.strptime(month, "%B").strftime("%b")}</a>\n' 
-                       for month in grouped.keys())
+    month_nav = ''.join(f'<a href="#{month.lower()}" class="page-link">{datetime.strptime(month, "%B").strftime("%b")}</a>\n' for month in grouped.keys())
 
     # Build the content
     content_blocks = ''.join(f'''
-        <h2 id="{month.lower()}" class="month-header">{month}</h2>
+        <h2 id="{month.lower()}" class="page-header">{month}</h2>
         <section class="card-grid">
           {''.join(render_event_card(e) for e in events_in_month)}
         </section>
@@ -606,7 +605,7 @@ def render_schedule():
 
     content = f'''
   {render_hero("Schedule of Events", json_events.get('hero'))}
-  <div class="month-nav">
+  <div class="page-nav">
     <details class="filter-section">
       <summary class="filter-toggle">
         <i class="fa-solid fa-sliders"></i>
@@ -640,7 +639,7 @@ def render_schedule():
         </div>
       </div>
     </details>
-    <div class="month-links">
+    <div class="page-links">
       {month_nav}
     </div>
   </div>
@@ -661,9 +660,17 @@ def render_makers():
     members_section = render_maker_cards(members)
     visitors_section = render_maker_cards(visitors, 'Visiting Artists')
 
+    maker_nav = ''.join(f'<a href="#{slugify(title)}" class="page-link">{title}</a>\n' for title in ["Members", "Visiting Artists"]) if members_section and visitors_section else ''
+
+
     content = f'''
   {render_hero("Makers", makers.get('hero'))}
-  <section class="page-details">
+  <div class="page-nav maker-nav">
+    <div class="page-links">
+      {maker_nav}
+    </div>
+  </div>
+  <section class="page-details homepage-details">
     <div class="details-text">
       <p class="details-description home">{makers.get('description')}</p>
       <a href="{makers.get('link')}" class="cta-btn">{makers.get('cta')}</a>

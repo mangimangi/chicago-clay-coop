@@ -249,6 +249,7 @@ header {
 
 .details-media iframe {
   aspect-ratio: 1 / 1;
+  min-height: 80%;
 }
 
 /* Lists with custom bullets */
@@ -526,44 +527,64 @@ header {
 }
 
 /* Schedule navigation and filtering */
-.month-nav {
+.page-nav {
   position: sticky;
   top: calc(var(--header-height) + 2 * var(--header-padding));
   background-color: var(--primary-bg);
   z-index: 1;
-  display: flex;
   justify-content: flex-start;
   align-items: center;
   padding: var(--header-padding) 0;
-  gap: 2rem;
-  height: var(--header-height);
-}
-
-.month-links {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin: 0.5vw 0 0 0;
-}
-
-.month-link {
+  gap: 5vw;
+  font-size: var(--font-lg);
+  font-weight: 600;
   font-family: 'roca', sans-serif;
   color: var(--primary-text);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: var(--font-sm);
+  display: grid;
+  grid-template-columns: 30% 70%;
 }
 
-.month-link:hover {
+.maker-nav {
+  grid-template-columns: 100%;
+}
+
+.page-links {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 0.5vw;
+  flex-wrap: wrap;
+}
+
+.page-link {
+  color: var(--primary-text);
+  text-decoration: none;
+}
+
+.page-link:hover {
   text-decoration: underline;
   text-decoration-style: wavy;
   text-decoration-color: var(--primary-cta);
 }
 
-.month-header {
+.page-header {
   margin-top: 4vw;
   scroll-margin-top: calc(2 * var(--header-height) + 4 * var(--header-padding));
 }
+
+.maker-header {
+  scroll-margin-top: calc(2 * var(--header-height) + 4 * var(--header-padding)) !important;
+}
+
+@media (pointer: coarse) {
+  .page-nav {
+    grid-template-columns: repeat(1, 100%);
+  }
+
+  .page-header {
+    scroll-margin-top: calc(3 * var(--header-height) + 6 * var(--header-padding));
+  }
+}
+
 
 /* Filter section */
 .filter-section {
@@ -574,16 +595,12 @@ header {
 .filter-toggle {
   display: flex;
   align-items: center;
-  gap: 2vw;
-  padding: 0 1vw;
+  gap: 3vw;
+  padding: 0 3vw;
   background-color: white;
   border: var(--card-border) solid var(--primary-text);
   border-radius: 8px;
   cursor: pointer;
-  font-family: 'roca', sans-serif;
-  font-size: var(--font-sm);
-  font-weight: 600;
-  color: var(--primary-text);
   transition: background-color 0.3s;
   list-style: none;
   min-width: 100px;
@@ -659,14 +676,14 @@ header {
   }
 
   .filter-content {
-    grid-template-columns: repeat(2, 42.5vw);
+    grid-template-columns: repeat(2, 43.5vw);
+    border-radius: 0 0 8px 8px;
   }
 }
 
 /* Responsive filter adjustments */
 @media (max-width: 768px) {
-  .month-nav {
-    flex-direction: column;
+  .page-nav {
     gap: 1rem;
   }
   
@@ -904,11 +921,6 @@ main:not(:has(.filter-section input:checked)) .card {
   .hero h1 {
     font-size: var(--font-md);
   }
-}
-
-/* Utility classes */
-.maker-title {
-  margin-top: 8vw;
 }
 
 /* Footer */
