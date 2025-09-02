@@ -54,9 +54,11 @@ def is_payment_link(url, domains=["stripe.com"]):
     except:
         return False
 
-def get_cta_text(link):
-    if is_payment_link(link):
+def get_cta_text(link, event=True):
+    if is_payment_link(link) and event:
         return "Register"
+    elif is_payment_link(link):
+        return "Buy"
     else:
         return "Learn More"
 
@@ -122,7 +124,8 @@ def header(page):
             # Handle special cases for active state
             active_pages = {
                 "schedule": ["schedule", "event"],
-                "makers": ["makers", "maker"]
+                "makers": ["makers", "maker"],
+                "shop": ["shop"]
             }
             is_active = page in active_pages.get(page_key, [page_key])
             active_class = 'class="active"' if is_active else ""
@@ -279,6 +282,230 @@ def render_share_section(title, slug):
         <i class="fa-solid fa-user-plus"></i><p>Share With A Friend</p>
     </a>
     '''
+
+def render_shop_share_section(title, slug, item_type):
+    url = f"https://ccc.quest/shop/{slug}.html" 
+    share_message = f"{url} Check out this {item_type} at the Chicago Clay Co-Op!"
+    sms_url = f"sms:?body={share_message.replace(' ', '%20').replace('!', '%21').replace('-', '%2D')}"
+    
+    return f'''
+    <a href="{sms_url}" class="share-section">
+        <i class="fa-solid fa-user-plus"></i><p>Share With A Friend</p>
+    </a>
+    '''
+
+def render_pot_card(pot):
+    cost = f"${pot['cost']}" if pot.get('cost') else '&nbsp;'
+    artist = f"by {pot['artist']}" if pot.get('artist') else '&nbsp;'
+    slug = slugify(f"{pot['title']}-{pot.get('artist', '')}")
+    detail_link = f"shop/{slug}.html"
+
+    link = pot.get('link')
+    cta = f"""<a href="{link}" class="cta-btn card-btn">{get_cta_text(link, False)}</a>""" if link else ""
+
+    return f'''
+        <div class="card">
+          <a href="{detail_link}"><img src="{pot.get('image', '')}" alt="{pot.get('title', '')}" /></a>
+          <div class="card-content">
+            <h3>{pot.get('title', '')}</h3>
+            <p>{artist}</p>
+            <p>{pot.get('media', '')}</p>
+            <p>{pot.get('year', '')}</p>
+            <p>{cost}</p>
+          </div>
+          <div class="card-btn-row">
+            <a href="{detail_link}" class="cta-btn card-btn details-btn">Details</a>
+            {cta}
+          </div>
+        </div>
+    '''
+
+def render_merch_card(merch):
+    cost = f"${merch['cost']}" if merch.get('cost') else '&nbsp;'
+    artist = f"by {merch['artist']}" if merch.get('artist') else '&nbsp;'
+    slug = slugify(f"{merch['title']}-{merch.get('artist', '')}")
+    detail_link = f"shop/{slug}.html"
+
+    link = merch.get('link')
+    cta = f"""<a href="{link}" class="cta-btn card-btn">{get_cta_text(link, False)}</a>""" if link else ""
+
+    return f'''
+        <div class="card">
+          <a href="{detail_link}"><img src="{merch.get('image', '')}" alt="{merch.get('title', '')}" /></a>
+          <div class="card-content">
+            <h3>{merch.get('title', '')}</h3>
+            <p>{artist}</p>
+            <p>{merch.get('media', '')}</p>
+            <p>{cost}</p>
+          </div>
+          <div class="card-btn-row">
+            <a href="{detail_link}" class="cta-btn card-btn details-btn">Details</a>
+            {cta}
+          </div>
+        </div>
+    '''
+
+def render_pot(pot):
+    title = pot.get('title', '')
+    artist = pot.get('artist', '')
+    description = pot.get('description', '')
+    year = pot.get('year', '')
+    cost = f"""${pot.get('cost')}""" if pot.get('cost') else "Free"
+    media = pot.get('media', '')
+    image = pot.get('image', '')
+    link = pot.get('link')
+
+    slug = slugify(f"{title}-{artist}")
+    page_path = Path("shop") / f"{slug}.html"
+
+    # Build pot details section
+    details = f"""<div class='event-details'>
+    <div class="event-detail">
+        <i class="fa-light fa-dollar-sign"></i>
+        <div class="event-detail-text">{cost}</div>
+    </div>
+    """
+
+    details += f"""
+    <div class="event-detail">
+        <i class="fa-solid fa-mound"></i>
+        <div class="event-detail-text">{pot.get('media').replace(',', '<br>')}</div>
+    </div>
+    """
+
+    details += f"""
+    <div class="event-detail">
+        <i class="fa-solid fa-dumpster-fire"></i>
+        <div class="event-detail-text">{pot.get('firing').replace(',', '<br>')}</div>
+    </div>
+    """
+    if year:
+        details += f"""
+        <div class="event-detail">
+            <i class="fa-regular fa-calendar"></i>
+            <div class="event-detail-text">{year}</div>
+        </div>
+        </div>
+        """
+    else:
+        details += "</div>"
+
+
+    cta = f"""<a href="{link}" class="cta-btn">{get_cta_text(link, False)}</a>""" if link else ""
+
+    # Load FAQ data for collapsible sections
+    faqs = load_json('shop.json').get('faqs')
+    
+    # Generate collapsible sections
+    sections = '\n'.join([
+        render_collapsible_detail_section(
+            faq.get('title'),
+            'fa-solid fa-question',
+            faq.get('description', ''),
+        )
+        for faq in faqs
+    ])
+ 
+    # Share section
+    sections += render_shop_share_section(title, slug, "pot")
+
+    # Build page content
+    page_content = f"""
+  <section class="page-details">
+    <div class="details-media">
+      <img src="{image}" alt="{title}" />
+    </div>
+    <div class="details-text">
+      <h1 class="details-title">{title}</h1>
+      <h3>{f"by {artist}" if artist else ""}</h3>
+      {details}
+      <p class="details-description">{description}</p>
+      {cta}
+    </div>
+  </section>
+  
+  <section class="event-collapsible-sections">
+    {sections}
+  </section>
+"""
+
+    # Write the page
+    page_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(page_path, "w", encoding="utf-8") as f:
+        f.write(build_page_html(title, page_content, "shop", "../styles.css"))
+
+def render_merch(merch):
+    title = merch.get('title', '')
+    artist = merch.get('artist', '')
+    media = merch.get('media', '')
+    description = merch.get('description', '')
+    cost = f"""${merch.get('cost')}""" if merch.get('cost') else "Free"
+    image = merch.get('image', '')
+    link = merch.get('link')
+
+    slug = slugify(f"{title}-{artist}")
+    page_path = Path("shop") / f"{slug}.html"
+
+    # Build merch details section
+    details = f"""<div class='event-details'>
+    <div class="event-detail">
+        <i class="fa-light fa-dollar-sign"></i>
+        <div class="event-detail-text">{cost}</div>
+    </div>
+    """
+
+    details += f"""
+    <div class="event-detail">
+        <i class="fa-solid fa-hippo"></i>
+        <div class="event-detail-text">{media}</div>
+    </div>
+    </div>
+    """
+
+    cta = f"""<a href="{link}" class="cta-btn">{get_cta_text(link, False)}</a>""" if link else ""
+
+    # Load FAQ data for collapsible sections
+    faqs = load_json('shop.json').get('faqs')
+    
+    # Generate collapsible sections
+    sections = '\n'.join([
+        render_collapsible_detail_section(
+            faq.get('title'),
+            'fa-solid fa-question',
+            faq.get('description', ''),
+        )
+        for faq in faqs
+    ])
+ 
+    # Share section
+    sections += render_shop_share_section(title, slug, "item")
+
+    # Build page content - combining media and description with line break
+    combined_description = f"{media}<br>{description}" if media and description else (media or description)
+    
+    page_content = f"""
+  <section class="page-details">
+    <div class="details-media">
+      <img src="{image}" alt="{title}" />
+    </div>
+    <div class="details-text">
+      <h1 class="details-title">{title}</h1>
+      <h3>{f"by {artist}" if artist else ""}</h3>
+      {details}
+      <p class="details-description">{description}</p>
+      {cta}
+    </div>
+  </section>
+  
+  <section class="event-collapsible-sections">
+    {sections}
+  </section>
+"""
+
+    # Write the page
+    page_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(page_path, "w", encoding="utf-8") as f:
+        f.write(build_page_html(title, page_content, "shop", "../styles.css"))
 
 def render_event(event):
     title = event.get('name', '')
@@ -485,6 +712,74 @@ def render_maker_cards(makers, title="Members"):
   {cards}
 </section>
 ''' if cards else ""
+
+def render_shop():
+    shop = load_json('shop.json')
+    pots = shop.get('pots')
+    merch = shop.get('merch')
+
+    events = get_events()
+    paid_events = [e for e in events if e.get('cost')]
+
+    # Generate individual item pages
+    for pot in pots:
+        render_pot(pot)
+    
+    for item in merch:
+        render_merch(item)
+
+
+    shop_nav = f"""
+      <div class="page-nav maker-nav"><div class="page-links">
+        {''.join(f'<a href="#{slugify(title)}" class="page-link">{title}</a>' for title in ["Pots", "Merch", "Classes & Workshops", "FAQs"])}
+        </div>
+      </div>"""
+
+    # Generate card sections
+    pots_cards = ''.join(render_pot_card(pot) for pot in pots)
+    merch_cards = ''.join(render_merch_card(item) for item in merch)
+    events_cards = ''.join(render_event_card(e) for e in paid_events)
+
+    # Generate FAQ section with lorem ipsum
+    faqs = shop.get('faqs', )
+    
+    faq_sections = '\n'.join([
+        render_collapsible_detail_section(
+            faq.get('title'),
+            'fa-solid fa-question',
+            faq.get('description', ''),
+        )
+        for faq in faqs
+    ])
+
+    # Build shop page content
+    content = f'''
+  {render_hero("Shop", shop.get('hero'))}
+  {shop_nav}
+  
+  <h2 id="pots" class="page-header">Pots</h2>
+  <section class="card-grid">
+    {pots_cards}
+  </section>
+  
+  <h2 id="merch" class="page-header">Merch</h2>
+  <section class="card-grid">
+    {merch_cards}
+  </section>
+  
+  <h2 id="classes-workshops" class="page-header">Classes & Workshops</h2>
+  <section class="card-grid">
+    {events_cards}
+  </section>
+  
+  <h2 id="faqs" class="page-header">FAQs</h2>
+  <section class="event-collapsible-sections">
+    {faq_sections}
+  </section>
+'''
+
+    with open('shop.html', 'w', encoding='utf-8') as f:
+        f.write(build_page_html("Shop", content, "shop"))
 
 def render_home():
     home = load_json('home.json')
@@ -703,6 +998,7 @@ def main():
     render_visit()
     render_schedule()
     render_makers()
+    render_shop()
 
 if __name__ == '__main__':
     main()

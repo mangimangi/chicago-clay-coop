@@ -1,0 +1,85 @@
+{
+  "hero": "https://i.imgur.com/0Zq98jN.jpeg",
+  "pots": [
+    {
+      "title": "Biblically Accurate Freak Mug",
+      "artist": "Michael Bridges",
+      "media": "Stoneware, Porcelain",
+      "firing": "Cone 10, Reduction",
+      "year": "2024",
+      "cost": 225,
+      "description": "What is it? Freak Mug How did you make it? pinch and coil. What's on it? Slip, stain and glaze and sometimes underglaze What is the clay body? this is a pot made out of stoneware with porcelain teeth and multicolored porcelain eyeballs. Can I put it in the dishwasher or microwave? best not to Is this mug functional? Yes! my work is intended to be a functional sculpture. I want you to develop a relationship with the pot. that's the beauty of handmade work! How big is it? This mug holds 12oz",
+      "image": "https://i.etsystatic.com/18400183/r/il/32a06a/6495451788/il_1588xN.6495451788_byow.jpg",
+      "link": "https://buy.stripe.com/sunset-bowl"
+    },
+    {
+      "title": "Biblically Accurate Freak Mug",
+      "artist": "Michael Bridges",
+      "media": "Stoneware, Porcelain",
+      "firing": "Cone 10, Reduction",
+      "year": "2024",
+      "cost": 225,
+      "description": "What is it? Freak Mug How did you make it? pinch and coil. What's on it? Slip, stain and glaze and sometimes underglaze What is the clay body? this is a pot made out of stoneware with porcelain teeth and multicolored porcelain eyeballs. Can I put it in the dishwasher or microwave? best not to Is this mug functional? Yes! my work is intended to be a functional sculpture. I want you to develop a relationship with the pot. that's the beauty of handmade work! How big is it? This mug holds 12oz",
+      "image": "https://i.etsystatic.com/18400183/r/il/32a06a/6495451788/il_1588xN.6495451788_byow.jpg",
+      "link": "https://buy.stripe.com/sunset-bowl"
+    },
+    {
+      "title": "Biblically Accurate Freak Mug",
+      "artist": "Michael Bridges",
+      "media": "Stoneware, Porcelain",
+      "firing": "Cone 10, Reduction",
+      "year": "2024",
+      "cost": 225,
+      "description": "What is it? Freak Mug How did you make it? pinch and coil. What's on it? Slip, stain and glaze and sometimes underglaze What is the clay body? this is a pot made out of stoneware with porcelain teeth and multicolored porcelain eyeballs. Can I put it in the dishwasher or microwave? best not to Is this mug functional? Yes! my work is intended to be a functional sculpture. I want you to develop a relationship with the pot. that's the beauty of handmade work! How big is it? This mug holds 12oz",
+      "image": "https://i.etsystatic.com/18400183/r/il/32a06a/6495451788/il_1588xN.6495451788_byow.jpg",
+      "link": "https://buy.stripe.com/sunset-bowl"
+    }
+  ],
+  "merch": [
+    {
+      "title": "Sticker Pack",
+      "artist": "Chicago Clay Co-Op",
+      "media": "Vinyl",
+      "cost": 5,
+      "description": "Pack of 3 weatherproof stickers featuring our logo. Perfect for water bottles, laptops, or studio equipment.",
+      "image": "https://i.imgur.com/tsaNM6g.jpeg",
+      "link": "https://buy.stripe.com/stickers"
+    },
+    {
+      "title": "Sticker Pack",
+      "artist": "Chicago Clay Co-Op",
+      "media": "Vinyl",
+      "cost": 5,
+      "description": "Pack of 3 weatherproof stickers featuring our logo. Perfect for water bottles, laptops, or studio equipment.",
+      "image": "https://i.imgur.com/tsaNM6g.jpeg",
+      "link": "https://buy.stripe.com/stickers"
+    },
+    {
+      "title": "Sticker Pack",
+      "artist": "Chicago Clay Co-Op",
+      "media": "Vinyl",
+      "cost": 5,
+      "description": "Pack of 3 weatherproof stickers featuring our logo. Perfect for water bottles, laptops, or studio equipment.",
+      "image": "https://i.imgur.com/tsaNM6g.jpeg",
+      "link": "https://buy.stripe.com/stickers"
+    }
+  ],
+  "faqs": [
+    {
+      "title": "How do I purchase items?",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "title": "What is your return policy?",
+      "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+      "title": "Where do you ship?",
+      "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "How long does shipping take?",
+      "description": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    }
+  ]
+}
