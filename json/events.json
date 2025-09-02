@@ -196,16 +196,14 @@
       "date": "2025-10-24",
       "time": "6pm-9pm",
       "description": "Halloween market and party!",
-      "image": "https://i.imgur.com/2g7dvce.jpeg",
-      "link": "Applications coming soon!"
+      "image": "https://i.imgur.com/2g7dvce.jpeg"
     },
     {
       "name": "Holiday Market",
       "date": "2025-12-12",
       "time": "6pm-9pm",
       "description": "Holiday market and party!",
-      "image": "https://i.imgur.com/2g7dvce.jpeg",
-      "link": "Applications coming soon!"
+      "image": "https://i.imgur.com/2g7dvce.jpeg"
     }
   ]
 }
