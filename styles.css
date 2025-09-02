@@ -784,7 +784,7 @@ main:not(:has(.filter-section input:checked)) .card {
 }
 
 .collapsible-section summary p {
-  margin: 1vw 0 0 0;
+  margin: 0.5vw 0 0 0;
 }
 
 .collapsible-section[open] summary {
@@ -889,7 +889,7 @@ main:not(:has(.filter-section input:checked)) .card {
 }
 
 .share-section p {
-  margin: 1vw 0 0 0;
+  margin: 0.5vw 0 0 0;
 }
 
 /* Hero section */
