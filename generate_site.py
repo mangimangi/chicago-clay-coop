@@ -420,7 +420,7 @@ def render_maker_links(maker):
         '''
     return ""
 
-def render_maker(maker):
+def render_maker(maker, upcoming=''):
     name = maker.get('name', '')
     image = maker.get('image', '')
     statement = maker.get('statement', '')
@@ -428,6 +428,18 @@ def render_maker(maker):
     slug = slugify(name)
     page_path = Path("maker") / f"{slug}.html"
     links = render_maker_links(maker)
+
+    if upcoming:
+      upcoming = f"""
+  <section class="page-details homepage-details">
+    <div class="details-text">
+      <h2>Upcoming Events</h2>
+      <div class="carousel">
+        {upcoming}
+      </div>
+    </div>
+  </section>
+"""
 
     page_content = f"""
   <section class="page-details">
@@ -442,6 +454,7 @@ def render_maker(maker):
       <p class="details-description">{statement}</p>
     </div>
   </section>
+  {upcoming}
 """
 
     page_path.parent.mkdir(parents=True, exist_ok=True)
@@ -654,22 +667,23 @@ def render_makers():
     members = makers.get('members', [])
     visitors = makers.get('visitors', [])
 
+    events = load_json('events.json')
+
     for maker in members + visitors:
-        render_maker(maker)
+        render_maker(maker, ''.join([render_event_card(e) for e in events.get('events') if e.get('instructor','') == maker.get('name')]))
 
     members_section = render_maker_cards(members)
     visitors_section = render_maker_cards(visitors, 'Visiting Artists')
 
-    maker_nav = ''.join(f'<a href="#{slugify(title)}" class="page-link">{title}</a>\n' for title in ["Members", "Visiting Artists"]) if members_section and visitors_section else ''
-
+    maker_nav = ''
+    if members_section and visitors_section:
+      maker_nav = f'<div class="page-nav maker-nav"><div class="page-links">'
+      maker_nav += ''.join(f'<a href="#{slugify(title)}" class="page-link">{title}</a>\n' for title in ["Members", "Visiting Artists"])
+      maker_nav +=  f'</div></div>'
 
     content = f'''
   {render_hero("Makers", makers.get('hero'))}
-  <div class="page-nav maker-nav">
-    <div class="page-links">
-      {maker_nav}
-    </div>
-  </div>
+  {maker_nav}
   <section class="page-details homepage-details">
     <div class="details-text">
       <p class="details-description home">{makers.get('description')}</p>
