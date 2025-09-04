@@ -115,7 +115,7 @@ def header(page):
             ("home", "/index.html", "Home"),
             ("about", "/about.html", "About"), 
             ("visit", "/visit.html", "Visit"),
-            ("schedule", "/schedule.html", "Schedule"),
+            ("events", "/events.html", "Events"),
             ("makers", "/makers.html", "Makers")
         ]
         
@@ -123,7 +123,7 @@ def header(page):
         for page_key, url, label in nav_items:
             # Handle special cases for active state
             active_pages = {
-                "schedule": ["schedule", "event"],
+                "events": ["events", "event"],
                 "makers": ["makers", "maker"],
                 "shop": ["shop"]
             }
@@ -819,7 +819,7 @@ def render_home():
       <div class="carousel">
         {upcoming_cards}
       </div>
-      <a href="schedule.html" class="cta-btn">Full Schedule of Events</a>
+      <a href="events.html" class="cta-btn">Full Schedule of Events</a>
     </div>
   </section>
   <section class="page-details homepage-details">
@@ -887,7 +887,7 @@ def render_visit():
     with open('visit.html', 'w', encoding='utf-8') as f:
         f.write(build_page_html("Visit", content, "visit"))
 
-def render_schedule():
+def render_events():
     json_events = load_json('events.json')
 
     # Group events by month
@@ -954,8 +954,8 @@ def render_schedule():
   {content_blocks}
 '''
 
-    with open('schedule.html', 'w', encoding='utf-8') as f:
-        f.write(build_page_html("Schedule", content, "schedule"))
+    with open('events.html', 'w', encoding='utf-8') as f:
+        f.write(build_page_html("Events", content, "events"))
 
 def render_makers():
     makers = load_json('makers.json')
@@ -996,7 +996,7 @@ def main():
     render_home()
     render_about()
     render_visit()
-    render_schedule()
+    render_events()
     render_makers()
     render_shop()
 
