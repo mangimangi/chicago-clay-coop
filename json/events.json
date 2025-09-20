@@ -148,7 +148,7 @@
       "link": "https://buy.stripe.com/3cIaEW7gnaZ24Hw3jH9R60h"
     },
     {
-      "name": "Tiny Pottery NEW",
+      "name": "Tiny Pottery",
       "date": "2025-10-25",
       "time": "2pm-5pm",
       "cost": "85",
@@ -156,7 +156,8 @@
       "instructor": "Lillie Frances",
       "description": "Step into the world of tiny pottery! In this playful, hands-on workshop, each participant will be provided a miniature pottery wheel, clay, tools, and underglazes. After a brief demo and instruction, you’ll get to create your own tiny ceramic pieces—perfect for beginners and anyone curious about working small. Your finished creations will be glazed, kiln-fired, and ready for pickup within two weeks. No experience needed—just bring your curiosity and appreciation for all things mini! This workshop includes all supplies, is beginner-friendly, offers instruction by a local ceramic artist, and you'll take home 2–5 mini pieces.",
       "image": "https://i.imgur.com/B9OGoPl.jpeg",
-      "link": "https://buy.stripe.com/cNieVcdEL7MQ1vkcUh9R60n"
+      "link": "https://buy.stripe.com/cNieVcdEL7MQ1vkcUh9R60n",
+      "callout": "NEW"
     },
     {
       "name": "Date Night",

@@ -87,6 +87,54 @@ def build_page_html(title, content, page_type, css_path="styles.css", icon=None)
         home = load_json('home.json')
         icon = home.get('thumbnail')
 
+    # Add JavaScript for scroll navigation only to pages that have page-nav
+    scroll_script = ""
+    if page_type in ["events", "shop", "makers"]:
+        scroll_script = """
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const pageNav = document.querySelector('.page-nav');
+    if (!pageNav) return;
+    
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    
+    // Get the position of the page-nav element
+    const pageNavRect = pageNav.getBoundingClientRect();
+    const pageNavTop = pageNavRect.top + window.scrollY;
+    
+    function updateNav() {
+        const currentScrollY = window.scrollY;
+        
+        // Only start hiding/showing behavior once we've scrolled past the nav
+        if (currentScrollY > pageNavTop + 50) {
+            if (currentScrollY > lastScrollY) {
+                // Scrolling down - hide nav
+                pageNav.classList.add('hidden');
+            } else {
+                // Scrolling up - show nav
+                pageNav.classList.remove('hidden');
+            }
+        } else {
+            // Always show nav when above its original position
+            pageNav.classList.remove('hidden');
+        }
+        
+        lastScrollY = currentScrollY;
+        ticking = false;
+    }
+    
+    function onScroll() {
+        if (!ticking) {
+            requestAnimationFrame(updateNav);
+            ticking = true;
+        }
+    }
+    
+    window.addEventListener('scroll', onScroll);
+});
+</script>"""
+    
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,6 +150,7 @@ def build_page_html(title, content, page_type, css_path="styles.css", icon=None)
 {content}
 </main>
 {footer()}
+{scroll_script}
 </body>
 </html>
 '''
@@ -604,9 +653,17 @@ def render_event_card(e):
 
     event_data = get_event_card_data(e)
 
+    # Add callout bubble if callout exists in event data
+    callout_bubble = ""
+    if e.get('callout'):
+        callout_bubble = f'<div class="callout-bubble">{e.get("callout")}</div>'
+
     return f'''
         <div class="card" {event_data}>
-          <a href="{detail_link}"><img src="{e.get('image', '')}" alt="{e.get('name', '')}" /></a>
+          <div class="card-image-container">
+            <a href="{detail_link}"><img src="{e.get('image', '')}" alt="{e.get('name', '')}" /></a>
+            {callout_bubble}
+          </div>
           <div class="card-content">
             <h3>{e.get('name', '')}</h3>
             <p>{instructor}</p>

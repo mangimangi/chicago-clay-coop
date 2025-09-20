@@ -182,7 +182,7 @@ header {
 }
 
 .page-details-reverse  > * {
-  direction: ltr; /* reset so child text doesn’t flip */
+  direction: ltr; /* reset so child text doesn't flip */
 }
 
 .homepage-details {
@@ -345,6 +345,39 @@ header {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+}
+
+/* Card image container for callouts */
+.card-image-container {
+  position: relative;
+}
+
+.card-image-container img {
+  vertical-align: top;
+}
+
+/* Callout bubble styling */
+.callout-bubble {
+  position: absolute;
+  bottom: 2vw;
+  right: 2vw;
+  background-color: #A60000;
+  color: var(--primary-bg);
+  padding: 1vw  2vw;
+  border-radius: 2vw;
+  font-size: var(--font-sm);
+  font-weight: bold;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media (pointer: coarse) {
+  .callout-bubble {
+    bottom: 4vw;
+    right: 4vw;
+    padding: 4vw 8vw;
+    border-radius: 8vw;
+  }
 }
 
 .card-content {
@@ -542,6 +575,12 @@ header {
   color: var(--primary-text);
   display: grid;
   grid-template-columns: 30% 70%;
+  transition: transform 0.3s ease-in-out; /* Smooth hide/show transition */
+}
+
+/* Class to hide the page-nav when scrolling down */
+.page-nav.hidden {
+  transform: translateY(-100%); /* Move the nav off-screen */
 }
 
 .maker-nav {
