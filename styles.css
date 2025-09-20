@@ -164,7 +164,7 @@ header {
   font-weight: bold;
 }
 
-@media (max-width: 1336px) {
+@media (pointer: coarse) {
   .desktop-nav { display: none; }
   .mobile-nav { display: block; }
 }
