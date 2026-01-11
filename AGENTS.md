@@ -48,13 +48,38 @@ bd sync               # Sync issues to git
 
 ### Development Phases (from Beads)
 
-1. **Local Development & Documentation** - Set up project structure, environment variables, AGENTS.md
-2. **Email Management (Email Octopus)** - Listserv management, event reminders
-3. **Discord Bot - Priority Features** - Member/event/workshop/class updates (more important than shop)
-4. **Stripe Integration** - Shop product migration, checkout endpoints, webhooks
-5. **Site Rebuild Automation** - DO App Platform CI/CD, Spaces → rebuild triggers
-6. **Frontend Integration** - Stripe Checkout buttons on shop page
-7. **Deployment & Integration** - Full end-to-end testing and deployment
+**Phase 0: Testing & Documentation** - Baseline validation
+- Test existing `generate_site.py` pipeline (verify all HTML generation works)
+- Document JSON schema/structure for all data files (reference for bot/API developers)
+
+**Phase 1: Local Development & Infrastructure** - FastAPI setup and Spaces integration
+- Create FastAPI project structure with dependencies
+- Set up DO Spaces client utilities for JSON management
+
+**Phase 2: Email Management** - Email Octopus integration
+- Listserv management, event/workshop/class reminders
+
+**Phase 3: Discord Bot - Priority Features** - Member/event/workshop/class updates (more important than shop)
+- Bot setup and slash command infrastructure (runs in FastAPI as background task)
+- Member management commands (/member add, update, remove, list)
+- Event/workshop/class commands (/event, /workshop, /class commands)
+
+**Phase 4: Stripe Integration** - Shop product management and checkout
+- Stripe API client and product catalog sync
+- Checkout session endpoint
+- Webhook receiver for payment confirmation and inventory sync
+
+**Phase 5: Site Rebuild Automation** - CI/CD and automatic updates
+- GitHub Actions workflow to monitor Spaces for JSON changes
+- API webhook to trigger GitHub Actions rebuilds
+
+**Phase 6: Frontend Integration** - Stripe Checkout on website
+- Integrate Stripe Checkout button into shop page
+- Handle success/cancel redirects
+
+**Phase 7: Deployment & Testing** - Production deployment
+- Package FastAPI for DO App Platform
+- End-to-end integration testing
 
 ### JSON Data Flow
 
@@ -63,6 +88,57 @@ When someone updates data via Discord or API:
 2. **Spaces webhook** → Triggers GitHub Actions workflow
 3. **GitHub Actions** → Pulls repo, runs `python3 generate_site.py`, deploys HTML to DO App Platform
 4. **Stripe sync** (optional) - Discord command may also sync to Stripe inventory
+
+### Discord Bot Architecture
+
+The Discord bot runs **in the same FastAPI process** as a background task (using asyncio). This keeps deployment simple and costs low ($5/month for the entire backend):
+
+**How it works:**
+1. **FastAPI application starts** with Discord bot as a background task
+2. **Discord bot connects** to Discord's WebSocket gateway using discord.py
+3. **Studio member types slash command** in Discord (e.g., `/member add "Jane" "Makes sculptures"`)
+4. **Discord sends interaction** to the bot (via WebSocket)
+5. **Bot processes command** → calls internal API functions
+6. **Functions update JSON** in Digital Ocean Spaces
+7. **Spaces triggers GitHub Actions** → website rebuilds
+8. **Discord bot sends response** to studio member with confirmation/errors
+
+**Architecture diagram:**
+```
+┌─────────────────────────────────────────┐
+│   Digital Ocean App Platform ($5)       │
+├─────────────────────────────────────────┤
+│  FastAPI Application                    │
+│  ├─ /api/* endpoints (Stripe, etc)     │
+│  ├─ Discord bot (background task)      │
+│  │  └─ Runs discord.py client          │
+│  │  └─ Listens for slash commands      │
+│  ├─ Services                            │
+│  │  ├─ Spaces client                   │
+│  │  ├─ Email Octopus client            │
+│  │  ├─ Stripe client                   │
+│  │  └─ GitHub Actions trigger          │
+│  └─ Session management & auth          │
+└──────────────────────────────────────────┘
+         ↓                    ↑
+   Updates JSON         Sends responses
+         ↓                    ↑
+┌──────────────────┐   ┌─────────────────┐
+│ DO Spaces JSON   │   │  Discord API    │
+│ (file-the-coop)  │   │  (WebSocket)    │
+└──────────────────┘   └─────────────────┘
+         ↓
+┌──────────────────┐
+│ GitHub Actions   │ → Rebuild & Deploy HTML
+│  Rebuild Trigger │
+└──────────────────┘
+```
+
+**Key benefits:**
+- Single deployment = lower cost and complexity
+- Shared state/services (Spaces client, configs, etc)
+- Same HTTP endpoints for both API and discord.py webhook interactions
+- Easier to test (single process locally)
 
 ### Development Guidelines
 
