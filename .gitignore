@@ -1,3 +1,4 @@
 *.html
 __pycache__/
 .pytest_cache/
+.beads/daemon-error
