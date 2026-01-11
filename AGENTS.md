@@ -92,11 +92,10 @@ Events, workshops, and classes schedule.
       "date": "string (YYYY-MM-DD)", // Single event date (required if no dates)
       "dates": ["string"],           // Array of dates for multi-session classes (optional)
       "time": "string",              // Event time (e.g., "6pm-9pm")
-      "cost": "string|number",       // Price (omit for free events)
+      "cost": "string|number",       // Price in dollars (omit for free events)
       "instructor": "string",        // Instructor name (optional)
       "description": "string",       // Event description
       "image": "string (URL)",       // Event image
-      "link": "string (URL)",        // Registration/purchase link (optional)
       "technique": "string",         // Technique type: "handbuilding", "wheelthrowing" (optional)
       "requirements": "string",      // Requirements (e.g., "Ages 21+") (optional, defaults to "Open to All")
       "callout": "string"            // Callout badge text (e.g., "NEW") (optional)
@@ -111,6 +110,7 @@ Events, workshops, and classes schedule.
 - Events with `cost` and `dates` are categorized as "class"
 - Events with `cost` but no `dates` are categorized as "workshop"
 - Events without `cost` are categorized as "free"
+- Paid events use Stripe Checkout via `/api/stripe/register/{event-slug}`
 
 ### makers.json
 
@@ -152,10 +152,9 @@ Products for sale and FAQs.
       "media": "string",             // Materials (e.g., "Stoneware, Porcelain")
       "firing": "string",            // Firing method (e.g., "Cone 10, Reduction")
       "year": "string|number",       // Year created
-      "cost": "number",              // Price in dollars (required for API checkout)
+      "cost": "number",              // Price in dollars (required for checkout)
       "description": "string",       // Item description
-      "image": "string (URL)",       // Item image
-      "link": "string (URL)"         // Legacy: direct Stripe link (optional, see Payment section)
+      "image": "string (URL)"        // Item image
     }
   ],
   "merch": [                         // Array of merchandise items
@@ -163,10 +162,9 @@ Products for sale and FAQs.
       "title": "string",             // Item title (required)
       "artist": "string",            // Creator/brand name
       "media": "string",             // Material (e.g., "Vinyl", "Cotton")
-      "cost": "number",              // Price in dollars (required for API checkout)
+      "cost": "number",              // Price in dollars (required for checkout)
       "description": "string",       // Item description
-      "image": "string (URL)",       // Item image
-      "link": "string (URL)"         // Legacy: direct Stripe link (optional, see Payment section)
+      "image": "string (URL)"        // Item image
     }
   ],
   "faqs": [                          // Array of frequently asked questions
@@ -177,10 +175,6 @@ Products for sale and FAQs.
   ]
 }
 ```
-
-**Note:** The `link` field is optional. Products can use either:
-1. **API Checkout** (preferred): Omit `link`, use `POST /api/stripe/checkout/product/{slug}` endpoint
-2. **Direct Link** (legacy): Include a pre-created Stripe payment link in `link` field
 
 ### about.json
 
@@ -256,30 +250,27 @@ Visit page with location and logistics info.
 
 **Payment Integration:**
 
-Two approaches are supported:
+All payments use Stripe Checkout sessions via the API:
 
-1. **API Checkout Sessions** (preferred for shop items):
-   - Frontend calls `POST /api/stripe/checkout/product/{slug}` with product slug
-   - API looks up product in shop.json, creates Stripe Checkout session
-   - Returns checkout URL for redirect
-   - No pre-created payment links needed in JSON
+- **Shop products**: Link to `/api/stripe/buy/{product-slug}` (redirects to Stripe)
+- **Events/workshops/classes**: Link to `/api/stripe/register/{event-slug}` (redirects to Stripe)
 
-2. **Direct Stripe Links** (legacy, still works for events):
-   - Include `link` field with Stripe payment link (e.g., `https://buy.stripe.com/xxx`)
-   - Static site generator renders link directly
-   - Useful for events with custom registration flows
-
-**CTA Button Text:**
-- Stripe links (`*.stripe.com`) → "Register" (events) or "Buy" (shop)
-- Non-Stripe links → "Learn More"
+The API looks up pricing from the JSON files (`cost` field) and creates checkout sessions dynamically. No payment links stored in JSON.
 
 ### API Endpoints
 
 The FastAPI backend provides these endpoints:
 
-**Stripe Checkout:**
+**Stripe Checkout (redirect endpoints for static site):**
+- `GET /api/stripe/buy/{slug}` - Redirect to Stripe Checkout for shop product
+- `GET /api/stripe/register/{slug}` - Redirect to Stripe Checkout for event registration
+
+**Stripe Checkout (JSON endpoints for JS clients):**
 - `POST /api/stripe/checkout` - Create checkout session with custom product
-- `POST /api/stripe/checkout/product/{slug}` - Create checkout for shop.json product by slug
+- `POST /api/stripe/checkout/product/{slug}` - Create checkout for shop product
+- `POST /api/stripe/checkout/event/{slug}` - Create checkout for event
+
+**Webhooks:**
 - `POST /api/stripe/webhook` - Handle Stripe webhook events
 
 **Site Rebuild:**
