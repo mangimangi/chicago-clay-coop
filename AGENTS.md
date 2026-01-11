@@ -152,10 +152,10 @@ Products for sale and FAQs.
       "media": "string",             // Materials (e.g., "Stoneware, Porcelain")
       "firing": "string",            // Firing method (e.g., "Cone 10, Reduction")
       "year": "string|number",       // Year created
-      "cost": "number",              // Price in dollars
+      "cost": "number",              // Price in dollars (required for API checkout)
       "description": "string",       // Item description
       "image": "string (URL)",       // Item image
-      "link": "string (URL)"         // Stripe purchase link
+      "link": "string (URL)"         // Legacy: direct Stripe link (optional, see Payment section)
     }
   ],
   "merch": [                         // Array of merchandise items
@@ -163,10 +163,10 @@ Products for sale and FAQs.
       "title": "string",             // Item title (required)
       "artist": "string",            // Creator/brand name
       "media": "string",             // Material (e.g., "Vinyl", "Cotton")
-      "cost": "number",              // Price in dollars
+      "cost": "number",              // Price in dollars (required for API checkout)
       "description": "string",       // Item description
       "image": "string (URL)",       // Item image
-      "link": "string (URL)"         // Stripe purchase link
+      "link": "string (URL)"         // Legacy: direct Stripe link (optional, see Payment section)
     }
   ],
   "faqs": [                          // Array of frequently asked questions
@@ -177,6 +177,10 @@ Products for sale and FAQs.
   ]
 }
 ```
+
+**Note:** The `link` field is optional. Products can use either:
+1. **API Checkout** (preferred): Omit `link`, use `POST /api/stripe/checkout/product/{slug}` endpoint
+2. **Direct Link** (legacy): Include a pre-created Stripe payment link in `link` field
 
 ### about.json
 
@@ -238,7 +242,6 @@ Visit page with location and logistics info.
 
 **URLs:**
 - Image URLs typically use Imgur hosting (e.g., `https://i.imgur.com/xxx.jpeg`)
-- Purchase links use Stripe (e.g., `https://buy.stripe.com/xxx` or `https://book.stripe.com/xxx`)
 - Internal links use relative paths (e.g., `/events.html`)
 
 **Line Breaks:**
@@ -251,9 +254,41 @@ Visit page with location and logistics info.
 **Date Format:**
 - All dates use ISO 8601 format: `YYYY-MM-DD`
 
-**Payment Links:**
-- Stripe links trigger "Register" (events) or "Buy" (shop) CTA text
-- Non-Stripe links show "Learn More"
+**Payment Integration:**
+
+Two approaches are supported:
+
+1. **API Checkout Sessions** (preferred for shop items):
+   - Frontend calls `POST /api/stripe/checkout/product/{slug}` with product slug
+   - API looks up product in shop.json, creates Stripe Checkout session
+   - Returns checkout URL for redirect
+   - No pre-created payment links needed in JSON
+
+2. **Direct Stripe Links** (legacy, still works for events):
+   - Include `link` field with Stripe payment link (e.g., `https://buy.stripe.com/xxx`)
+   - Static site generator renders link directly
+   - Useful for events with custom registration flows
+
+**CTA Button Text:**
+- Stripe links (`*.stripe.com`) → "Register" (events) or "Buy" (shop)
+- Non-Stripe links → "Learn More"
+
+### API Endpoints
+
+The FastAPI backend provides these endpoints:
+
+**Stripe Checkout:**
+- `POST /api/stripe/checkout` - Create checkout session with custom product
+- `POST /api/stripe/checkout/product/{slug}` - Create checkout for shop.json product by slug
+- `POST /api/stripe/webhook` - Handle Stripe webhook events
+
+**Site Rebuild:**
+- `POST /api/rebuild/trigger` - Trigger GitHub Actions site rebuild
+
+**Health:**
+- `GET /health` - Basic health check
+- `GET /health/ready` - Readiness check (dependencies)
+- `GET /health/live` - Liveness check
 
 ### Development Phases (from Beads)
 
