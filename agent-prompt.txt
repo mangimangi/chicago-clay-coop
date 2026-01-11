@@ -1,0 +1,68 @@
+TASK: Implement Chicago Clay Co-op Development Roadmap
+
+You are working on a Python static site generator for a community ceramic studio (https://ccc.quest). The codebase uses generate_site.py to build HTML pages from JSON data files.
+
+PROJECT CONTEXT
+===============
+- Main script: generate_site.py (1,061 lines, stdlib-only Python 3.7+)
+- Data files: json/*.json (home, events, makers, shop, about, visit)
+- Docs: AGENTS.md contains architecture and development guidelines
+- Issue tracking: Beads CLI (~/go/bin/bd list to see issues)
+
+YOUR TASK
+=========
+Work through the beads issues in dependency order. Use "bd show <issue-id>" to see details and "bd close <issue-id>" when complete.
+
+PRIORITY ORDER (respect dependencies)
+=====================================
+
+Start with Phase 0 (no dependencies):
+1. chicago-clay-coop-bm5 - Write pytest tests for generate_site.py
+2. chicago-clay-coop-u66 - Document JSON schemas in AGENTS.md
+
+Then Phase 1 (depends on Phase 0):
+3. chicago-clay-coop-7z5 - Create FastAPI project structure
+4. chicago-clay-coop-m28 - Set up Digital Ocean Spaces client utilities
+5. chicago-clay-coop-75m - Write pytest tests for FastAPI and Spaces
+
+Then Phases 2-4 can proceed in parallel (depend on Phase 1):
+6. chicago-clay-coop-0yd - Email Octopus integration
+7. chicago-clay-coop-qt7 - Tests for Email Octopus
+8. chicago-clay-coop-3jh - Discord bot with slash commands
+9. chicago-clay-coop-kwo - Tests for Discord bot
+10. chicago-clay-coop-5db - Stripe integration
+11. chicago-clay-coop-y4c - Tests for Stripe
+
+Then Phases 5-7 (depend on earlier phases):
+12. chicago-clay-coop-den - GitHub Actions site rebuild automation
+13. chicago-clay-coop-5or - Stripe Checkout frontend
+14. chicago-clay-coop-8hj - Deploy to Digital Ocean App Platform
+
+INSTRUCTIONS
+============
+1. Work sequentially through dependencies - don't start an issue until its dependencies are closed
+2. Write tests first - ensure all Python code has pytest coverage
+3. Commit frequently - make atomic commits as you complete logical units of work
+4. Run tests after each change - verify nothing breaks
+5. Continue autonomously until either:
+   - All issues are complete, OR
+   - You encounter ambiguity, a design decision, or uncertainty that requires human input
+
+WHEN TO STOP AND ASK
+====================
+- Unclear requirements or multiple valid implementation approaches
+- External service configuration needed (API keys, webhooks, etc.)
+- Breaking changes that might affect the live site
+- Test failures you cannot resolve
+- Any security concerns
+
+TECHNICAL NOTES
+===============
+- Site generator must remain stdlib-only (no dependencies)
+- FastAPI backend will be a separate service with its own requirements.txt
+- All external API calls should be mockable for testing
+- Refer to AGENTS.md for architecture details and environment variables
+
+BEGIN
+=====
+Start with chicago-clay-coop-bm5 (pytest tests for generate_site.py).
