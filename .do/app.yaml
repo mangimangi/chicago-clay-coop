@@ -1,0 +1,88 @@
+# Digital Ocean App Platform Configuration
+# https://docs.digitalocean.com/products/app-platform/reference/app-spec/
+
+name: chicago-clay-coop
+
+# Static site component (free tier)
+static_sites:
+  - name: website
+    source_dir: /
+    build_command: python3 generate_site.py
+    output_dir: /
+    index_document: index.html
+    error_document: index.html
+    environment_slug: html
+    github:
+      repo: chicago-clay-coop/chicago-clay-coop
+      branch: main
+      deploy_on_push: true
+    routes:
+      - path: /
+
+# API service component ($5/month)
+services:
+  - name: api
+    source_dir: /
+    dockerfile_path: Dockerfile
+    http_port: 8000
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    github:
+      repo: chicago-clay-coop/chicago-clay-coop
+      branch: main
+      deploy_on_push: true
+    routes:
+      - path: /api
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 10
+      period_seconds: 30
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    envs:
+      # Digital Ocean Spaces
+      - key: DIGITALOCEAN_SPACES_ACCESS_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: DIGITALOCEAN_SPACES_SECRET_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: DIGITALOCEAN_REGION
+        scope: RUN_TIME
+        value: nyc3
+      - key: DIGITALOCEAN_SPACES_BUCKET
+        scope: RUN_TIME
+        value: file-the-coop
+
+      # Discord
+      - key: DISCORD_BOT_TOKEN
+        scope: RUN_TIME
+        type: SECRET
+      - key: DISCORD_GUILD_ID
+        scope: RUN_TIME
+        type: SECRET
+
+      # Stripe
+      - key: STRIPE_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_WEBHOOK_SECRET
+        scope: RUN_TIME
+        type: SECRET
+
+      # Email Octopus
+      - key: EMAIL_OCTOPUS_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: EMAIL_OCTOPUS_LIST_ID
+        scope: RUN_TIME
+        type: SECRET
+
+      # GitHub (for triggering rebuilds)
+      - key: GITHUB_TOKEN
+        scope: RUN_TIME
+        type: SECRET
+      - key: GITHUB_REPO
+        scope: RUN_TIME
+        value: chicago-clay-coop/chicago-clay-coop

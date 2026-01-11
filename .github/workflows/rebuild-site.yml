@@ -1,0 +1,111 @@
+name: Rebuild Site
+
+# Triggered by:
+# 1. Manual workflow dispatch
+# 2. Repository dispatch from API (when Spaces JSON changes)
+# 3. Push to main branch (JSON changes)
+
+on:
+  workflow_dispatch:
+    inputs:
+      trigger_source:
+        description: 'Source that triggered the rebuild'
+        required: false
+        default: 'manual'
+
+  repository_dispatch:
+    types: [spaces-json-updated]
+
+  push:
+    branches:
+      - main
+    paths:
+      - 'json/*.json'
+      - 'generate_site.py'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Fetch JSON from Spaces (if available)
+        if: github.event_name == 'repository_dispatch'
+        env:
+          SPACES_ACCESS_KEY: ${{ secrets.DIGITALOCEAN_SPACES_ACCESS_KEY }}
+          SPACES_SECRET_KEY: ${{ secrets.DIGITALOCEAN_SPACES_SECRET_KEY }}
+          SPACES_REGION: ${{ secrets.DIGITALOCEAN_REGION }}
+          SPACES_BUCKET: ${{ secrets.DIGITALOCEAN_SPACES_BUCKET }}
+        run: |
+          # Install AWS CLI for S3-compatible operations
+          pip install awscli
+
+          # Configure AWS CLI for DO Spaces
+          aws configure set aws_access_key_id "$SPACES_ACCESS_KEY"
+          aws configure set aws_secret_access_key "$SPACES_SECRET_KEY"
+          aws configure set default.region "$SPACES_REGION"
+
+          # Sync JSON files from Spaces
+          aws s3 sync \
+            "s3://${SPACES_BUCKET:-file-the-coop}/json/" \
+            ./json/ \
+            --endpoint-url "https://${SPACES_REGION:-nyc3}.digitaloceanspaces.com"
+
+      - name: Generate static site
+        run: |
+          python3 generate_site.py
+          echo "Site generation complete"
+
+      - name: List generated files
+        run: |
+          echo "Generated HTML files:"
+          find . -name "*.html" -type f | head -20
+
+      - name: Upload site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-site
+          path: |
+            *.html
+            event/*.html
+            maker/*.html
+            shop/*.html
+            styles.css
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'repository_dispatch' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: static-site
+
+      - name: Deploy to Digital Ocean App Platform
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: |
+          echo "Deployment would happen here"
+          echo "Files to deploy:"
+          find . -name "*.html" -type f | head -10
+          # TODO: Implement actual deployment when DO App Platform is configured
+          # doctl apps create-deployment <app-id>
+
+  notify:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Report status
+        run: |
+          echo "Build status: ${{ needs.build.result }}"
+          echo "Deploy status: ${{ needs.deploy.result }}"
+          echo "Trigger: ${{ github.event_name }}"

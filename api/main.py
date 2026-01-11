@@ -16,7 +16,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.core.config import settings
-from api.routers import health
+from api.routers import health, rebuild, stripe
 
 # Configure logging
 logging.basicConfig(
@@ -80,11 +80,8 @@ def create_app() -> FastAPI:
 
     # Include routers
     app.include_router(health.router, tags=["health"])
-
-    # TODO: Add additional routers as they're implemented
-    # app.include_router(stripe.router, prefix="/api/stripe", tags=["stripe"])
-    # app.include_router(spaces.router, prefix="/api/spaces", tags=["spaces"])
-    # app.include_router(email.router, prefix="/api/email", tags=["email"])
+    app.include_router(stripe.router, prefix="/api/stripe", tags=["stripe"])
+    app.include_router(rebuild.router, prefix="/api/rebuild", tags=["rebuild"])
 
     return app
 
