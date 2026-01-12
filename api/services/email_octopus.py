@@ -271,6 +271,118 @@ class EmailOctopusClient:
             logger.error(f"Failed to remove subscriber {email}: {e}")
             raise EmailOctopusError(f"Failed to remove subscriber: {e}")
 
+    async def get_lists(self) -> Dict[str, Any]:
+        """
+        Get all mailing lists.
+
+        Returns:
+            List data with all lists
+
+        Raises:
+            EmailOctopusError: On API errors
+        """
+        self._check_api_key()
+
+        try:
+            response = await self.client.get(
+                "/lists",
+                params=self._add_api_key({}),
+            )
+            response.raise_for_status()
+            return response.json()
+
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Failed to get lists: {e}")
+            raise EmailOctopusError(f"Failed to get lists: {e}")
+
+    async def create_list(self, name: str) -> Dict[str, Any]:
+        """
+        Create a new mailing list.
+
+        Args:
+            name: Name for the new list
+
+        Returns:
+            Created list data
+
+        Raises:
+            EmailOctopusError: On API errors
+        """
+        self._check_api_key()
+
+        payload = {
+            "api_key": self.api_key,
+            "name": name,
+        }
+
+        try:
+            logger.info(f"Creating list: {name}")
+            response = await self.client.post(
+                "/lists",
+                json=payload,
+            )
+            response.raise_for_status()
+            result = response.json()
+            logger.info(f"Created list: {name} (ID: {result.get('id')})")
+            return result
+
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Failed to create list {name}: {e}")
+            raise EmailOctopusError(f"Failed to create list: {e}")
+
+    async def find_list_by_name(self, name: str) -> Optional[Dict[str, Any]]:
+        """
+        Find a list by its name.
+
+        Args:
+            name: List name to search for
+
+        Returns:
+            List data if found, None otherwise
+
+        Raises:
+            EmailOctopusError: On API errors
+        """
+        lists_data = await self.get_lists()
+
+        for lst in lists_data.get("data", []):
+            if lst.get("name") == name:
+                return lst
+
+        return None
+
+    async def get_or_create_event_list(
+        self,
+        event_name: str,
+        event_date: str,
+    ) -> str:
+        """
+        Get or create a mailing list for an event.
+
+        Creates a list named "Event: {event_name} {event_date}" if it doesn't exist.
+
+        Args:
+            event_name: Name of the event
+            event_date: Date of the event (YYYY-MM-DD)
+
+        Returns:
+            List ID for the event
+
+        Raises:
+            EmailOctopusError: On API errors
+        """
+        list_name = f"Event: {event_name} {event_date}"
+
+        # Check if list exists
+        existing = await self.find_list_by_name(list_name)
+        if existing:
+            logger.info(f"Found existing event list: {list_name}")
+            return existing["id"]
+
+        # Create new list
+        new_list = await self.create_list(list_name)
+        return new_list["id"]
+
     async def update_subscriber_tags(
         self,
         email: str,
@@ -379,4 +491,42 @@ async def subscribe_to_event_reminders(
         email=email,
         first_name=first_name,
         tags=["event-reminder", f"event-{event_name.lower().replace(' ', '-')}"],
+    )
+
+
+async def add_event_registrant(
+    email: str,
+    event_name: str,
+    event_date: str,
+    first_name: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Add a registrant to an event-specific mailing list.
+
+    Gets or creates a list for the event and adds the subscriber.
+    This is used for sending event reminders to registered attendees.
+
+    Args:
+        email: Registrant's email address
+        event_name: Name of the event
+        event_date: Date of the event (YYYY-MM-DD)
+        first_name: Registrant's first name (optional)
+
+    Returns:
+        Subscriber data
+    """
+    client = get_email_client()
+
+    # Get or create the event list
+    list_id = await client.get_or_create_event_list(
+        event_name=event_name,
+        event_date=event_date,
+    )
+
+    # Add subscriber to the event list
+    return await client.add_subscriber(
+        email=email,
+        first_name=first_name,
+        list_id=list_id,
+        tags=["event-registrant"],
     )

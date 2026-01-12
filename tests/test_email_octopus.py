@@ -17,6 +17,7 @@ from api.services.email_octopus import (
     get_email_client,
     subscribe_to_newsletter,
     subscribe_to_event_reminders,
+    add_event_registrant,
 )
 
 
@@ -337,6 +338,221 @@ class TestConvenienceFunctions:
             call_args = mock_client.add_subscriber.call_args
             assert "event-reminder" in call_args[1]["tags"]
             assert "event-pottery-workshop" in call_args[1]["tags"]
+
+
+# =============================================================================
+# List Management Tests
+# =============================================================================
+
+class TestGetLists:
+    """Tests for getting all lists."""
+
+    @pytest.mark.asyncio
+    async def test_get_lists_success(self, email_client, mock_httpx_client):
+        """Test successfully getting all lists."""
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "data": [
+                {"id": "list_1", "name": "Newsletter"},
+                {"id": "list_2", "name": "Event: Pottery Workshop 2025-01-20"},
+            ],
+            "paging": {"next": None},
+        }
+        mock_response.raise_for_status = MagicMock()
+        mock_httpx_client.get.return_value = mock_response
+
+        result = await email_client.get_lists()
+
+        assert len(result["data"]) == 2
+        mock_httpx_client.get.assert_called_once()
+
+
+class TestCreateList:
+    """Tests for creating new lists."""
+
+    @pytest.mark.asyncio
+    async def test_create_list_success(self, email_client, mock_httpx_client):
+        """Test successfully creating a list."""
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "id": "new_list_123",
+            "name": "Event: Pottery Workshop 2025-01-20",
+        }
+        mock_response.raise_for_status = MagicMock()
+        mock_httpx_client.post.return_value = mock_response
+
+        result = await email_client.create_list("Event: Pottery Workshop 2025-01-20")
+
+        assert result["id"] == "new_list_123"
+        assert result["name"] == "Event: Pottery Workshop 2025-01-20"
+
+        call_args = mock_httpx_client.post.call_args
+        assert call_args[1]["json"]["name"] == "Event: Pottery Workshop 2025-01-20"
+
+    @pytest.mark.asyncio
+    async def test_create_list_api_error(self, email_client, mock_httpx_client):
+        """Test create_list handles API errors."""
+        mock_response = MagicMock()
+        mock_response.status_code = 400
+        mock_response.raise_for_status.side_effect = httpx.HTTPStatusError(
+            "Bad Request", request=MagicMock(), response=mock_response
+        )
+        mock_httpx_client.post.return_value = mock_response
+
+        with pytest.raises(EmailOctopusError, match="Failed to create list"):
+            await email_client.create_list("Bad List Name")
+
+
+class TestFindListByName:
+    """Tests for finding a list by name."""
+
+    @pytest.mark.asyncio
+    async def test_find_list_by_name_found(self, email_client, mock_httpx_client):
+        """Test finding a list by name when it exists."""
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "data": [
+                {"id": "list_1", "name": "Newsletter"},
+                {"id": "list_2", "name": "Event: Pottery Workshop 2025-01-20"},
+            ],
+            "paging": {"next": None},
+        }
+        mock_response.raise_for_status = MagicMock()
+        mock_httpx_client.get.return_value = mock_response
+
+        result = await email_client.find_list_by_name("Event: Pottery Workshop 2025-01-20")
+
+        assert result is not None
+        assert result["id"] == "list_2"
+
+    @pytest.mark.asyncio
+    async def test_find_list_by_name_not_found(self, email_client, mock_httpx_client):
+        """Test finding a list by name when it doesn't exist."""
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "data": [
+                {"id": "list_1", "name": "Newsletter"},
+            ],
+            "paging": {"next": None},
+        }
+        mock_response.raise_for_status = MagicMock()
+        mock_httpx_client.get.return_value = mock_response
+
+        result = await email_client.find_list_by_name("Event: Nonexistent")
+
+        assert result is None
+
+
+class TestGetOrCreateEventList:
+    """Tests for getting or creating event-specific lists."""
+
+    @pytest.mark.asyncio
+    async def test_get_or_create_event_list_existing(self, email_client, mock_httpx_client):
+        """Test getting existing event list."""
+        # First call: get_lists returns list with existing event list
+        mock_get_response = MagicMock()
+        mock_get_response.json.return_value = {
+            "data": [
+                {"id": "event_list_123", "name": "Event: Pottery Workshop 2025-01-20"},
+            ],
+            "paging": {"next": None},
+        }
+        mock_get_response.raise_for_status = MagicMock()
+        mock_httpx_client.get.return_value = mock_get_response
+
+        result = await email_client.get_or_create_event_list(
+            event_name="Pottery Workshop",
+            event_date="2025-01-20",
+        )
+
+        assert result == "event_list_123"
+        # Should not call post (create) since list exists
+        mock_httpx_client.post.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_get_or_create_event_list_creates_new(self, email_client, mock_httpx_client):
+        """Test creating new event list when it doesn't exist."""
+        # First call: get_lists returns empty
+        mock_get_response = MagicMock()
+        mock_get_response.json.return_value = {
+            "data": [],
+            "paging": {"next": None},
+        }
+        mock_get_response.raise_for_status = MagicMock()
+
+        # Second call: create_list returns new list
+        mock_post_response = MagicMock()
+        mock_post_response.json.return_value = {
+            "id": "new_event_list_456",
+            "name": "Event: Pottery Workshop 2025-01-20",
+        }
+        mock_post_response.raise_for_status = MagicMock()
+
+        mock_httpx_client.get.return_value = mock_get_response
+        mock_httpx_client.post.return_value = mock_post_response
+
+        result = await email_client.get_or_create_event_list(
+            event_name="Pottery Workshop",
+            event_date="2025-01-20",
+        )
+
+        assert result == "new_event_list_456"
+        mock_httpx_client.post.assert_called_once()
+
+
+class TestAddEventRegistrant:
+    """Tests for adding registrants to event lists."""
+
+    @pytest.mark.asyncio
+    async def test_add_event_registrant_success(self):
+        """Test adding a registrant to an event list."""
+        with patch("api.services.email_octopus.get_email_client") as mock_get:
+            mock_client = MagicMock()
+            mock_client.get_or_create_event_list = AsyncMock(return_value="event_list_123")
+            mock_client.add_subscriber = AsyncMock(return_value={
+                "email_address": "attendee@example.com",
+                "status": "SUBSCRIBED",
+            })
+            mock_get.return_value = mock_client
+
+            result = await add_event_registrant(
+                email="attendee@example.com",
+                event_name="Pottery Workshop",
+                event_date="2025-01-20",
+            )
+
+            # Should get or create the event list
+            mock_client.get_or_create_event_list.assert_called_once_with(
+                event_name="Pottery Workshop",
+                event_date="2025-01-20",
+            )
+
+            # Should add subscriber to that list
+            mock_client.add_subscriber.assert_called_once()
+            call_kwargs = mock_client.add_subscriber.call_args[1]
+            assert call_kwargs["email"] == "attendee@example.com"
+            assert call_kwargs["list_id"] == "event_list_123"
+
+            assert result["email_address"] == "attendee@example.com"
+
+    @pytest.mark.asyncio
+    async def test_add_event_registrant_with_name(self):
+        """Test adding a registrant with their name."""
+        with patch("api.services.email_octopus.get_email_client") as mock_get:
+            mock_client = MagicMock()
+            mock_client.get_or_create_event_list = AsyncMock(return_value="event_list_123")
+            mock_client.add_subscriber = AsyncMock(return_value={"status": "ok"})
+            mock_get.return_value = mock_client
+
+            await add_event_registrant(
+                email="attendee@example.com",
+                event_name="Pottery Workshop",
+                event_date="2025-01-20",
+                first_name="Jane",
+            )
+
+            call_kwargs = mock_client.add_subscriber.call_args[1]
+            assert call_kwargs["first_name"] == "Jane"
 
 
 if __name__ == "__main__":

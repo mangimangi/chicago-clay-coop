@@ -203,6 +203,95 @@ class TestHandleCheckoutCompleted:
         assert result["customer_email"] == "customer@example.com"
         assert result["status"] == "processed"
 
+    @pytest.mark.asyncio
+    async def test_handle_event_checkout_calls_email_octopus(self, stripe_client):
+        """Test event checkout adds registrant to Email Octopus list."""
+        session_data = {
+            "id": "cs_event_123",
+            "customer_details": {"email": "attendee@example.com"},
+            "metadata": {
+                "event_slug": "pottery-workshop-2025-01-20",
+                "event_name": "Pottery Workshop",
+                "event_date": "2025-01-20",
+            },
+        }
+
+        with patch("api.services.stripe_client.add_event_registrant") as mock_add:
+            mock_add.return_value = {"status": "ok"}
+
+            result = await stripe_client.handle_checkout_completed(session_data)
+
+            # Should call add_event_registrant for event checkouts
+            mock_add.assert_called_once_with(
+                email="attendee@example.com",
+                event_name="Pottery Workshop",
+                event_date="2025-01-20",
+            )
+            assert result["event_registration"] == "added_to_list"
+
+    @pytest.mark.asyncio
+    async def test_handle_event_checkout_without_email(self, stripe_client):
+        """Test event checkout without customer email logs warning."""
+        session_data = {
+            "id": "cs_event_123",
+            "customer_details": {},  # No email
+            "metadata": {
+                "event_slug": "pottery-workshop-2025-01-20",
+                "event_name": "Pottery Workshop",
+                "event_date": "2025-01-20",
+            },
+        }
+
+        with patch("api.services.stripe_client.add_event_registrant") as mock_add:
+            result = await stripe_client.handle_checkout_completed(session_data)
+
+            # Should not call add_event_registrant without email
+            mock_add.assert_not_called()
+            assert result["status"] == "processed"
+
+    @pytest.mark.asyncio
+    async def test_handle_product_checkout_no_email_octopus(self, stripe_client):
+        """Test product checkout doesn't call Email Octopus."""
+        session_data = {
+            "id": "cs_product_123",
+            "customer_details": {"email": "buyer@example.com"},
+            "metadata": {
+                "product_slug": "freak-mug-michael-bridges",
+                "product_type": "pot",
+            },
+        }
+
+        with patch("api.services.stripe_client.add_event_registrant") as mock_add:
+            result = await stripe_client.handle_checkout_completed(session_data)
+
+            # Should not call add_event_registrant for product checkouts
+            mock_add.assert_not_called()
+            assert result["status"] == "processed"
+
+    @pytest.mark.asyncio
+    async def test_handle_event_checkout_email_octopus_error(self, stripe_client):
+        """Test event checkout handles Email Octopus errors gracefully."""
+        session_data = {
+            "id": "cs_event_123",
+            "customer_details": {"email": "attendee@example.com"},
+            "metadata": {
+                "event_slug": "pottery-workshop-2025-01-20",
+                "event_name": "Pottery Workshop",
+                "event_date": "2025-01-20",
+            },
+        }
+
+        with patch("api.services.stripe_client.add_event_registrant") as mock_add:
+            # Simulate Email Octopus error
+            from api.services.email_octopus import EmailOctopusError
+            mock_add.side_effect = EmailOctopusError("API error")
+
+            # Should not raise, just log the error and continue
+            result = await stripe_client.handle_checkout_completed(session_data)
+
+            assert result["status"] == "processed"
+            assert result.get("event_registration") == "failed"
+
 
 # =============================================================================
 # Product Management Tests

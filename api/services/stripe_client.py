@@ -16,6 +16,7 @@ import stripe
 
 from api.core.config import settings
 from api.services.spaces import read_site_json, write_site_json
+from api.services.email_octopus import add_event_registrant, EmailOctopusError
 
 logger = logging.getLogger(__name__)
 
@@ -174,6 +175,10 @@ class StripeClient:
         """
         Handle a checkout.session.completed webhook event.
 
+        For event registrations, adds the customer to an Email Octopus list
+        for the event (creating the list if needed). This enables
+        sending reminder emails to registered attendees.
+
         Args:
             session_data: Session data from the webhook
 
@@ -187,15 +192,40 @@ class StripeClient:
         logger.info(f"Processing completed checkout: {session_id}")
         logger.info(f"Customer email: {customer_email}")
 
-        # TODO: Send confirmation email
-        # TODO: Update inventory in shop.json if needed
-
-        return {
+        result = {
             "session_id": session_id,
             "customer_email": customer_email,
             "metadata": metadata,
             "status": "processed",
         }
+
+        # Check if this is an event registration
+        event_name = metadata.get("event_name")
+        event_date = metadata.get("event_date")
+
+        if event_name and event_date and customer_email:
+            # Add registrant to event-specific Email Octopus list
+            try:
+                logger.info(f"Adding {customer_email} to event list: {event_name}")
+                await add_event_registrant(
+                    email=customer_email,
+                    event_name=event_name,
+                    event_date=event_date,
+                )
+                result["event_registration"] = "added_to_list"
+                logger.info(f"Successfully added {customer_email} to event list")
+
+            except EmailOctopusError as e:
+                logger.error(f"Failed to add {customer_email} to event list: {e}")
+                result["event_registration"] = "failed"
+
+        elif event_name and event_date and not customer_email:
+            logger.warning(f"Event checkout without customer email: {session_id}")
+
+        # TODO: Send confirmation email
+        # TODO: Update inventory in shop.json if needed
+
+        return result
 
     async def list_products(self, limit: int = 100) -> List[Dict[str, Any]]:
         """
