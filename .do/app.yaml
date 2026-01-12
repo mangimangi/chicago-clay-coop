@@ -2,22 +2,47 @@
 # https://docs.digitalocean.com/products/app-platform/reference/app-spec/
 
 name: chicago-clay-coop
+region: tor
+
+alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DOMAIN_FAILED
+
+domains:
+  - domain: ccc.quest
+    type: PRIMARY
+  - domain: chicagoclaycooperative.com
+    type: ALIAS
+  - domain: www.chicagoclaycooperative.com
+    type: ALIAS
+
+features:
+  - buildpack-stack=ubuntu-22
+
+ingress:
+  rules:
+    # Static site serves everything except /api
+    - component:
+        name: chicago-clay-coop
+      match:
+        path:
+          prefix: /
+    # API handles /api routes
+    - component:
+        name: api
+      match:
+        path:
+          prefix: /api
 
 # Static site component (free tier)
 static_sites:
-  - name: website
+  - name: chicago-clay-coop
     source_dir: /
-    build_command: python3 generate_site.py
-    output_dir: /
-    index_document: index.html
-    error_document: index.html
+    build_command: python3 generate_site.py && rm README.md generate_site.py && rm -rf json/ && rm -rf .github/
     environment_slug: html
     github:
-      repo: chicago-clay-coop/chicago-clay-coop
+      repo: mangimangi/chicago-clay-coop
       branch: main
-      deploy_on_push: true
-    routes:
-      - path: /
 
 # API service component ($5/month)
 services:
@@ -28,11 +53,9 @@ services:
     instance_size_slug: basic-xxs
     instance_count: 1
     github:
-      repo: chicago-clay-coop/chicago-clay-coop
+      repo: mangimangi/chicago-clay-coop
       branch: main
       deploy_on_push: true
-    routes:
-      - path: /api
     health_check:
       http_path: /health
       initial_delay_seconds: 10
@@ -85,4 +108,4 @@ services:
         type: SECRET
       - key: GITHUB_REPO
         scope: RUN_TIME
-        value: chicago-clay-coop/chicago-clay-coop
+        value: mangimangi/chicago-clay-coop
