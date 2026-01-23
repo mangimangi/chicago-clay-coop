@@ -1,0 +1,111 @@
+# Digital Ocean App Platform Configuration
+# https://docs.digitalocean.com/products/app-platform/reference/app-spec/
+
+name: chicago-clay-coop
+region: tor
+
+alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DOMAIN_FAILED
+
+domains:
+  - domain: ccc.quest
+    type: PRIMARY
+  - domain: chicagoclaycooperative.com
+    type: ALIAS
+  - domain: www.chicagoclaycooperative.com
+    type: ALIAS
+
+features:
+  - buildpack-stack=ubuntu-22
+
+ingress:
+  rules:
+    # Static site serves everything except /api
+    - component:
+        name: chicago-clay-coop
+      match:
+        path:
+          prefix: /
+    # API handles /api routes
+    - component:
+        name: api
+      match:
+        path:
+          prefix: /api
+
+# Static site component (free tier)
+static_sites:
+  - name: chicago-clay-coop
+    source_dir: /
+    build_command: python3 generate_site.py && rm README.md generate_site.py && rm -rf json/ && rm -rf .github/
+    environment_slug: html
+    github:
+      repo: mangimangi/chicago-clay-coop
+      branch: main
+
+# API service component ($5/month)
+services:
+  - name: api
+    source_dir: /
+    dockerfile_path: Dockerfile
+    http_port: 8000
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    github:
+      repo: mangimangi/chicago-clay-coop
+      branch: main
+      deploy_on_push: true
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 10
+      period_seconds: 30
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    envs:
+      # Digital Ocean Spaces
+      - key: DIGITALOCEAN_SPACES_ACCESS_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: DIGITALOCEAN_SPACES_SECRET_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: DIGITALOCEAN_REGION
+        scope: RUN_TIME
+        value: nyc3
+      - key: DIGITALOCEAN_SPACES_BUCKET
+        scope: RUN_TIME
+        value: file-the-coop
+
+      # Discord
+      - key: DISCORD_BOT_TOKEN
+        scope: RUN_TIME
+        type: SECRET
+      - key: DISCORD_GUILD_ID
+        scope: RUN_TIME
+        type: SECRET
+
+      # Stripe
+      - key: STRIPE_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_WEBHOOK_SECRET
+        scope: RUN_TIME
+        type: SECRET
+
+      # Email Octopus
+      - key: EMAIL_OCTOPUS_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: EMAIL_OCTOPUS_LIST_ID
+        scope: RUN_TIME
+        type: SECRET
+
+      # GitHub (for triggering rebuilds)
+      - key: GITHUB_TOKEN
+        scope: RUN_TIME
+        type: SECRET
+      - key: GITHUB_REPO
+        scope: RUN_TIME
+        value: mangimangi/chicago-clay-coop

@@ -46,6 +46,241 @@ bd sync               # Sync issues to git
 - Email Octopus service layer (TBD)
 - Stripe integration (TBD)
 
+## JSON Data Schemas
+
+The site generator reads data from JSON files in the `/json/` directory. Below are the schemas for each file.
+
+### home.json
+
+Main site configuration and homepage content.
+
+```json
+{
+  "thumbnail": "string (URL)",       // Site favicon/thumbnail image
+  "hero": "string (URL)",            // Homepage hero image
+  "title": "string",                 // Homepage title (supports \\n for line breaks)
+  "description": "string",           // Site description
+  "email_octopus": {
+    "id": "string",                  // Email Octopus form ID
+    "cta": "string"                  // Button text for newsletter signup
+  },
+  "email": "string",                 // Contact email
+  "phone": "string",                 // Contact phone
+  "instagram": "string (URL)",       // Instagram profile URL
+  "apply": "string (URL)",           // Membership application URL
+  "testimonials": [                  // Array of testimonials
+    {
+      "name": "string",              // Testimonial author name
+      "location": "string",          // Author location
+      "text": "string",              // Testimonial quote
+      "image": "string (URL)"        // Background image for testimonial card
+    }
+  ]
+}
+```
+
+### events.json
+
+Events, workshops, and classes schedule.
+
+```json
+{
+  "hero": "string (URL)",            // Events page hero image
+  "events": [                        // Array of events
+    {
+      "name": "string",              // Event title (required)
+      "date": "string (YYYY-MM-DD)", // Single event date (required if no dates)
+      "dates": ["string"],           // Array of dates for multi-session classes (optional)
+      "time": "string",              // Event time (e.g., "6pm-9pm")
+      "cost": "string|number",       // Price in dollars (omit for free events)
+      "instructor": "string",        // Instructor name (optional)
+      "description": "string",       // Event description
+      "image": "string (URL)",       // Event image
+      "technique": "string",         // Technique type: "handbuilding", "wheelthrowing" (optional)
+      "requirements": "string",      // Requirements (e.g., "Ages 21+") (optional, defaults to "Open to All")
+      "callout": "string"            // Callout badge text (e.g., "NEW") (optional)
+    }
+  ]
+}
+```
+
+**Notes:**
+- Use `date` for single events, `dates` array for multi-session classes
+- If `dates` is provided, the minimum date is used for sorting
+- Events with `cost` and `dates` are categorized as "class"
+- Events with `cost` but no `dates` are categorized as "workshop"
+- Events without `cost` are categorized as "free"
+- Paid events use Stripe Checkout via `/api/stripe/register/{event-slug}`
+
+### makers.json
+
+Studio members and visiting artists.
+
+```json
+{
+  "hero": "string (URL)",            // Makers page hero image
+  "description": "string",           // Page description
+  "cta": "string",                   // Call-to-action button text
+  "link": "string (URL)",            // CTA link (e.g., membership inquiry)
+  "members": [                       // Array of studio members
+    {
+      "name": "string",              // Artist name (required)
+      "statement": "string",         // Artist statement/bio
+      "image": "string (URL)",       // Artist photo
+      "instagram": "string (URL)",   // Instagram profile URL (optional)
+      "website": "string (URL)",     // Personal website URL (optional)
+      "shop": "string (URL)"         // Online shop URL (optional)
+    }
+  ],
+  "visitors": [                      // Array of visiting artists (same schema as members)
+    { ... }
+  ]
+}
+```
+
+### shop.json
+
+Products for sale and FAQs.
+
+```json
+{
+  "hero": "string (URL)",            // Shop page hero image
+  "pots": [                          // Array of ceramic pieces for sale
+    {
+      "title": "string",             // Item title (required)
+      "artist": "string",            // Artist name
+      "media": "string",             // Materials (e.g., "Stoneware, Porcelain")
+      "firing": "string",            // Firing method (e.g., "Cone 10, Reduction")
+      "year": "string|number",       // Year created
+      "cost": "number",              // Price in dollars (required for checkout)
+      "description": "string",       // Item description
+      "image": "string (URL)"        // Item image
+    }
+  ],
+  "merch": [                         // Array of merchandise items
+    {
+      "title": "string",             // Item title (required)
+      "artist": "string",            // Creator/brand name
+      "media": "string",             // Material (e.g., "Vinyl", "Cotton")
+      "cost": "number",              // Price in dollars (required for checkout)
+      "description": "string",       // Item description
+      "image": "string (URL)"        // Item image
+    }
+  ],
+  "faqs": [                          // Array of frequently asked questions
+    {
+      "title": "string",             // Question
+      "description": "string"        // Answer
+    }
+  ]
+}
+```
+
+### about.json
+
+About page sections.
+
+```json
+{
+  "hero": "string (URL)",            // About page hero image
+  "sections": [                      // Array of content sections
+    {
+      "title": "string",             // Section title (supports \\n for line breaks)
+      "icon": "string",              // FontAwesome icon class (optional)
+      "description": "string",       // Section content (supports \\n for line breaks)
+      "image": "string (URL)",       // Section image (optional)
+      "iframe": "string (URL)",      // Embedded iframe URL (optional, e.g., Google Maps)
+      "cta": "string",               // Button text (optional)
+      "link": "string (URL)",        // Button link (optional)
+      "lists": [                     // Array of bulleted lists (optional)
+        {
+          "title": "string",         // List heading
+          "icon": "string",          // FontAwesome icon class
+          "items": ["string"]        // Array of list items
+        }
+      ]
+    }
+  ]
+}
+```
+
+### visit.json
+
+Visit page with location and logistics info.
+
+```json
+{
+  "hero": "string (URL)",            // Visit page hero image
+  "sections": [                      // Array of content sections (same schema as about.json)
+    {
+      "title": "string",             // Section title (supports \\n for addresses)
+      "icon": "string",              // FontAwesome icon class (optional)
+      "description": "string",       // Section content
+      "image": "string (URL)",       // Section image (optional)
+      "iframe": "string (URL)",      // Embedded iframe (e.g., Google Maps embed)
+      "cta": "string",               // Button text (optional)
+      "link": "string (URL)",        // Button link (optional)
+      "lists": [                     // Array of bulleted lists
+        {
+          "title": "string",         // List heading
+          "icon": "string",          // FontAwesome icon class
+          "items": ["string"]        // Array of list items
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Common Patterns
+
+**URLs:**
+- Image URLs typically use Imgur hosting (e.g., `https://i.imgur.com/xxx.jpeg`)
+- Internal links use relative paths (e.g., `/events.html`)
+
+**Line Breaks:**
+- Use `\\n` in JSON strings for line breaks (rendered as `<br>` in HTML)
+
+**Icons:**
+- Uses FontAwesome 6.5+ classes (e.g., `fa-solid fa-phone`, `fa-brands fa-instagram`)
+- See [FontAwesome Icons](https://fontawesome.com/icons) for reference
+
+**Date Format:**
+- All dates use ISO 8601 format: `YYYY-MM-DD`
+
+**Payment Integration:**
+
+All payments use Stripe Checkout sessions via the API:
+
+- **Shop products**: Link to `/api/stripe/buy/{product-slug}` (redirects to Stripe)
+- **Events/workshops/classes**: Link to `/api/stripe/register/{event-slug}` (redirects to Stripe)
+
+The API looks up pricing from the JSON files (`cost` field) and creates checkout sessions dynamically. No payment links stored in JSON.
+
+### API Endpoints
+
+The FastAPI backend provides these endpoints:
+
+**Stripe Checkout (redirect endpoints for static site):**
+- `GET /api/stripe/buy/{slug}` - Redirect to Stripe Checkout for shop product
+- `GET /api/stripe/register/{slug}` - Redirect to Stripe Checkout for event registration
+
+**Stripe Checkout (JSON endpoints for JS clients):**
+- `POST /api/stripe/checkout` - Create checkout session with custom product
+- `POST /api/stripe/checkout/product/{slug}` - Create checkout for shop product
+- `POST /api/stripe/checkout/event/{slug}` - Create checkout for event
+
+**Webhooks:**
+- `POST /api/stripe/webhook` - Handle Stripe webhook events
+
+**Site Rebuild:**
+- `POST /api/rebuild/trigger` - Trigger GitHub Actions site rebuild
+
+**Health:**
+- `GET /health` - Basic health check
+- `GET /health/ready` - Readiness check (dependencies)
+- `GET /health/live` - Liveness check
+
 ### Development Phases (from Beads)
 
 **Phase 0: Testing & Documentation** - Baseline validation
